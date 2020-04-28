@@ -1,0 +1,25 @@
+#message-read, #message-send {
+  border: 2px solid black;
+  color: black;
+}
+
+#message-read {
+  height: 40vh;
+}
+
+#message-send {
+  height: 15vh;
+}
+
+#message-block {
+  border-left: 3px solid black;
+
+}
+
+.list-group img{
+  width: 30px;
+}
+
+.card-body .list-group {
+  color: black;
+}

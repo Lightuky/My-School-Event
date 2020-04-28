@@ -1,0 +1,50 @@
+
+#feed {
+   border-left: 1px solid dimgray;
+   border-right: 1px solid dimgray;
+ }
+
+
+section {
+  background-color: white;
+}
+
+#feed .card  {
+  border-radius: 5px;
+  color:  black;
+  border: 2px solid white;
+}
+
+#feed .card-header {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: white;
+}
+
+#feed button {
+  color: black;
+  background-color: #F6CE00;
+  border-radius: 5px;
+  float: right;
+}
+
+
+#feed .card-body{
+  color: #F6CE00;
+}
+
+.row .card-body{
+  color: #F6CE00;
+  border: none;
+}
+
+main {
+  background-color: white;
+}
+
+#postitem:hover {
+  text-decoration: none;
+}
+
+
+
