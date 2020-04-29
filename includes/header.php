@@ -17,6 +17,17 @@ session_start();
 <body>
 <div id="app">
     <header id="header">
-        <a href="index.php" class="btn btn-warning">My School Event</a>
+        <div class="d-flex  justify-content-between">
+            <a href="index.php" class="btn btn-warning">My School Event</a>
+            <div>
+                <?php if (!isset($_SESSION['auth_id'])) {?>
+                <a href="login.php" class="btn btn-success">Se connecter</a>
+                <?php }
+                else { ?>
+                    <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="btn btn-info">Mon profil</a>
+                    <a href="assets/logout.php" class="btn btn-danger">Déconnexion</a><?php
+                } ?>
+            </div>
+        </div>
     </header>
     <main id="main">
