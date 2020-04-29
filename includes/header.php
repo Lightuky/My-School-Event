@@ -3,6 +3,7 @@ require_once 'vendor/autoload.php';
 require_once 'config.php';
 require_once 'helpers.php';
 session_start();
+//include 'debug.php';
 ?>
 <!doctype html>
 <html lang="fr">
@@ -16,6 +17,6 @@ session_start();
 <body>
 <div id="app">
     <header id="header">
-
+        <a href="index.php" class="btn btn-warning">My School Event</a>
     </header>
     <main id="main">
