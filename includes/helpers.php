@@ -65,6 +65,14 @@ function getUser($id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+function getUserSchool($id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT users.id, schools.* FROM users LEFT JOIN schools ON users.school_id = schools.id WHERE users.id = :id LIMIT 1");
+    $stmt->bindValue(':id', $id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 function getUsers($id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT * FROM users WHERE id != $id");
@@ -110,13 +118,14 @@ function deleteFriend($pending, $auth_id, $user2_id) {
 
 function updateUser($data, $id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("UPDATE users SET last_name = :last_name, first_name = :first_name, email = :email, phone_number = :phone_number, birthday = :birthday, gender = :gender, updated_at = :updated_at WHERE id = $id");
-    $stmt->bindValue(':last_name', $data['last_name']);
+    $stmt = $dbh->prepare("UPDATE users SET  first_name = :first_name, last_name = :last_name, phone_number = :phone_number, birthday = :birthday, gender = :gender, school_id = :school_id, school_year = :school_year, date_edited = :date_edited WHERE id = $id");
     $stmt->bindValue(':first_name', $data['first_name']);
-    $stmt->bindValue(':email', $data['email']);
+    $stmt->bindValue(':last_name', $data['last_name']);
     $stmt->bindValue(':phone_number', $data['phone_number']);
     $stmt->bindValue(':birthday', $data['birthday']);
     $stmt->bindValue(':gender', $data['gender']);
-    $stmt->bindValue(':updated_at', date("Y-m-d H:i:s", time()));
+    $stmt->bindValue(':school_id', $data['school_id']);
+    $stmt->bindValue(':school_year', $data['school_year']);
+    $stmt->bindValue(':date_edited', date("Y-m-d H:i:s", time()));
     $stmt->execute();
 }
