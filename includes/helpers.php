@@ -23,3 +23,10 @@ function getDateForHumans($date) {
     $c = new Carbon($date, 'Europe/Paris');
     return $c->diffForHumans();
 }
+
+function getUsers() {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM users");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

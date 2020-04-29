@@ -2,13 +2,15 @@
 require_once 'includes/header.php';
 use Carbon\Carbon;
 
-connectDB();
+$users = getUsers();
 
 ?>
 
 <section>
     <div class="container">
-            test
+        <?php foreach ($users as $user) {
+            echo $user['phone_number'];
+        } ?>
     </div>
 </section>
 
