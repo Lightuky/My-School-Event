@@ -19,6 +19,12 @@ session_start();
     <header id="header">
         <div class="d-flex  justify-content-between">
             <a href="index.php" class="btn btn-warning">My School Event</a>
+            <?php if (!isset($_SESSION['auth_id'])) {?>
+                <a href="login.php" class="btn btn-secondary">Ajouter un event</a>
+            <?php }
+            else { ?>
+                <a href="addevent.php" class="btn btn-secondary">Ajouter un event</a>
+            <?php } ?>
             <div>
                 <?php if (!isset($_SESSION['auth_id'])) {?>
                 <a href="login.php" class="btn btn-success">Se connecter</a>

@@ -2,6 +2,7 @@
 require_once 'includes/header.php';
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $user = getUser($id);
+$owned_events = getOwnedEvents($id);
 
 if ($user['email'] == NULL) {
     $pathError =  "/mse/404.php";
@@ -57,6 +58,12 @@ if (isset($_SESSION['auth_id'])) {
                     <div>
                         <h1><?php echo $user['first_name'] . " " . $user['last_name'] ?></h1>
                         <strong>Inscrit <?php echo getDateForHumans($user['date_added']); ?></strong>
+                    </div>
+                    <div class="mt-5 h3 text-muted">Événements gérés :</div>
+                    <div>
+                        <?php foreach ($owned_events as $owned_event) { ?>
+                            <a class="nav-link card col-3 p-3 text-center mt-5 d-flex" href="event.php?id=<?php echo $owned_event['id'] ?>"><?php echo $owned_event['name'] ?></a>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
