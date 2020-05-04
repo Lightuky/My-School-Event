@@ -11356,3 +11356,15 @@ a.text-dark:focus {
   }
 }
 
+.linear-gradient {
+  background: linear-gradient(65deg, #6f1cf3, #f15ff1);
+}
+
+.font-size-name-profile {
+  font-size: 160%;
+}
+
+.fs-info-profile {
+  font-size: 65%;
+}
+
