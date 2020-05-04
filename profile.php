@@ -16,19 +16,20 @@ if (isset($_SESSION['auth_id'])) {
 }
 
 ?>
-    <section>
+    <section class="linear-gradient  h-50">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4">
-                    <img src="https://www.gravatar.com/avatar/<?php echo md5($user['email']); ?>?s=600" alt="" class="d-block w-50">
-                    <div class="container mt-3">
+                <div class="col-lg-4 text-center mt-3">
+                    <img src="https://www.gravatar.com/avatar/<?php echo md5($user['email']); ?>?s=600" alt="" class="m-auto d-block shadow border border-white rounded-circle w-25">
+                    <strong class="text-white small mt-3 ">Inscrit <?php echo getDateForHumans($user['date_added']); ?></strong>
+                    <div class="container">
                         <?php if (isset($_SESSION['auth_id'])) {
                             if ($id == $_SESSION['auth_id']) { ?>
-                                <a href="edituser.php?id=<?php echo $id ?>" class="btn btn-secondary">Editer mes infos</a>
+                                <a href="edituser.php?id=<?php echo $id ?>" class="">Editer le profile</a>
                             <?php }
                         } ?>
                     </div>
-                    <div class="mt-3">
+                    <div class="">
                     <?php if (isset($_SESSION['auth_id'])): ?>
                         <?php if ($_SESSION['auth_id'] != $id): ?>
                             <?php if (!$friend): ?>
@@ -55,9 +56,10 @@ if (isset($_SESSION['auth_id'])) {
                     </div>
                 </div>
                 <div class="col-lg-8">
-                    <div>
-                        <h1><?php echo $user['first_name'] . " " . $user['last_name'] ?></h1>
-                        <strong>Inscrit <?php echo getDateForHumans($user['date_added']); ?></strong>
+                    <div class="text-white text-center">
+
+                        <h1 class="font-size-name-profile" ><?php echo $user['first_name'] . " " . $user['last_name'] ?></h1>
+
                     </div>
                     <div class="mt-5 h3 text-muted">Événements gérés :</div>
                     <div>
@@ -68,13 +70,10 @@ if (isset($_SESSION['auth_id'])) {
                 </div>
             </div>
         </div>
-        <div class="container mt-5">
-            <span class="text-muted d-block">Adresse Email : <?php echo $user['email'] ?></span>
-            <span class="text-muted d-block">N° de téléphone : <?php echo !$user['phone_number'] ? 'Non renseigné' : $user['phone_number']; ?></span>
-            <span class="text-muted d-block">Date de naissance : <?php echo !$user['birthday'] ? 'Non renseigné' : $user['birthday']; ?></span>
-            <span class="text-muted d-block">Genre : <?php echo $user['gender'] != 1 ? ($user['gender'] != 2 ? "Autre" : "Femme") : "Homme" ?></span>
-            <span class="text-muted d-block">École : <?php echo $user_school['name'] ?></span>
-            <span class="text-muted d-block">Année : N°<?php echo $user['school_year'] ?></span>
+        <div class="d-flex justify-content-center mt-2 pb-5">
+            <span class="fs-info-profile pr-2 border-right  text-white d-block"><?php echo $user['school_year'] ?>°</span>
+            <span class="fs-info-profile pr-2 pl-2 text-white border-right d-block"><?php echo $user_school['name'] ?></span>
+            <span class="fs-info-profile pl-2 text-white d-block"><?php echo $user['email'] ?></span>
         </div>
     </section>
 
