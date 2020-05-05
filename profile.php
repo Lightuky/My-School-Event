@@ -16,7 +16,7 @@ if (isset($_SESSION['auth_id'])) {
 }
 
 ?>
-    <section class="linear-gradient  h-50">
+    <section class="linear-gradient h-50" style="margin-top: 60px">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 text-center mt-3">

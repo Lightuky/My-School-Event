@@ -11354,6 +11354,30 @@ a.text-dark:focus {
   }
 }
 
+#ContentProfilePics {
+  position: absolute;
+  top: -0.3rem;
+  left: -2.7rem;
+  width: 4.5vw;
+}
+
+#ContentPosts {
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.57);
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: slategray;
+  border-radius: 10px;
+}
+
 .linear-gradient {
   background: linear-gradient(65deg, #6f1cf3, #f15ff1);
 }

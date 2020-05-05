@@ -229,6 +229,157 @@ function setNewAddress($data) {
     return $dbh->lastInsertId();
 }
 
+function getEventsSorted() {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT events.*, users.first_name, users.last_name, users.email FROM users LEFT JOIN events 
+                            ON users.id = events.admin_id WHERE events.admin_id != 'NULL' ORDER BY date_added DESC");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPostsSorted() {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT posts.*, users.first_name, users.last_name, users.email FROM users LEFT JOIN posts 
+                            ON users.id = posts.author_id WHERE posts.author_id != 'NULL' ORDER BY date_added DESC");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getHelpsSorted() {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT helps.*, users.first_name, users.last_name, users.email FROM users LEFT JOIN helps 
+                            ON users.id = helps.author_id WHERE helps.author_id != 'NULL' ORDER BY date_added DESC");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getEventComments($event_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT event_comments.*, users.id, users.first_name, users.last_name FROM event_comments LEFT JOIN users
+                            ON users.id = event_comments.author_id WHERE event_comments.event_id = :event_id");
+    $stmt->bindValue(':event_id', $event_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPostComments($post_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT posts_comments.*, users.id, users.first_name, users.last_name FROM posts_comments LEFT JOIN users
+                            ON users.id = posts_comments.author_id WHERE posts_comments.post_id = :post_id");
+    $stmt->bindValue(':post_id', $post_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getHelpComments($help_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT help_answers.*, users.id, users.first_name, users.last_name FROM help_answers LEFT JOIN users
+                            ON users.id = help_answers.author_id WHERE help_answers.help_id = :help_id");
+    $stmt->bindValue(':help_id', $help_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getEventCommentLikes($comment_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT event_comment_likes.*, users.id, users.first_name, users.last_name FROM event_comment_likes LEFT JOIN users
+                            ON users.id = event_comment_likes.user_id WHERE event_comment_likes.comment_id = :comment_id");
+    $stmt->bindValue(':comment_id', $comment_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getHelpLikes($help_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT help_likes.*, users.id, users.first_name, users.last_name FROM help_likes LEFT JOIN users
+                            ON users.id = help_likes.user_id WHERE help_likes.help_id = :help_id");
+    $stmt->bindValue(':help_id', $help_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getHelpAnswerLikes($help_answer_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT help_answers_likes.*, users.id, users.first_name, users.last_name FROM help_answers_likes LEFT JOIN users
+                            ON users.id = help_answers_likes.user_id WHERE help_answers_likes.comment_id = :help_answer_id");
+    $stmt->bindValue(':help_answer_id', $help_answer_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getHelpAnswerDislikes($answer_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT help_answers_dislikes.*, users.id, users.first_name, users.last_name FROM help_answers_dislikes LEFT JOIN users
+                            ON users.id = help_answers_dislikes.user_id WHERE help_answers_dislikes.comment_id = :answer_id");
+    $stmt->bindValue(':answer_id', $answer_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPostLikes($post_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT post_likes.*, users.id, users.first_name, users.last_name FROM post_likes LEFT JOIN users
+                            ON users.id = post_likes.user_id WHERE post_likes.post_id = :post_id");
+    $stmt->bindValue(':post_id', $post_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPostCommentLikes($comment_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT post_comment_likes.*, users.id, users.first_name, users.last_name FROM post_comment_likes LEFT JOIN users
+                            ON users.id = post_comment_likes.user_id WHERE post_comment_likes.comment_id = :comment_id");
+    $stmt->bindValue(':comment_id', $comment_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function setNewPost($data, $id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO posts (author_id, content, privacy_level) VALUES (:author_id, :content, :privacy_level)");
+    $stmt->bindValue(':author_id', $id);
+    $stmt->bindValue(':content', $data['content']);
+    $stmt->bindValue(':privacy_level', 0);
+    $stmt->execute();
+}
+
+function setNewHelp($data, $id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO helps (author_id, title, content, privacy_level) VALUES (:author_id, :title, :content, :privacy_level)");
+    $stmt->bindValue(':author_id', $id);
+    $stmt->bindValue(':author_id', $data['title']);
+    $stmt->bindValue(':content', $data['content']);
+    $stmt->bindValue(':privacy_level', 0);
+    $stmt->execute();
+}
+
+function addEventComment($data, $author_id, $event_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO event_comments (author_id, event_id, content) VALUES (:author_id, :event_id, :content)");
+    $stmt->bindValue(':author_id', $author_id);
+    $stmt->bindValue(':event_id', $event_id);
+    $stmt->bindValue(':content', $data['content']);
+    $stmt->execute();
+}
+
+function addPostComment($data, $author_id, $post_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO event_comments (author_id, post_id, content) VALUES (:author_id, :post_id, :content)");
+    $stmt->bindValue(':author_id', $author_id);
+    $stmt->bindValue(':post_id', $post_id);
+    $stmt->bindValue(':content', $data['content']);
+    $stmt->execute();
+}
+
+function addHelpAnswer($data, $author_id, $help_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO event_comments (author_id, help_id, content) VALUES (:author_id, :help_id, :content)");
+    $stmt->bindValue(':author_id', $author_id);
+    $stmt->bindValue(':help_id', $help_id);
+    $stmt->bindValue(':content', $data['content']);
+    $stmt->execute();
+}
+
 function getEvent($id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT * FROM events WHERE id = :id LIMIT 1");
