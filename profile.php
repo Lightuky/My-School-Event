@@ -16,6 +16,7 @@ if (isset($_SESSION['auth_id'])) {
 }
 
 ?>
+
     <section class="section-up"></section>
 
     <div class="section-flex">

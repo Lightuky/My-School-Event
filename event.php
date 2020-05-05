@@ -90,9 +90,15 @@ if (isset($_SESSION['auth_id'])) {
                 <span class="text-muted d-block">Privé ? : <?php echo $event_infos['is_private'] == 1 ? "Oui" : "Non" ?></span>
             </div>
         </div>
-        <?php if ($_SESSION['auth_id'] != $event_admin['id']) { ?>
-        <a href="eventmembers.php?id=<?php echo $id ?>" class="btn btn-info mt-4">Voir les membres</a>
-        <?php } ?>
+        <?php if (isset($_SESSION['auth_id'])) { ?>
+            <?php if ($_SESSION['auth_id'] != $event_admin['id']) { ?>
+            <a href="eventmembers.php?id=<?php echo $id ?>" class="btn btn-info mt-4">Voir les membres</a>
+            <?php }
+        }
+        else { ?>
+            <a href="login.php" class="btn btn-info mt-4">Voir les membres</a>
+        <?php }
+        ?>
     </div>
 </section>
 
