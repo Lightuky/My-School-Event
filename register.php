@@ -8,7 +8,7 @@ $schools = getSchools();
 ?>
 <section>
     <div class="container">
-        <div>
+        <div class="mt-5" style="padding-top: 60px!important;">
             <h2>Inscription</h2>
             <form method="post" action="assets/register.php">
                 <div class="form-group">
