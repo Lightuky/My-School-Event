@@ -255,8 +255,8 @@ function getHelpsSorted() {
 
 function getEventComments($event_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT event_comments.*, users.id, users.first_name, users.last_name FROM event_comments LEFT JOIN users
-                            ON users.id = event_comments.author_id WHERE event_comments.event_id = :event_id");
+    $stmt = $dbh->prepare("SELECT event_comments.*, users.first_name, users.last_name, users.email FROM event_comments LEFT JOIN users
+                            ON users.id = event_comments.author_id WHERE event_comments.event_id = :event_id ORDER BY date_added DESC");
     $stmt->bindValue(':event_id', $event_id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -264,8 +264,8 @@ function getEventComments($event_id) {
 
 function getPostComments($post_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT posts_comments.*, users.id, users.first_name, users.last_name FROM posts_comments LEFT JOIN users
-                            ON users.id = posts_comments.author_id WHERE posts_comments.post_id = :post_id");
+    $stmt = $dbh->prepare("SELECT post_comments.*, users.first_name, users.last_name, users.email FROM post_comments LEFT JOIN users
+                            ON users.id = post_comments.author_id WHERE post_comments.post_id = :post_id ORDER BY date_added DESC");
     $stmt->bindValue(':post_id', $post_id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -273,8 +273,8 @@ function getPostComments($post_id) {
 
 function getHelpComments($help_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT help_answers.*, users.id, users.first_name, users.last_name FROM help_answers LEFT JOIN users
-                            ON users.id = help_answers.author_id WHERE help_answers.help_id = :help_id");
+    $stmt = $dbh->prepare("SELECT help_answers.*, users.first_name, users.last_name, users.email FROM help_answers LEFT JOIN users
+                            ON users.id = help_answers.author_id WHERE help_answers.help_id = :help_id ORDER BY date_added DESC");
     $stmt->bindValue(':help_id', $help_id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -282,7 +282,7 @@ function getHelpComments($help_id) {
 
 function getEventCommentLikes($comment_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT event_comment_likes.*, users.id, users.first_name, users.last_name FROM event_comment_likes LEFT JOIN users
+    $stmt = $dbh->prepare("SELECT event_comment_likes.*, users.first_name, users.last_name FROM event_comment_likes LEFT JOIN users
                             ON users.id = event_comment_likes.user_id WHERE event_comment_likes.comment_id = :comment_id");
     $stmt->bindValue(':comment_id', $comment_id);
     $stmt->execute();
@@ -291,7 +291,7 @@ function getEventCommentLikes($comment_id) {
 
 function getHelpLikes($help_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT help_likes.*, users.id, users.first_name, users.last_name FROM help_likes LEFT JOIN users
+    $stmt = $dbh->prepare("SELECT help_likes.*, users.first_name, users.last_name FROM help_likes LEFT JOIN users
                             ON users.id = help_likes.user_id WHERE help_likes.help_id = :help_id");
     $stmt->bindValue(':help_id', $help_id);
     $stmt->execute();
@@ -300,7 +300,7 @@ function getHelpLikes($help_id) {
 
 function getHelpAnswerLikes($help_answer_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT help_answers_likes.*, users.id, users.first_name, users.last_name FROM help_answers_likes LEFT JOIN users
+    $stmt = $dbh->prepare("SELECT help_answers_likes.*, users.first_name, users.last_name FROM help_answers_likes LEFT JOIN users
                             ON users.id = help_answers_likes.user_id WHERE help_answers_likes.comment_id = :help_answer_id");
     $stmt->bindValue(':help_answer_id', $help_answer_id);
     $stmt->execute();
@@ -309,7 +309,7 @@ function getHelpAnswerLikes($help_answer_id) {
 
 function getHelpAnswerDislikes($answer_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT help_answers_dislikes.*, users.id, users.first_name, users.last_name FROM help_answers_dislikes LEFT JOIN users
+    $stmt = $dbh->prepare("SELECT help_answers_dislikes.*, users.first_name, users.last_name FROM help_answers_dislikes LEFT JOIN users
                             ON users.id = help_answers_dislikes.user_id WHERE help_answers_dislikes.comment_id = :answer_id");
     $stmt->bindValue(':answer_id', $answer_id);
     $stmt->execute();
@@ -318,7 +318,7 @@ function getHelpAnswerDislikes($answer_id) {
 
 function getPostLikes($post_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT post_likes.*, users.id, users.first_name, users.last_name FROM post_likes LEFT JOIN users
+    $stmt = $dbh->prepare("SELECT post_likes.*, users.first_name, users.last_name FROM post_likes LEFT JOIN users
                             ON users.id = post_likes.user_id WHERE post_likes.post_id = :post_id");
     $stmt->bindValue(':post_id', $post_id);
     $stmt->execute();
@@ -327,7 +327,7 @@ function getPostLikes($post_id) {
 
 function getPostCommentLikes($comment_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT post_comment_likes.*, users.id, users.first_name, users.last_name FROM post_comment_likes LEFT JOIN users
+    $stmt = $dbh->prepare("SELECT post_comment_likes.*, users.first_name, users.last_name FROM post_comment_likes LEFT JOIN users
                             ON users.id = post_comment_likes.user_id WHERE post_comment_likes.comment_id = :comment_id");
     $stmt->bindValue(':comment_id', $comment_id);
     $stmt->execute();
@@ -353,7 +353,7 @@ function setNewHelp($data, $id) {
     $stmt->execute();
 }
 
-function addEventComment($data, $author_id, $event_id) {
+function addEventComment($author_id, $event_id, $data) {
     $dbh = connectDB();
     $stmt = $dbh->prepare( "INSERT INTO event_comments (author_id, event_id, content) VALUES (:author_id, :event_id, :content)");
     $stmt->bindValue(':author_id', $author_id);
@@ -362,9 +362,9 @@ function addEventComment($data, $author_id, $event_id) {
     $stmt->execute();
 }
 
-function addPostComment($data, $author_id, $post_id) {
+function addPostComment($author_id, $post_id, $data) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare( "INSERT INTO event_comments (author_id, post_id, content) VALUES (:author_id, :post_id, :content)");
+    $stmt = $dbh->prepare( "INSERT INTO post_comments (author_id, post_id, content) VALUES (:author_id, :post_id, :content)");
     $stmt->bindValue(':author_id', $author_id);
     $stmt->bindValue(':post_id', $post_id);
     $stmt->bindValue(':content', $data['content']);
@@ -373,7 +373,7 @@ function addPostComment($data, $author_id, $post_id) {
 
 function addHelpAnswer($data, $author_id, $help_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare( "INSERT INTO event_comments (author_id, help_id, content) VALUES (:author_id, :help_id, :content)");
+    $stmt = $dbh->prepare( "INSERT INTO help_answers (author_id, help_id, content) VALUES (:author_id, :help_id, :content)");
     $stmt->bindValue(':author_id', $author_id);
     $stmt->bindValue(':help_id', $help_id);
     $stmt->bindValue(':content', $data['content']);
