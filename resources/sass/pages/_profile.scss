@@ -1,67 +1,52 @@
-
-
 @media (max-width: 640px) {
 
-  .font-size-name-profile{
+  .font-size-name-profile {
     font-size: 160%;
   }
 
-  .fs-info-profile{
+  .fs-info-profile {
     font-size: 65%;
   }
 
-  .section-down{
+  .section-down {
     background: linear-gradient(65deg, #6f1cf3, #f15ff1);
   }
-
 
 }
 
 @media (min-width: 640px) {
 
-  header{
-    background-color: #1b1e21;
-    width: 20%;
-    min-height: 100vh;
-  }
-
-  #app{
+  #app {
     display: flex;
     min-height: 100vh;
-
   }
 
-  main{
+  main {
     width: 100%;
     min-height: 100vh;
   }
 
-  .section-up{
+  .section-up {
     position: static;
     height: 20%;
     background: linear-gradient(65deg, #6f1cf3, #f15ff1);
   }
 
-  .section-flex{
+  .section-flex {
     display: flex;
   }
 
-  .section-down{
+  .section-down {
     width: 40%;
     min-height: 100vh;
     border-right: solid 1px #95999c;
   }
 
-  .d-profile-picture{
-    
+  .d-profile-picture {
 
   }
 
+  body {
 
-
-body{
-
-
-}
-
+  }
 }

@@ -1,8 +1,13 @@
 #ContentProfilePics {
-  position: absolute;
   top: -0.3rem;
   left: -2.7rem;
   width: 4.5vw;
+}
+
+#CommentProfilePics {
+  top: 50px;
+  left: -65px;
+  width: 3.7vw;
 }
 
 #ContentPosts {
@@ -20,4 +25,8 @@ html::-webkit-scrollbar {
 html::-webkit-scrollbar-thumb {
   background: slategray;
   border-radius: 10px;
+}
+
+#ShowComments:focus, #showCommentForm:focus {
+  box-shadow: none;
 }
