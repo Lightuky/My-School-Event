@@ -11364,6 +11364,7 @@ a.text-dark:focus {
   width: 4.5vw;
 }
 
+
 #CommentProfilePics {
   top: 50px;
   left: -65px;
@@ -11393,6 +11394,15 @@ html::-webkit-scrollbar-thumb {
 }
 
 @media (max-width: 640px) {
+  .menu-profile {
+    display: none;
+  }
+
+  .d-profile-picture {
+    width: 25%;
+    margin: auto;
+  }
+
   .font-size-name-profile {
     font-size: 160%;
   }
@@ -11404,6 +11414,10 @@ html::-webkit-scrollbar-thumb {
   .section-down {
     background: linear-gradient(65deg, #6f1cf3, #f15ff1);
   }
+
+  .color-text-white {
+    color: white;
+  }
 }
 
 @media (min-width: 640px) {
@@ -11411,6 +11425,10 @@ html::-webkit-scrollbar-thumb {
     display: -webkit-box;
     display: flex;
     min-height: 100vh;
+  }
+
+  .information-profile {
+    margin-top: 50%;
   }
 
   main {
@@ -11430,9 +11448,17 @@ html::-webkit-scrollbar-thumb {
   }
 
   .section-down {
-    width: 40%;
+    width: 25%;
     min-height: 100vh;
     border-right: solid 1px #95999c;
   }
+
+  .d-profile-picture {
+    position: absolute;
+    margin-left: 1%;
+    width: 20%;
+    top: 50px;
+  }
+
 }
 

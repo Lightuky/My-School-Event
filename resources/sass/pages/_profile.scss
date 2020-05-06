@@ -1,4 +1,13 @@
+
 @media (max-width: 640px) {
+  .menu-profile{
+    display: none;
+  }
+
+  .d-profile-picture{
+    width: 25%;
+    margin: auto;
+  }
 
   .font-size-name-profile {
     font-size: 160%;
@@ -12,16 +21,33 @@
     background: linear-gradient(65deg, #6f1cf3, #f15ff1);
   }
 
+
+  .color-text-white{
+    color: white;
+  }
+
 }
 
 @media (min-width: 640px) {
 
+
+  #app{
+
   #app {
+
     display: flex;
     min-height: 100vh;
   }
 
+
+  .information-profile{
+    margin-top: 50%;
+  }
+
+  main{
+
   main {
+
     width: 100%;
     min-height: 100vh;
   }
@@ -36,11 +62,31 @@
     display: flex;
   }
 
+
+  .section-down{
+    width: 25%;
+
   .section-down {
     width: 40%;
+
     min-height: 100vh;
     border-right: solid 1px #95999c;
+
   }
+
+
+  .d-profile-picture{
+
+    position: absolute;
+    margin-left: 1%;
+    width: 20%;
+    top:50px
+
+
+
+
+  }
+
 
   .d-profile-picture {
 
@@ -49,4 +95,5 @@
   body {
 
   }
+
 }
