@@ -20,12 +20,36 @@ if (isset($_SESSION['auth_id'])) {
     <section class="section-up"></section>
 
     <div class="section-flex">
+    <section class="menu-profile" style="width: 17%">
+        <div class=" col-2 m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="width: 230px; height: 100vh; bottom: 0;">
+            <div>
+                <a href="index.php" class="text-white nav-link border py-3 mt-2 border-left-0">Acceuil</a>
+                <?php if (!isset($_SESSION['auth_id'])) { ?>
+                    <a href="login.php" class="text-white nav-link border py-3 mt-5 border-left-0">Se connecter</a>
+                    <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
+                    <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                <?php }
+                else { ?>
+                    <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
+                    <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
+                    <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                <?php } ?>
+            </div>
+            <?php if (isset($_SESSION['auth_id'])) { ?>
+                <div class="">
+                    <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
+                    <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
+                </div>
+            <?php } ?>
+        </div>
+
+    </section>
     <section class="section-down">
-        <div class="container d-flex align-content-center">
+        <div class="container d-flex align-content-center information-profile">
             <div class="">
                 <div class="text-center">
-                    <img src="https://www.gravatar.com/avatar/<?php echo md5($user['email']); ?>?s=600" alt="" class="d-profile-picture m-auto d-block shadow border border-white rounded-circle w-25">
-                    <strong class="small">Inscrit <?php echo getDateForHumans($user['date_added']); ?></strong>
+                    <img src="https://www.gravatar.com/avatar/<?php echo md5($user['email']); ?>?s=600" alt="" class="d-profile-picture d-block shadow border border-white rounded-circle ">
+                    <strong class="small color-text-white">Inscrit <?php echo getDateForHumans($user['date_added']); ?></strong>
                     <div class="container">
                         <?php if (isset($_SESSION['auth_id'])) {
                             if ($id == $_SESSION['auth_id']) { ?>
@@ -62,7 +86,7 @@ if (isset($_SESSION['auth_id'])) {
                 <div class="">
                     <div class=" text-center">
 
-                        <h1 class="font-size-name-profile" ><?php echo $user['first_name'] . " " . $user['last_name'] ?></h1>
+                        <h1 class="font-size-name-profile color-text-white" ><?php echo $user['first_name'] . " " . $user['last_name'] ?></h1>
 
                     <!--</div>
                     <div class="mt-5 h3 text-muted">Événements gérés :</div>
@@ -75,12 +99,13 @@ if (isset($_SESSION['auth_id'])) {
             </div>
         </div>
         <div class="d-flex justify-content-center mt-2 pb-5">
-            <span class="fs-info-profile pr-2 border-right d-block"><?php echo $user['school_year'] ?>°</span>
-            <span class="fs-info-profile pr-2 pl-2  border-right d-block"><?php echo $user_school['name'] ?></span>
-            <span class="fs-info-profile pl-2 d-block"><?php echo $user['email'] ?></span>
+            <span class="fs-info-profile pr-2 border-right d-block color-text-white"><?php echo $user['school_year'] ?>°</span>
+            <span class="fs-info-profile pr-2 pl-2  border-right d-block color-text-white"><?php echo $user_school['name'] ?></span>
+            <span class="fs-info-profile pl-2 d-block color-text-white"><?php echo $user['email'] ?></span>
         </div>
     </section>
-    <section class="section-feed"></section>
+    <section class="section-feed">
+    </section>
     <div>
 
 <?php require_once 'includes/footer.php'; ?>

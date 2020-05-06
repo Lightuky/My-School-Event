@@ -11356,54 +11356,8 @@ a.text-dark:focus {
   }
 }
 
-@media (max-width: 640px) {
-  .font-size-name-profile {
-    font-size: 160%;
-  }
-
-  .fs-info-profile {
-    font-size: 65%;
-  }
-
-  .section-down {
-    background: linear-gradient(65deg, #6f1cf3, #f15ff1);
-  }
-}
-
-@media (min-width: 640px) {
-  header {
-    background-color: #1b1e21;
-    width: 20%;
-    min-height: 100vh;
-  }
-
-  #app {
-    display: -webkit-box;
-    display: flex;
-    min-height: 100vh;
-  }
-
-  main {
-    width: 100%;
-    min-height: 100vh;
-  }
-
-  .section-up {
-    position: static;
-    height: 20%;
-    background: linear-gradient(65deg, #6f1cf3, #f15ff1);
-  }
-
-  .section-flex {
-    display: -webkit-box;
-    display: flex;
-  }
-
-  .section-down {
-    width: 40%;
-    min-height: 100vh;
-    border-right: solid 1px #95999c;
-  }
+.linear-gradient {
+  background: linear-gradient(65deg, #6f1cf3, #f15ff1);
 }
 
 #ContentProfilePics {
@@ -11429,3 +11383,72 @@ html::-webkit-scrollbar-thumb {
   background: slategray;
   border-radius: 10px;
 }
+
+@media (max-width: 640px) {
+  .menu-profile {
+    display: none;
+  }
+
+  .d-profile-picture {
+    width: 25%;
+    margin: auto;
+  }
+
+  .font-size-name-profile {
+    font-size: 160%;
+  }
+
+  .fs-info-profile {
+    font-size: 65%;
+  }
+
+  .section-down {
+    background: linear-gradient(65deg, #6f1cf3, #f15ff1);
+  }
+
+  .color-text-white {
+    color: white;
+  }
+}
+
+@media (min-width: 640px) {
+  #app {
+    display: -webkit-box;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  .information-profile {
+    margin-top: 50%;
+  }
+
+  main {
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  .section-up {
+    position: static;
+    height: 20%;
+    background: linear-gradient(65deg, #6f1cf3, #f15ff1);
+  }
+
+  .section-flex {
+    display: -webkit-box;
+    display: flex;
+  }
+
+  .section-down {
+    width: 25%;
+    min-height: 100vh;
+    border-right: solid 1px #95999c;
+  }
+
+  .d-profile-picture {
+    position: absolute;
+    margin-left: 1%;
+    width: 20%;
+    top: 50px;
+  }
+}
+
