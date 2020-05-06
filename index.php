@@ -71,7 +71,7 @@ $helps = getHelpsSorted();
                             <form method="post" action="assets/addpost.php">
                                 <div class="form-group">
                                     <label for="content">Contenu du post</label>
-                                    <textarea class="form-control mt-1" name="content" rows="2"></textarea>
+                                    <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
                                 </div>
                                 <?php if (isset($_SESSION['auth_id'])) { ?>
                                     <button class="btn btn-outline-info my-2">Poster</button>
@@ -90,22 +90,124 @@ $helps = getHelpsSorted();
                                 <p class="card-text text-muted"><?php echo $post['content'] ?></p>
                                 <div class="d-flex">
                                     <i class="fas fa-star mt-1" style="color: gold"></i>
-                                    <div class="ml-2"><?php echo count(getPostComments($post['id'])); ?></div>
+                                    <div class="ml-2"><?php echo count(getPostLikes($post['id'])); ?></div>
                                 </div>
                                 <hr class="bg-secondary">
                                 <div class="d-flex justify-content-around mt-3">
+                                    <?php if (isset($_SESSION['auth_id'])) {
+                                        $post_likes = getPostLikes($post['id']);
+                                        if (empty($post_likes)) { ?>
+                                            <div class="d-flex">
+                                                <a href="assets/addpostlike.php?id=<?php echo $post['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-star mt-1 text-muted"></i> Favori</a>
+                                            </div>
+                                        <?php }
+                                        else {
+                                            foreach ($post_likes as $post_like) {
+                                                if ($post_like['user_id'] == $_SESSION['auth_id']) { ?>
+                                                    <div class="d-flex">
+                                                        <a href="assets/delpostlike.php?id=<?php echo $post['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-star mt-1 text-warning"></i> Favori</a>
+                                                    </div>
+                                                <?php  }
+                                                else { ?>
+                                                    <div class="d-flex">
+                                                        <a href="assets/addpostlike.php?id=<?php echo $post['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-star mt-1 text-muted"></i> Favori</a>
+                                                    </div>
+                                                <?php }
+                                            }
+                                        }
+                                    }
+                                    else { ?>
+                                        <div class="d-flex">
+                                            <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-star mt-1 text-muted"></i> Favori</a>
+                                        </div>
+                                    <?php } ?>
                                     <div class="d-flex">
-                                        <i class="far fa-star mt-1 text-muted"></i>
-                                        <a href="#" class="card-link ml-2 text-muted">Favori</a>
+                                        <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
                                     </div>
                                     <div class="d-flex">
-                                        <i class="far fa-comment-alt mt-1 text-muted"></i>
-                                        <a href="#" class="card-link ml-2 text-muted">Commenter</a>
+                                        <a href="#" class="card-link ml-2 text-muted"><i class="fas fa-share mt-1 text-muted"></i> Partager</a>
                                     </div>
-                                    <div class="d-flex">
-                                        <i class="fas fa-share mt-1 text-muted"></i>
-                                        <a href="#" class="card-link ml-2 text-muted">Partager</a>
+                                </div>
+                            </div>
+                            <div class="card-body text-center">
+                                <div id="ContentPosts" class="col-10 mx-auto d-none newcommentform">
+                                    <div class="card-header text-center h5">
+                                        Ajouter un commentaire
                                     </div>
+                                    <div class="card-body my-3 p-1">
+                                        <form method="post" action="assets/addpostcomment.php?id=<?php echo $post['id'] ?>">
+                                            <div class="form-group">
+                                                <label for="content">Contenu du commentaire</label>
+                                                <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
+                                            </div>
+                                            <?php if (isset($_SESSION['auth_id'])) { ?>
+                                                <button class="btn btn-outline-info my-2">Envoyer</button>
+                                            <?php } else { ?>
+                                                <a href="login.php" class="btn btn-outline-info my-2">Envoyer</a>
+                                            <?php } ?>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowComments">Montrer les commentaires</button>
+                                    <div class="nav-link text-muted px-0">(<?php echo count(getPostComments($post['id'])) ?>)</div>
+                                </div>
+                                <div class="d-none ContentsComments">
+                                    <?php $post_comments = getPostComments($post['id']);
+                                    foreach ($post_comments as $post_comment) { ?>
+                                        <div class="card-body" id="ContentPosts">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <img src="https://www.gravatar.com/avatar/<?php echo md5($post_comment['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
+                                                    <h6 class="card-title"><?php echo $post_comment['first_name'] . " " . $post_comment['last_name'] ?></h6>
+                                                    <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($post_comment['date_added']); ?></h6>
+                                                </div>
+                                                <div class="mt-auto mb-4">
+                                                    <div class="d-flex">
+                                                        <i class="fas fa-star mt-1" style="color: gold"></i>
+                                                        <div class="ml-2"><?php echo count(getPostCommentLikes($post_comment['id'])); ?></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="card-text text-muted"><?php echo $post_comment['content'] ?></p>
+                                            <hr class="bg-secondary">
+                                            <div class="d-flex justify-content-around mt-3">
+                                                <?php if (isset($_SESSION['auth_id'])) {
+                                                    $post_comment_likes = getPostCommentLikes($post_comment['id']);
+                                                    if (empty($post_comment_likes)) { ?>
+                                                        <div class="d-flex">
+                                                            <a href="assets/addpostcommentlike.php?id=<?php echo $post_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
+                                                        </div>
+                                                    <?php }
+                                                    else {
+                                                        foreach ($post_comment_likes as $post_comment_like) {
+                                                            if ($post_comment_like['user_id'] == $_SESSION['auth_id']) { ?>
+                                                                <div class="d-flex">
+                                                                    <a href="assets/delpostcommentlike.php?id=<?php echo $post_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-heart mt-1 text-danger"></i> Aimé</a>
+                                                                </div>
+                                                            <?php  }
+                                                            else { ?>
+                                                                <div class="d-flex">
+                                                                    <a href="assets/addpostcommentlike.php?id=<?php echo $post_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
+                                                                </div>
+                                                            <?php }
+                                                        }
+                                                    }
+                                                }
+                                                else { ?>
+                                                    <div class="d-flex">
+                                                        <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
+                                                    </div>
+                                                <?php } ?>
+                                                <div class="d-flex">
+                                                    <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
+                                                </div>
+                                                <div class="d-flex">
+                                                    <a href="#" class="card-link ml-2 text-muted"><i class="fas fa-share mt-1 text-muted"></i> Partager</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -129,22 +231,129 @@ $helps = getHelpsSorted();
                                 </div>
                                 <div class="d-flex mt-3">
                                     <i class="fas fa-check-circle mt-1" style="color: forestgreen"></i>
-                                    <div class="ml-2"><?php echo count(getEventComments($event['id'])); ?></div>
+                                    <div class="ml-2"><?php echo count(getEventMembers($event['id'])); ?></div>
                                 </div>
                                 <hr class="bg-secondary">
                                 <div class="d-flex justify-content-around mt-3">
+                                    <?php if (isset($_SESSION['auth_id'])) {
+                                        if ($event['admin_id'] == $_SESSION['auth_id']) { ?>
+                                            <div class="d-flex">
+                                                <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
+                                            </div>
+                                        <?php }
+                                        else {
+                                            $event_state = checkEventState($event['id'], $_SESSION['auth_id']);
+                                            if (empty($event_state)) { ?>
+                                                <div class="d-flex">
+                                                    <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
+                                                </div>
+                                            <?php }
+                                            else {
+                                                if ($event_state['private_pending'] == "1") { ?>
+                                                    <div class="d-flex">
+                                                        <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-warning"></i> Demande Envoyée</a>
+                                                    </div>
+                                                <?php  }
+                                                elseif ($event_state['private_pending'] == "0") { ?>
+                                                    <div class="d-flex">
+                                                        <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
+                                                    </div>
+                                                <?php }
+                                            }
+                                        }
+                                    }
+                                    else { ?>
+                                        <div class="d-flex">
+                                            <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
+                                        </div>
+                                    <?php } ?>
                                     <div class="d-flex">
-                                        <i class="far fa-check-circle mt-1 text-muted"></i>
-                                        <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted">Participer</a>
+                                        <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
                                     </div>
                                     <div class="d-flex">
-                                        <i class="far fa-comment-alt mt-1 text-muted"></i>
-                                        <a href="#" class="card-link ml-2 text-muted">Commenter</a>
+                                        <a href="#" class="card-link ml-2 text-muted"><i class="fas fa-share mt-1 text-muted"></i> Partager</a>
                                     </div>
-                                    <div class="d-flex">
-                                        <i class="fas fa-share mt-1 text-muted"></i>
-                                        <a href="#" class="card-link ml-2 text-muted">Partager</a>
+                                </div>
+                            </div>
+                            <div class="card-body text-center">
+                                <div id="ContentPosts" class="col-10 mx-auto d-none newcommentform">
+                                    <div class="card-header text-center h5">
+                                        Ajouter un commentaire
                                     </div>
+                                    <div class="card-body my-3 p-1">
+                                        <form method="post" action="assets/addeventcomment.php?id=<?php echo $event['id'] ?>">
+                                            <div class="form-group">
+                                                <label for="content">Contenu du commentaire</label>
+                                                <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
+                                            </div>
+                                            <?php if (isset($_SESSION['auth_id'])) { ?>
+                                                <button class="btn btn-outline-info my-2">Envoyer</button>
+                                            <?php } else { ?>
+                                                <a href="login.php" class="btn btn-outline-info my-2">Envoyer</a>
+                                            <?php } ?>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowComments">Montrer les commentaires</button>
+                                    <div class="nav-link text-muted px-0">(<?php echo count(getEventComments($event['id'])) ?>)</div>
+                                </div>
+                                <div class="d-none ContentsComments">
+                                    <?php $event_comments = getEventComments($event['id']);
+                                    foreach ($event_comments as $event_comment) { ?>
+                                        <div class="card-body" id="ContentPosts">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <img src="https://www.gravatar.com/avatar/<?php echo md5($event_comment['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
+                                                    <h6 class="card-title"><?php echo $event_comment['first_name'] . " " . $event_comment['last_name'] ?></h6>
+                                                    <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($event_comment['date_added']); ?></h6>
+                                                </div>
+                                                <div class="mt-auto mb-4">
+                                                    <div class="d-flex">
+                                                        <i class="fas fa-star mt-1" style="color: gold"></i>
+                                                        <div class="ml-2"><?php echo count(getPostCommentLikes($event_comment['id'])); ?></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="card-text text-muted"><?php echo $event_comment['content'] ?></p>
+                                            <hr class="bg-secondary">
+                                            <div class="d-flex justify-content-around mt-3">
+                                                <?php if (isset($_SESSION['auth_id'])) {
+                                                    $event_comment_likes = getPostCommentLikes($event_comment['id']);
+                                                    if (empty($event_comment_likes)) { ?>
+                                                        <div class="d-flex">
+                                                            <a href="assets/addeventcommentlike.php?id=<?php echo $event_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
+                                                        </div>
+                                                    <?php }
+                                                    else {
+                                                        foreach ($event_comment_likes as $event_comment_like) {
+                                                            if ($event_comment_like['user_id'] == $_SESSION['auth_id']) { ?>
+                                                                <div class="d-flex">
+                                                                    <a href="assets/deleventcommentlike.php?id=<?php echo $event_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-heart mt-1 text-danger"></i> Aimé</a>
+                                                                </div>
+                                                            <?php  }
+                                                            else { ?>
+                                                                <div class="d-flex">
+                                                                    <a href="assets/addeventcommentlike.php?id=<?php echo $event_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
+                                                                </div>
+                                                            <?php }
+                                                        }
+                                                    }
+                                                }
+                                                else { ?>
+                                                    <div class="d-flex">
+                                                        <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
+                                                    </div>
+                                                <?php } ?>
+                                                <div class="d-flex">
+                                                    <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
+                                                </div>
+                                                <div class="d-flex">
+                                                    <a href="#" class="card-link ml-2 text-muted"><i class="fas fa-share mt-1 text-muted"></i> Partager</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -159,11 +368,11 @@ $helps = getHelpsSorted();
                             <form method="post" action="assets/addpost.php">
                                 <div class="form-group">
                                     <label for="title">Titre</label>
-                                    <input type="text" name="title" placeholder="Comment faire une ancre en HTML ?" class="form-control">
+                                    <input type="text" name="title" placeholder="Comment faire une ancre en HTML ?" class="form-control" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="content">Description</label>
-                                    <textarea class="form-control mt-1" name="content" rows="2"></textarea>
+                                    <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
                                 </div>
                                 <?php if (isset($_SESSION['auth_id'])) { ?>
                                     <button class="btn btn-outline-info my-2">Poster</button>

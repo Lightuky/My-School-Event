@@ -69,6 +69,13 @@ $('#SortMenuAll').click(function () {
     "display": "block"
   });
 });
+$('.ShowComments').click(function () {
+  $(this).text($(this).text() === 'Montrer les commentaires' ? 'Masquer les commentaires' : 'Montrer les commentaires');
+  $(this).closest("div.d-flex").next(".ContentsComments").toggleClass("d-none");
+});
+$('.showCommentForm').click(function () {
+  $(this).closest("div.col-10").find('.newcommentform').toggleClass("d-none");
+});
 
 /***/ }),
 
