@@ -17,6 +17,7 @@ if (isset($_SESSION['auth_id'])) {
 
 ?>
 
+
     <section class="section-up"></section>
     <script>document.getElementById('header').style.display = "none";</script>
     <div class="section-flex">
@@ -31,7 +32,7 @@ if (isset($_SESSION['auth_id'])) {
                 <?php }
                 else { ?>
                     <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
-                    <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
+                    <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border-left-0">Calendrier</a>
                     <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                 <?php } ?>
             </div>
@@ -45,6 +46,41 @@ if (isset($_SESSION['auth_id'])) {
 
     </section>
     <section class="section-down">
+        <div class="m-button-menu">
+            <button class="" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <i class="fas fa-bars  text-white"></i>
+            </button>
+
+            <div class="collapse" id="collapseExample">
+
+                    <div class=" m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="width: 100vw; height: 100vh; bottom: 0;">
+                        <div>
+                            <button class="" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                <i class="fas fa-bars text-white turn"></i>
+                            </button>
+                            <a href="index.php" class="text-white nav-link border py-3 mt-2 border-left-0">Acceuil</a>
+                            <?php if (!isset($_SESSION['auth_id'])) { ?>
+                                <a href="login.php" class="text-white nav-link border py-3 mt-5 border-left-0">Se connecter</a>
+                                <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
+                                <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                            <?php }
+                            else { ?>
+                                <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
+                                <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border-left-0">Calendrier</a>
+                                <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                            <?php } ?>
+                        </div>
+                        <?php if (isset($_SESSION['auth_id'])) { ?>
+                            <div class="">
+                                <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
+                                <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
+                            </div>
+                        <?php } ?>
+                    </div>
+
+
+            </div>
+        </div>
         <div class="container d-flex align-content-center information-profile">
             <div class="">
                 <div class="text-center">
@@ -99,13 +135,34 @@ if (isset($_SESSION['auth_id'])) {
             </div>
         </div>
         <div class="d-flex justify-content-center mt-2 pb-5">
-            <span class="fs-info-profile pr-2 border-right d-block color-text-white"><?php echo $user['school_year'] ?>°</span>
-            <span class="fs-info-profile pr-2 pl-2  border-right d-block color-text-white"><?php echo $user_school['name'] ?></span>
-            <span class="fs-info-profile pl-2 d-block color-text-white"><?php echo $user['email'] ?></span>
+            <span class="fs-1vw fs-info-profile pr-2 border-right d-block color-text-white"><?php echo $user['school_year'] ?>°</span>
+            <span class="fs-1vw fs-info-profile pr-2 pl-2  border-right d-block color-text-white"><?php echo $user_school['name'] ?></span>
+            <span class="fs-1vw fs-info-profile pl-2 d-block color-text-white"><?php echo $user['email'] ?></span>
         </div>
     </section>
-    <section class="section-feed">
+    <section class="section-feed align-content-center">
+        <div class="button-choice">
+            <div class="d-flex ">
+                <div class="col-3  text-center">
+                    <a href="#" class="h5 nav-link text-white mt-3" id="SortMenuAll">Tout</a>
+                    <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
+                </div>
+                <div class="col-3 text-center">
+                    <a href="#" class="h5 nav-link text-white mt-5" id="SortMenuPosts">Posts</a>
+                    <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
+                </div>
+                <div class="col-3 text-center">
+                    <a href="#" class="h5 nav-link text-white mt-5" id="SortMenuEvents">Événements</a>
+                    <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
+                </div>
+                <div class="col-3 text-center">
+                    <a href="#" class="h5 nav-link text-white mt-5" id="SortMenuHelps">Helps</a>
+                    <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
+                </div>
+            </div>
     </section>
-    <div>
+
+
+
 
 <?php require_once 'includes/footer.php'; ?>
