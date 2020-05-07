@@ -1,12 +1,19 @@
 
-@media (max-width: 640px) {
+@media (max-width: 760px) {
   .menu-profile{
     display: none;
+  }
+
+  .turn {
+    transform: rotate(90deg);
+
   }
 
   .d-profile-picture{
     width: 25%;
     margin: auto;
+    margin-top: 10%;
+
   }
 
   .font-size-name-profile {
@@ -26,12 +33,12 @@
     color: white;
   }
 
+
+
 }
 
-@media (min-width: 640px) {
+@media (min-width: 760px) {
 
-
-  #app{
 
   #app {
 
@@ -44,7 +51,13 @@
     margin-top: 50%;
   }
 
-  main{
+  .fs-1vw{
+    font-size: 1vw;
+  }
+
+  .font-size-name-profile{
+    font-size: 3vw;
+  }
 
   main {
 
@@ -65,15 +78,14 @@
 
   .section-down{
     width: 25%;
-
-  .section-down {
-    width: 40%;
-
     min-height: 100vh;
     border-right: solid 1px #95999c;
 
   }
 
+  .section-feed{
+    width: 60%;
+  }
 
   .d-profile-picture{
 
@@ -82,9 +94,17 @@
     width: 20%;
     top:50px
 
+  }
 
+  .button-choice{
+    position: absolute;
+    top: 73px;
+    width: 60%;
 
+  }
 
+  .m-button-menu{
+    display: none;
   }
 
 
