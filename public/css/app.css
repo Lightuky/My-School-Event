@@ -11461,7 +11461,7 @@ html::-webkit-scrollbar-thumb {
   }
 
   .section-down {
-    width: 25%;
+    width: 40%;
     min-height: 100vh;
     border-right: solid 1px #95999c;
   }
@@ -11486,5 +11486,6 @@ html::-webkit-scrollbar-thumb {
   .m-button-menu {
     display: none;
   }
+  
 }
 

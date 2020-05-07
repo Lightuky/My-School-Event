@@ -34,22 +34,19 @@
   }
 
 
-
 }
 
 @media (min-width: 760px) {
 
-
   #app {
-
     display: flex;
     min-height: 100vh;
   }
 
-
-  .information-profile{
+  .information-profile {
     margin-top: 50%;
   }
+
 
   .fs-1vw{
     font-size: 1vw;
@@ -60,7 +57,6 @@
   }
 
   main {
-
     width: 100%;
     min-height: 100vh;
   }
@@ -76,12 +72,13 @@
   }
 
 
+
   .section-down{
     width: 25%;
     min-height: 100vh;
     border-right: solid 1px #95999c;
-
   }
+
 
   .section-feed{
     width: 60%;
@@ -105,15 +102,16 @@
 
   .m-button-menu{
     display: none;
-  }
-
-
+    
   .d-profile-picture {
-
+    position: absolute;
+    margin-left: 1%;
+    width: 20%;
+    top: 50px;
   }
+
 
   body {
-
   }
 
 }
