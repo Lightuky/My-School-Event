@@ -18,7 +18,7 @@ if (isset($_SESSION['auth_id'])) {
 ?>
 
     <section class="section-up"></section>
-
+    <script>document.getElementById('header').style.display = "none";</script>
     <div class="section-flex">
     <section class="menu-profile" style="width: 17%">
         <div class=" col-2 m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="width: 230px; height: 100vh; bottom: 0;">

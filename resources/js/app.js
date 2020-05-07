@@ -46,9 +46,16 @@ $('.ShowComments').click(function() {
     $(this).closest("div.d-flex").next(".ContentsComments").toggleClass("d-none");
 });
 
+$('.ShowAnswer').click(function() {
+    $(this).text(($(this).text() === 'Montrer la réponse la plus utile') ? 'Masquer la réponse la plus utile' : 'Montrer la réponse la plus utile');
+    $(this).closest("div.d-flex").next(".BestAnswer").toggleClass("d-none");
+});
+
 $('.showCommentForm').click(function() {
     $(this).closest("div.col-10").find('.newcommentform').toggleClass("d-none");
 });
+
+
 
 
 

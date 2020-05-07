@@ -73,6 +73,10 @@ $('.ShowComments').click(function () {
   $(this).text($(this).text() === 'Montrer les commentaires' ? 'Masquer les commentaires' : 'Montrer les commentaires');
   $(this).closest("div.d-flex").next(".ContentsComments").toggleClass("d-none");
 });
+$('.ShowAnswer').click(function () {
+  $(this).text($(this).text() === 'Montrer la réponse la plus utile' ? 'Masquer la réponse la plus utile' : 'Montrer la réponse la plus utile');
+  $(this).closest("div.d-flex").next(".BestAnswer").toggleClass("d-none");
+});
 $('.showCommentForm').click(function () {
   $(this).closest("div.col-10").find('.newcommentform').toggleClass("d-none");
 });
@@ -97,8 +101,8 @@ $('.showCommentForm').click(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Applications/MAMP/htdocs/mse/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Applications/MAMP/htdocs/mse/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\wamp64\www\mse\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\wamp64\www\mse\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

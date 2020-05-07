@@ -345,11 +345,10 @@ function setNewPost($data, $id) {
 
 function setNewHelp($data, $id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare( "INSERT INTO helps (author_id, title, content, privacy_level) VALUES (:author_id, :title, :content, :privacy_level)");
+    $stmt = $dbh->prepare( "INSERT INTO helps (author_id, title, content) VALUES (:author_id, :title, :content)");
     $stmt->bindValue(':author_id', $id);
-    $stmt->bindValue(':author_id', $data['title']);
+    $stmt->bindValue(':title', $data['title']);
     $stmt->bindValue(':content', $data['content']);
-    $stmt->bindValue(':privacy_level', 0);
     $stmt->execute();
 }
 
@@ -377,6 +376,54 @@ function addHelpAnswer($data, $author_id, $help_id) {
     $stmt->bindValue(':author_id', $author_id);
     $stmt->bindValue(':help_id', $help_id);
     $stmt->bindValue(':content', $data['content']);
+    $stmt->execute();
+}
+
+function addPostLike($post_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO post_likes (post_id, user_id) VALUES (:post_id, :user_id)");
+    $stmt->bindValue(':post_id', $post_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function delPostLike($post_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM post_likes WHERE (post_id = :post_id AND user_id = :user_id)");
+    $stmt->bindValue(':post_id', $post_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function addPostCommentLike($post_comment_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO post_comment_likes (comment_id, user_id) VALUES (:post_comment_id, :user_id)");
+    $stmt->bindValue(':post_comment_id', $post_comment_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function delPostCommentLike($post_comment_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM post_comment_likes WHERE (comment_id = :post_comment_id AND user_id = :user_id)");
+    $stmt->bindValue(':post_comment_id', $post_comment_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function addEventCommentLike($event_comment_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO event_comment_likes (comment_id, user_id) VALUES (:event_comment_id, :user_id)");
+    $stmt->bindValue(':event_comment_id', $event_comment_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function delEventCommentLike($event_comment_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM event_comment_likes WHERE (comment_id = :event_comment_id AND user_id = :user_id)");
+    $stmt->bindValue(':event_comment_id', $event_comment_id);
+    $stmt->bindValue(':user_id', $auth_id);
     $stmt->execute();
 }
 

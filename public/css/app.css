@@ -11364,7 +11364,6 @@ a.text-dark:focus {
   width: 4.5vw;
 }
 
-
 #CommentProfilePics {
   top: 50px;
   left: -65px;
@@ -11448,7 +11447,7 @@ html::-webkit-scrollbar-thumb {
   }
 
   .section-down {
-    width: 25%;
+    width: 40%;
     min-height: 100vh;
     border-right: solid 1px #95999c;
   }
@@ -11459,6 +11458,5 @@ html::-webkit-scrollbar-thumb {
     width: 20%;
     top: 50px;
   }
-
 }
 
