@@ -11461,7 +11461,7 @@ html::-webkit-scrollbar-thumb {
   }
 
   .section-down {
-    width: 40%;
+    width: 25%;
     min-height: 100vh;
     border-right: solid 1px #95999c;
   }
@@ -11486,6 +11486,12 @@ html::-webkit-scrollbar-thumb {
   .m-button-menu {
     display: none;
   }
-  
+
+  .d-profile-picture {
+    position: absolute;
+    margin-left: 1%;
+    width: 20%;
+    top: 50px;
+  }
 }
 

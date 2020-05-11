@@ -20,11 +20,13 @@ $helps = getHelpsSorted();
                     <a href="login.php" class="text-white nav-link border py-3 mt-5 border-left-0">Se connecter</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                    <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                 <?php }
                 else { ?>
                     <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
                     <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                    <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                 <?php } ?>
             </div>
             <?php if (isset($_SESSION['auth_id'])) { ?>
@@ -429,7 +431,7 @@ $helps = getHelpsSorted();
                                         </div>
                                     <?php } ?>
                                     <div class="d-flex">
-                                        <a href="help.php?id=<?php echo $help['id'] ?>" class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</a>
+                                        <a href="help.php?id=<?php echo $help['id'] ?>" class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Répondre</a>
                                     </div>
                                     <div class="d-flex">
                                         <a href="#" class="card-link ml-2 text-muted"><i class="fas fa-share mt-1 text-muted"></i> Partager</a>
@@ -441,64 +443,103 @@ $helps = getHelpsSorted();
                                     <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowAnswer">Montrer la réponse la plus utile</button>
                                 </div>
                                 <div class="d-none BestAnswer">
-                                    <?php $help_answers = getHelpComments($help['id']);
+                                    <?php
                                     $help_answer_infos = getHelpComments($help['id']);
-                                    foreach ($help_answer_infos as $help_answer_info) { ?>
-                                        <div class="card-body" id="ContentPosts">
-                                            <div class="d-flex justify-content-between">
-                                                <div>
-                                                    <img src="https://www.gravatar.com/avatar/<?php echo md5($help_answer_info['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
-                                                    <h6 class="card-title"><?php echo $help_answer_info['first_name'] . " " . $help_answer_info['last_name'] ?></h6>
-                                                    <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($help_answer_info['date_added']); ?></h6>
-                                                </div>
-                                                <div class="mt-auto mb-4">
-                                                    <div class="d-flex">
-                                                        <i class="fas fa-heart mt-1 text-danger"></i>
-                                                        <div class="ml-2"><?php echo count(getHelpAnswerLikes($help_answer_info['id'])); ?></div>
+                                    $i_answers = 0;
+
+                                    foreach ($help_answer_infos as $help_answer_info) {
+                                        $new_answers[] = ["id" => $help_answer_info["id"], "help_id" => $help_answer_info["help_id"], "author_id" => $help_answer_info["author_id"]];
+                                        $help_answer_ratio = (count(getHelpAnswerLikes($help_answer_info['id'])) - count(getHelpAnswerDislikes($help_answer_info['id'])));
+                                        $new_answers[$i_answers]["ratio"] = "$help_answer_ratio";
+                                        $i_answers++;
+                                    }
+                                    $ratio_column = array_column($new_answers, 'ratio');
+                                    array_multisort($ratio_column, SORT_DESC, $new_answers);
+                                    $help_best_answer = array_slice($new_answers, 0, 1);
+
+                                    foreach ($help_answer_infos as $help_answer_info) {
+                                        if ($help_answer_info['id'] == $help_best_answer[0]['id']) { ?>
+                                            <div class="card-body" id="ContentPosts">
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <img src="https://www.gravatar.com/avatar/<?php echo md5($help_answer_info['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
+                                                        <h6 class="card-title"><?php echo $help_answer_info['first_name'] . " " . $help_answer_info['last_name'] ?></h6>
+                                                        <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($help_answer_info['date_added']); ?></h6>
+                                                    </div>
+                                                    <div class="mt-auto mb-4">
+                                                        <div class="d-flex">
+                                                            <i class="fas fa-lightbulb mt-1 text-info"></i>
+                                                            <div class="ml-2" title="<?php echo count(getHelpAnswerLikes($help_answer_info['id'])) .
+                                                                " personnes ont trouvée(s) cette réponse utile, " . count(getHelpAnswerDislikes($help_answer_info['id'])) . " autre(s) non." ?>">
+                                                                <?php echo count(getHelpAnswerLikes($help_answer_info['id'])) . " / " . count(getHelpAnswerDislikes($help_answer_info['id'])) ?></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <p class="card-text text-muted"><?php echo $help_answer_info['content'] ?></p>
-                                            <hr class="bg-secondary">
-                                            <div class="d-flex justify-content-around mt-3">
-                                                <?php if (isset($_SESSION['auth_id'])) {
-                                                    $help_comment_likes = getHelpComments($help_answer_info['id']);
-                                                    if (empty($help_comment_likes)) { ?>
-                                                        <div class="d-flex">
-                                                            <a href="assets/addhelpcommentlike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
-                                                        </div>
-                                                        <?php break;
-                                                    }
-                                                    else {
-                                                        foreach ($help_comment_likes as $help_comment_like) {
-                                                            if ($help_comment_like['user_id'] == $_SESSION['auth_id']) { ?>
-                                                                <div class="d-flex">
-                                                                    <a href="assets/delhelpcommentlike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-heart mt-1 text-danger"></i> Aimé</a>
-                                                                </div>
-                                                                <?php break;
+                                                <p class="card-text text-muted"><?php echo $help_answer_info['content'] ?></p>
+                                                <hr class="bg-secondary">
+                                                <div class="d-flex justify-content-around mt-3">
+                                                    <?php if (isset($_SESSION['auth_id'])) {
+                                                        $help_comment_likes = getHelpAnswerLikes($help_answer_info['id']);
+                                                        $help_comment_dislikes = getHelpAnswerDislikes($help_answer_info['id']);
+                                                        if (empty($help_comment_likes)) { ?>
+                                                            <div class="d-flex">
+                                                                <a href="assets/addhelpcommentlike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-success"></i> Utile</a>
+                                                            </div>
+                                                        <?php }
+                                                        else {
+                                                            foreach ($help_comment_likes as $help_comment_like) {
+                                                                if ($help_comment_like['user_id'] == $_SESSION['auth_id']) { ?>
+                                                                    <div class="d-flex">
+                                                                        <a href="assets/delhelpcommentlike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-lightbulb mt-1 text-success"></i> Voté utile</a>
+                                                                    </div>
+                                                                    <?php break;
+                                                                }
+                                                                elseif (end($help_comment_likes) == $help_comment_like) { ?>
+                                                                    <div class="d-flex">
+                                                                        <a href="assets/addhelpcommentlike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-success"></i> Utile</a>
+                                                                    </div>
+                                                                <?php }
                                                             }
-                                                            elseif (end($help_comment_likes) == $help_comment_like) { ?>
-                                                                <div class="d-flex">
-                                                                    <a href="assets/addhelpcommentlike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
-                                                                </div>
-                                                            <?php }
+                                                        }
+                                                        if (empty($help_comment_dislikes)) { ?>
+                                                            <div class="d-flex">
+                                                                <a href="assets/addhelpcommentdislike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-danger"></i> Pas utile</a>
+                                                            </div>
+                                                        <?php }
+                                                        else {
+                                                            foreach ($help_comment_dislikes as $help_comment_dislike) {
+                                                                if ($help_comment_dislike['user_id'] == $_SESSION['auth_id']) { ?>
+                                                                    <div class="d-flex">
+                                                                        <a href="assets/delhelpcommentdislike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-lightbulb mt-1 text-danger"></i> Voté inutile</a>
+                                                                    </div>
+                                                                    <?php break;
+                                                                }
+                                                                elseif (end($help_comment_dislikes) == $help_comment_dislike) { ?>
+                                                                    <div class="d-flex">
+                                                                        <a href="assets/addhelpcommentdislike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-danger"></i> Inutile</a>
+                                                                    </div>
+                                                                <?php }
+                                                            }
                                                         }
                                                     }
-                                                }
-                                                else { ?>
+                                                    else { ?>
+                                                        <div class="d-flex">
+                                                            <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-success"></i> Pertinent</a>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-danger"></i> Non Pertinent</a>
+                                                        </div>
+                                                    <?php } ?>
                                                     <div class="d-flex">
-                                                        <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
+                                                        <a href="help.php?id=<?php echo $help['id'] ?>" class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Répondre</a>
                                                     </div>
-                                                <?php } ?>
-                                                <div class="d-flex">
-                                                    <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
-                                                </div>
-                                                <div class="d-flex">
-                                                    <a href="#" class="card-link ml-2 text-muted"><i class="fas fa-share mt-1 text-muted"></i> Partager</a>
+                                                    <div class="d-flex">
+                                                        <a href="#" class="card-link ml-2 text-muted"><i class="fas fa-share mt-1 text-muted"></i> Partager</a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    <?php } ?>
+                                        <?php }
+                                    } ?>
                                 </div>
                             </div>
                         </div>
