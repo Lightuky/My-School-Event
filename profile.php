@@ -3,6 +3,8 @@ require_once 'includes/header.php';
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $user = getUser($id);
 $owned_events = getOwnedEvents($id);
+$user_posts = getUserPosts($id);
+$user_helps = getUserHelps($id);
 
 if ($user['email'] == NULL) {
     $pathError =  "/mse/404.php";
