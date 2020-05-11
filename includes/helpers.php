@@ -315,11 +315,11 @@ function getHelpAnswerLikes($help_answer_id) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getHelpAnswerDislikes($answer_id) {
+function getHelpAnswerDislikes($help_answer_id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT help_answers_dislikes.*, users.first_name, users.last_name FROM help_answers_dislikes LEFT JOIN users
-                            ON users.id = help_answers_dislikes.user_id WHERE help_answers_dislikes.comment_id = :answer_id");
-    $stmt->bindValue(':answer_id', $answer_id);
+                            ON users.id = help_answers_dislikes.user_id WHERE help_answers_dislikes.comment_id = :help_answer_id");
+    $stmt->bindValue(':help_answer_id', $help_answer_id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -435,6 +435,54 @@ function delEventCommentLike($event_comment_id, $auth_id) {
     $stmt->execute();
 }
 
+function addHelpLike($help_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO help_likes (help_id, user_id) VALUES (:help_id, :user_id)");
+    $stmt->bindValue(':help_id', $help_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function delHelpLike($help_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM help_likes WHERE (help_id = :help_id AND user_id = :user_id)");
+    $stmt->bindValue(':help_id', $help_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function addHelpAnswerLike($help_comment_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO help_answers_likes (comment_id, user_id) VALUES (:help_comment_id, :user_id)");
+    $stmt->bindValue(':help_comment_id', $help_comment_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function delHelpAnswerLike($help_comment_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM help_answers_likes WHERE (comment_id = :help_comment_id AND user_id = :user_id)");
+    $stmt->bindValue(':help_comment_id', $help_comment_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function addHelpAnswerDislike($help_comment_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO help_answers_dislikes (comment_id, user_id) VALUES (:help_comment_id, :user_id)");
+    $stmt->bindValue(':help_comment_id', $help_comment_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function delHelpAnswerDislike($help_comment_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM help_answers_dislikes WHERE (comment_id = :help_comment_id AND user_id = :user_id)");
+    $stmt->bindValue(':help_comment_id', $help_comment_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
 function getEvent($id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT * FROM events WHERE id = :id LIMIT 1");
@@ -531,6 +579,22 @@ function getOwnedEvents($user_id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT * FROM events WHERE admin_id = :admin_id");
     $stmt->bindValue(':admin_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getUserPosts($user_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM posts WHERE author_id = :author_id");
+    $stmt->bindValue(':author_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getUserHelps($user_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM helps WHERE author_id = :author_id");
+    $stmt->bindValue(':author_id', $user_id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
