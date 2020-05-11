@@ -26,11 +26,24 @@
 
   .section-down {
     background: linear-gradient(65deg, #6f1cf3, #f15ff1);
+    height: 50vh;
   }
+
+  .section-feed{
+    width: 100vw;
+  }
+
 
 
   .color-text-white{
     color: white;
+  }
+
+  .button-choice{
+    position: absolute;
+    top: 38vh;
+    width: 100%;
+
   }
 
 
@@ -100,9 +113,9 @@
 
   }
 
-  .m-button-menu{
+  .m-button-menu {
     display: none;
-    
+  }
   .d-profile-picture {
     position: absolute;
     margin-left: 1%;

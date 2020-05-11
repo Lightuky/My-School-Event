@@ -11418,10 +11418,21 @@ html::-webkit-scrollbar-thumb {
 
   .section-down {
     background: linear-gradient(65deg, #6f1cf3, #f15ff1);
+    height: 50vh;
+  }
+
+  .section-feed {
+    width: 100vw;
   }
 
   .color-text-white {
     color: white;
+  }
+
+  .button-choice {
+    position: absolute;
+    top: 38vh;
+    width: 100%;
   }
 }
 
@@ -11461,7 +11472,7 @@ html::-webkit-scrollbar-thumb {
   }
 
   .section-down {
-    width: 40%;
+    width: 25%;
     min-height: 100vh;
     border-right: solid 1px #95999c;
   }
@@ -11486,6 +11497,12 @@ html::-webkit-scrollbar-thumb {
   .m-button-menu {
     display: none;
   }
-  
+
+  .d-profile-picture {
+    position: absolute;
+    margin-left: 1%;
+    width: 20%;
+    top: 50px;
+  }
 }
 

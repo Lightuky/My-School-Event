@@ -97,6 +97,14 @@ function checkFriend($auth_id, $user2) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+function getFriends($user_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM friends WHERE user1_id = :user1_id  OR user2_id = :user1_id");
+    $stmt->bindValue(':user1_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function addFriend($pending, $auth_id, $user2_id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare( "INSERT INTO friends (user1_id, user2_id, pending) VALUES (:user1_id, :user2_id, :pending)");
