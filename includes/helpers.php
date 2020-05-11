@@ -583,6 +583,22 @@ function getOwnedEvents($user_id) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getUserPosts($user_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM posts WHERE author_id = :author_id");
+    $stmt->bindValue(':author_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getUserHelps($user_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM helps WHERE author_id = :author_id");
+    $stmt->bindValue(':author_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function joinEvent($private_pending, $auth_id, $event_id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare( "INSERT INTO event_users (user_id, event_id, private_pending) VALUES (:user_id, :event_id, :private_pending)");
