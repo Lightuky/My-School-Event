@@ -7,7 +7,7 @@ try {
 } catch (e) {}
 
 $('#btnSort').click(function() {
-    $('#SortForm').css({"display": "block"});
+    $('#SortForm').toggleClass("d-none");
 });
 
 $('#SortMenuPosts').click(function() {

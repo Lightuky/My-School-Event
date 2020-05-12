@@ -16,9 +16,7 @@ try {
 } catch (e) {}
 
 $('#btnSort').click(function () {
-  $('#SortForm').css({
-    "display": "block"
-  });
+  $('#SortForm').toggleClass("d-none");
 });
 $('#SortMenuPosts').click(function () {
   $('#SortMenuPosts').addClass("mt-3").removeClass("mt-5");
@@ -101,8 +99,8 @@ $('.showCommentForm').click(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Applications/MAMP/htdocs/mse/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Applications/MAMP/htdocs/mse/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\wamp64\www\mse\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\wamp64\www\mse\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

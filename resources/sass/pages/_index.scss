@@ -30,3 +30,7 @@ html::-webkit-scrollbar-thumb {
 #ShowComments:focus, #showCommentForm:focus {
   box-shadow: none;
 }
+
+#SortMenuAll:focus, #SortMenuPosts:focus, #SortMenuEvents:focus, #SortMenuHelps:focus {
+  outline: none;
+}
