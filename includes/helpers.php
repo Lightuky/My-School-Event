@@ -22,6 +22,13 @@ function getDateForHumans($date) {
     return $c->diffForHumans();
 }
 
+function getCities() {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM cities");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function getSchools() {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT * FROM schools");
@@ -39,14 +46,15 @@ function getSchool($user_id) {
 
 function setNewUser($data) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare( "INSERT INTO users (first_name, last_name, email, gender, school_id, school_year, password)
-                                     VALUES (:first_name, :last_name, :email, :gender, :school_id, :school_year, :password)");
+    $stmt = $dbh->prepare( "INSERT INTO users (first_name, last_name, email, gender, school_id, school_year, city_id, password)
+                                     VALUES (:first_name, :last_name, :email, :gender, :school_id, :school_year, :city_id, :password)");
     $stmt->bindValue(':first_name', $data['first_name']);
     $stmt->bindValue(':last_name', $data['last_name']);
     $stmt->bindValue(':email', $data['email']);
     $stmt->bindValue(':gender', $data['gender']);
     $stmt->bindValue(':school_id', $data['school_id']);
     $stmt->bindValue(':school_year', $data['school_year']);
+    $stmt->bindValue(':city_id', $data['city']);
     $stmt->bindValue(':password', sha1($data['password']));
     $stmt->execute();
     return $dbh->lastInsertId();
@@ -134,7 +142,7 @@ function deleteFriend($pending, $auth_id, $user2_id) {
 
 function updateUser($data, $id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("UPDATE users SET  first_name = :first_name, last_name = :last_name, phone_number = :phone_number, birthday = :birthday, gender = :gender, school_id = :school_id, school_year = :school_year, date_edited = :date_edited WHERE id = $id");
+    $stmt = $dbh->prepare("UPDATE users SET  first_name = :first_name, last_name = :last_name, phone_number = :phone_number, birthday = :birthday, gender = :gender, school_id = :school_id, school_year = :school_year, city_id = :city_id, date_edited = :date_edited WHERE id = $id");
     $stmt->bindValue(':first_name', $data['first_name']);
     $stmt->bindValue(':last_name', $data['last_name']);
     $stmt->bindValue(':phone_number', $data['phone_number']);
@@ -142,6 +150,7 @@ function updateUser($data, $id) {
     $stmt->bindValue(':gender', $data['gender']);
     $stmt->bindValue(':school_id', $data['school_id']);
     $stmt->bindValue(':school_year', $data['school_year']);
+    $stmt->bindValue(':city_id', $data['city']);
     $stmt->bindValue(':date_edited', date("Y-m-d H:i:s", time()));
     $stmt->execute();
 }
@@ -245,10 +254,56 @@ function getEventsSorted() {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getEventsQueryOneParam($query_value, $column, $table_join) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT events.*, users.first_name, users.last_name, users.email, $table_join.name AS :tablejoin_name, $table_join.id AS :tablejoin_id 
+                                    FROM users LEFT JOIN events ON users.id = events.admin_id INNER JOIN $table_join ON users.$column = $table_join.id 
+                                    WHERE users.$column = :query_value AND events.admin_id != 'NULL' ORDER BY date_added DESC");
+    $stmt->bindValue(':query_value', $query_value);
+    $stmt->bindValue(':tablejoin_name', $table_join . "_name");
+    $stmt->bindValue(':tablejoin_id', $table_join . "_id");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getEventsQueryTwoParam($query_city, $query_school) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT events.*, users.first_name, users.last_name, users.email, cities.name AS city_name, cities.id AS city_id, schools.name AS school_name, schools.id AS school_id
+                                    FROM users LEFT JOIN events ON users.id = events.admin_id INNER JOIN cities ON users.city_id = cities.id INNER JOIN schools ON users.school_id = schools.id
+                                    WHERE users.city_id = :query_city AND users.school_id = :query_school AND events.admin_id != 'NULL' ORDER BY date_added DESC");
+    $stmt->bindValue(':query_school', $query_school);
+    $stmt->bindValue(':query_city', $query_city);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function getPostsSorted() {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT posts.*, users.first_name, users.last_name, users.email FROM users LEFT JOIN posts 
                             ON users.id = posts.author_id WHERE posts.author_id != 'NULL' ORDER BY date_added DESC");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPostsQueryOneParam($query_value, $column, $table_join) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT posts.*, users.first_name, users.last_name, users.email, $table_join.name AS :tablejoin_name, $table_join.id AS :tablejoin_id 
+                                    FROM users LEFT JOIN posts ON users.id = posts.author_id INNER JOIN $table_join ON users.$column = $table_join.id 
+                                    WHERE users.$column = :query_value AND posts.author_id != 'NULL' ORDER BY date_added DESC");
+    $stmt->bindValue(':query_value', $query_value);
+    $stmt->bindValue(':tablejoin_name', $table_join . "_name");
+    $stmt->bindValue(':tablejoin_id', $table_join . "_id");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPostsQueryTwoParam($query_city, $query_school) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT posts.*, users.first_name, users.last_name, users.email, cities.name AS city_name, cities.id AS city_id, schools.name AS school_name, schools.id AS school_id
+                                    FROM users LEFT JOIN posts ON users.id = posts.author_id INNER JOIN cities ON users.city_id = cities.id INNER JOIN schools ON users.school_id = schools.id
+                                    WHERE users.city_id = :query_city AND users.school_id = :query_school AND posts.author_id != 'NULL' ORDER BY date_added DESC");
+    $stmt->bindValue(':query_school', $query_school);
+    $stmt->bindValue(':query_city', $query_city);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -259,6 +314,38 @@ function getHelpsSorted() {
                             ON users.id = helps.author_id WHERE helps.author_id != 'NULL' ORDER BY date_added DESC");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getHelpsQueryOneParam($query_value, $column, $table_join) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT helps.*, users.first_name, users.last_name, users.email, $table_join.name AS :tablejoin_name, $table_join.id AS :tablejoin_id 
+                                    FROM users LEFT JOIN helps ON users.id = helps.author_id INNER JOIN $table_join ON users.$column = $table_join.id 
+                                    WHERE users.$column = :query_value AND helps.author_id != 'NULL' ORDER BY date_added DESC");
+    $stmt->bindValue(':query_value', $query_value);
+    $stmt->bindValue(':tablejoin_name', $table_join . "_name");
+    $stmt->bindValue(':tablejoin_id', $table_join . "_id");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getHelpsQueryTwoParam($query_city, $query_school) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT helps.*, users.first_name, users.last_name, users.email, cities.name AS city_name, cities.id AS city_id, schools.name AS school_name, schools.id AS school_id
+                                    FROM users LEFT JOIN helps ON users.id = helps.author_id INNER JOIN cities ON users.city_id = cities.id INNER JOIN schools ON users.school_id = schools.id
+                                    WHERE users.city_id = :query_city AND users.school_id = :query_school AND helps.author_id != 'NULL' ORDER BY date_added DESC");
+    $stmt->bindValue(':query_school', $query_school);
+    $stmt->bindValue(':query_city', $query_city);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getHelp($help_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT helps.*, users.first_name, users.last_name, users.email FROM users LEFT JOIN helps 
+                            ON users.id = helps.author_id WHERE helps.id = :id LIMIT 1");
+    $stmt->bindValue(':id', $help_id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 function getEventComments($event_id) {
@@ -286,6 +373,15 @@ function getHelpComments($help_id) {
     $stmt->bindValue(':help_id', $help_id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getHelpComment($help_answer_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT help_answers.*, users.first_name, users.last_name, users.email FROM users LEFT JOIN help_answers 
+                            ON users.id = help_answers.author_id WHERE help_answers.author_id = :id LIMIT 1");
+    $stmt->bindValue(':id', $help_answer_id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 function getEventCommentLikes($comment_id) {
