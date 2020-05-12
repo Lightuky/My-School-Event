@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <?php
 require_once 'includes/header.php';
 $id = isset($_GET['id']) ? $_GET['id'] : null;
@@ -17,3 +18,24 @@ if ($user['email'] == NULL) {
 </section>
 
 <?php require_once 'includes/footer.php'; ?>
+=======
+<?php
+require_once 'includes/header.php';
+$id = isset($_GET['id']) ? $_GET['id'] : null;
+$user = getUser($id);
+$friends = getFriends($id);
+
+if ($user['email'] == NULL) {
+    $pathError =  "/mse/404.php";
+    header('Location: '. $pathError);
+}
+
+?>
+
+
+<section>
+
+</section>
+
+    <?php require_once 'includes/footer.php'; ?>
+>>>>>>> Stashed changes
