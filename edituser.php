@@ -3,6 +3,7 @@ require_once 'includes/header.php';
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $user = getUser($id);
 $schools = getSchools();
+$cities = getCities();
 
 if (isset($_SESSION['auth_id'])) {
     if ($_SESSION['auth_id'] != $id) {
@@ -59,10 +60,20 @@ else {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="school_year">Genre</label>
+                    <label for="school_year">Année</label>
                     <select id="school_year" name="school_year" class="form-control">
                         <?php for ($i = 1; $i <=5; $i++) { ?>
                             <option value="<?php echo $i ?>" <?php if ($user['school_year'] == $i) echo 'selected' ?>><?php echo "Année N°". $i ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="city">Ville</label>
+                    <select id="city" name="city" class="form-control">
+                        <?php foreach ($cities as $city) { ?>
+                            <option value="<?php echo $city['id'] ?>"
+                                <?php if ($user['city_id'] == $city['id']) echo 'selected' ?>><?php echo $city['name'] ?>
+                            </option>
                         <?php } ?>
                     </select>
                 </div>

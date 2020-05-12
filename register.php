@@ -4,6 +4,7 @@ require_once 'includes/header.php';
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 
 $schools = getSchools();
+$cities = getCities();
 
 ?>
 <section>
@@ -47,6 +48,14 @@ $schools = getSchools();
                     <select id="school_year" name="school_year" class="form-control">
                         <?php for ($i = 1; $i <= 5; $i++) { ?>
                             <option value="<?php echo $i ?>">Année N°<?php echo $i ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="city">Ville</label>
+                    <select id="city" name="city" class="form-control">
+                        <?php foreach ($cities as $city) { ?>
+                            <option value="<?php echo $city['id'] ?>"><?php echo $city['name'] ?></option>
                         <?php } ?>
                     </select>
                 </div>

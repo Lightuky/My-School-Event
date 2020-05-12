@@ -4,10 +4,38 @@ use Carbon\Carbon;
 date_default_timezone_set('Europe/Paris');
 setlocale(LC_TIME, 'fr_FR');
 
+$query_city = isset($_GET['c']) ? $_GET['c'] : null;
+$query_school = isset($_GET['s']) ? $_GET['s'] : null;
 $categories = getCategories();
-$events = getEventsSorted();
-$posts = getPostsSorted();
-$helps = getHelpsSorted();
+$cities = getCities();
+$schools = getSchools();
+
+if (!$query_city AND !$query_school) {
+    $events = getEventsSorted();
+    $posts = getPostsSorted();
+    $helps = getHelpsSorted();
+}
+else {
+    if (!$query_city AND $query_school) {
+        $query_column = "school_id";
+        $table_join = "schools";
+        $events = getEventsQueryOneParam($query_school,$query_column,$table_join);
+        $posts = getPostsQueryOneParam($query_school,$query_column,$table_join);
+        $helps = getHelpsQueryOneParam($query_school,$query_column,$table_join);
+    }
+    elseif ($query_city AND !$query_school) {
+        $query_column = "city_id";
+        $table_join = "cities";
+        $events = getEventsQueryOneParam($query_city,$query_column,$table_join);
+        $posts = getPostsQueryOneParam($query_city,$query_column,$table_join);
+        $helps = getHelpsQueryOneParam($query_city,$query_column,$table_join);
+    }
+    else {
+        $events = getEventsQueryTwoParam($query_city,$query_school);
+        $posts = getPostsQueryTwoParam($query_city,$query_school);
+        $helps = getHelpsQueryTwoParam($query_city,$query_school);
+    }
+}
 
 ?>
 
@@ -48,19 +76,19 @@ $helps = getHelpsSorted();
             <div class="col-7 p-0">
                 <div class="d-flex justify-content-around">
                     <div class="col-3 text-center">
-                        <a href="#" class="h5 nav-link text-dark mt-3" id="SortMenuAll">Tout</a>
+                        <button class="h5 nav-link text-dark mt-3 border-0 mx-auto" id="SortMenuAll">Tout</button>
                         <div class="bg-dark mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                     </div>
                     <div class="col-3 text-center">
-                        <a href="#" class="h5 nav-link text-dark mt-5" id="SortMenuPosts">Posts</a>
+                        <button class="h5 nav-link text-dark mt-5 border-0 mx-auto" id="SortMenuPosts">Posts</button>
                         <div class="bg-dark mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                     </div>
                     <div class="col-3 text-center">
-                        <a href="#" class="h5 nav-link text-dark mt-5" id="SortMenuEvents">Événements</a>
+                        <button class="h5 nav-link text-dark mt-5 border-0 mx-auto" id="SortMenuEvents">Événements</button>
                         <div class="bg-dark mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                     </div>
                     <div class="col-3 text-center">
-                        <a href="#" class="h5 nav-link text-dark mt-5" id="SortMenuHelps">Helps</a>
+                        <button class="h5 nav-link text-dark mt-5 border-0 mx-auto" id="SortMenuHelps">Helps</button>
                         <div class="bg-dark mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                     </div>
                 </div>
@@ -389,7 +417,7 @@ $helps = getHelpsSorted();
                         </div>
                     </div>
                     <?php foreach ($helps as $help){ ?>
-                        <div class="card col-10 mx-auto mt-4" id="ContentPosts">
+                        <div class="card col-10 mx-auto mt-4">
                             <div class="card-body">
                                 <img src="https://www.gravatar.com/avatar/<?php echo md5($help['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                                 <h5 class="card-title"><?php echo $help['first_name'] . " " . $help['last_name'] ?></h5>
@@ -406,20 +434,20 @@ $helps = getHelpsSorted();
                                         $help_likes = getHelpLikes($help['id']);
                                         if (empty($help_likes)) { ?>
                                             <div class="d-flex">
-                                                <a href="assets/addhelplike.php?id=<?php echo $help['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-muted"></i> Pertinent</a>
+                                                <a href="assets/addhelplike.php?s=1&id=<?php echo $help['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-muted"></i> Pertinent</a>
                                             </div>
                                         <?php }
                                         else {
                                             foreach ($help_likes as $help_like) {
                                                 if ($help_like['user_id'] == $_SESSION['auth_id']) { ?>
                                                     <div class="d-flex">
-                                                        <a href="assets/delhelplike.php?id=<?php echo $help['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-lightbulb mt-1 text-info"></i> Pertinent</a>
+                                                        <a href="assets/delhelplike.php?s=1&id=<?php echo $help['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-lightbulb mt-1 text-info"></i> Pertinent</a>
                                                     </div>
                                                     <?php break;
                                                 }
                                                 elseif (end($help_likes) == $help_like) { ?>
                                                     <div class="d-flex">
-                                                        <a href="assets/addhelplike.php?id=<?php echo $help['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-muted"></i> Pertinent</a>
+                                                        <a href="assets/addhelplike.php?s=1&id=<?php echo $help['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-muted"></i> Pertinent</a>
                                                     </div>
                                                 <?php }
                                             }
@@ -483,40 +511,40 @@ $helps = getHelpsSorted();
                                                         $help_comment_dislikes = getHelpAnswerDislikes($help_answer_info['id']);
                                                         if (empty($help_comment_likes)) { ?>
                                                             <div class="d-flex">
-                                                                <a href="assets/addhelpcommentlike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-success"></i> Utile</a>
+                                                                <a href="assets/addhelpcommentlike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-success"></i> Utile</a>
                                                             </div>
                                                         <?php }
                                                         else {
                                                             foreach ($help_comment_likes as $help_comment_like) {
                                                                 if ($help_comment_like['user_id'] == $_SESSION['auth_id']) { ?>
                                                                     <div class="d-flex">
-                                                                        <a href="assets/delhelpcommentlike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-lightbulb mt-1 text-success"></i> Voté utile</a>
+                                                                        <a href="assets/delhelpcommentlike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-lightbulb mt-1 text-success"></i> Voté utile</a>
                                                                     </div>
                                                                     <?php break;
                                                                 }
                                                                 elseif (end($help_comment_likes) == $help_comment_like) { ?>
                                                                     <div class="d-flex">
-                                                                        <a href="assets/addhelpcommentlike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-success"></i> Utile</a>
+                                                                        <a href="assets/addhelpcommentlike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-success"></i> Utile</a>
                                                                     </div>
                                                                 <?php }
                                                             }
                                                         }
                                                         if (empty($help_comment_dislikes)) { ?>
                                                             <div class="d-flex">
-                                                                <a href="assets/addhelpcommentdislike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-danger"></i> Pas utile</a>
+                                                                <a href="assets/addhelpcommentdislike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-danger"></i> Pas utile</a>
                                                             </div>
                                                         <?php }
                                                         else {
                                                             foreach ($help_comment_dislikes as $help_comment_dislike) {
                                                                 if ($help_comment_dislike['user_id'] == $_SESSION['auth_id']) { ?>
                                                                     <div class="d-flex">
-                                                                        <a href="assets/delhelpcommentdislike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-lightbulb mt-1 text-danger"></i> Voté inutile</a>
+                                                                        <a href="assets/delhelpcommentdislike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-lightbulb mt-1 text-danger"></i> Voté inutile</a>
                                                                     </div>
                                                                     <?php break;
                                                                 }
                                                                 elseif (end($help_comment_dislikes) == $help_comment_dislike) { ?>
                                                                     <div class="d-flex">
-                                                                        <a href="assets/addhelpcommentdislike.php?id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-danger"></i> Inutile</a>
+                                                                        <a href="assets/addhelpcommentdislike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-danger"></i> Inutile</a>
                                                                     </div>
                                                                 <?php }
                                                             }
@@ -548,11 +576,38 @@ $helps = getHelpsSorted();
             </div>
             <div class="col-3 mt-4 p-0 text-center">
                 <div class="btn btn-secondary" id="btnSort">Trier</div>
-                <div class="border col-8 mx-auto mt-2" id="SortForm" style="display: none">
-                    <div>test</div>
-                    <div>test</div>
-                    <div>test</div>
-                    <div>test</div>
+                <?php if ($query_school OR $query_city) { ?>
+                    <a href="index.php" class="btn btn-danger d-block col-5 mx-auto my-3">Annuler le tri</a>
+                <?php } ?>
+                <div class="border col-8 mx-auto mt-2 d-none" id="SortForm" style="border-radius: 10px;">
+                    <form method="post" action="assets/indexsort.php">
+                        <div class="form-group">
+                            <label for="content" class="d-block mt-2 h6 font-weight-bold">Ville</label>
+                            <div class="d-flex flex-wrap">
+                                <?php foreach ($cities as $city) { ?>
+                                    <div class="form-check w-50">
+                                        <input class="form-check-input" type="radio" name="city" id="city" value="<?php echo $city['id'] ?>">
+                                        <label class="form-check-label" for="city"><?php echo $city['name'] ?></label>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <hr class="bg-secondary">
+                        <div class="form-group">
+                            <label for="content" class="d-block mt-2 h6 font-weight-bold">École</label>
+                            <?php foreach ($schools as $school) { ?>
+                                <div class="form-check mx-0">
+                                    <input class="form-check-input" type="radio" name="school" id="school" value="<?php echo $school['id'] ?>">
+                                    <label class="form-check-label" for="school"><?php echo $school['name'] ?></label>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <?php if (isset($_SESSION['auth_id'])) { ?>
+                            <button class="btn btn-outline-info my-2">Rechercher</button>
+                        <?php } else { ?>
+                            <a href="login.php" class="btn btn-outline-info my-2">Rechercher</a>
+                        <?php } ?>
+                    </form>
                 </div>
             </div>
         </div>

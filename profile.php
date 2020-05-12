@@ -2,6 +2,7 @@
 require_once 'includes/header.php';
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $user = getUser($id);
+
 $events = getOwnedEvents($id);
 $posts = getUserPosts($id);
 $helps = getUserHelps($id);

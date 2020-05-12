@@ -17,9 +17,6 @@ if ($user['email'] == NULL) {
 
 </section>
 
-
-
-
 <?php require_once 'includes/footer.php'; ?>
 =======
 <?php

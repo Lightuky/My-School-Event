@@ -11394,6 +11394,13 @@ html::-webkit-scrollbar-thumb {
   box-shadow: none;
 }
 
+#SortMenuAll:focus,
+#SortMenuPosts:focus,
+#SortMenuEvents:focus,
+#SortMenuHelps:focus {
+  outline: none;
+}
+
 @media (max-width: 760px) {
   .menu-profile {
     display: none;
