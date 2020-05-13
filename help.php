@@ -96,6 +96,7 @@ if ($help_infos['title'] == NULL) {
                                 <?php
                                 $help_answer_infos = getHelpComments($help_infos['id']);
                                 $i_answers = 0;
+                                $new_answers = [];
 
                                 foreach ($help_answer_infos as $help_answer_info) {
                                     $new_answers[] = ["id" => $help_answer_info["id"], "author_id" => $help_answer_info["author_id"], "help_id" => $help_answer_info["help_id"],
@@ -107,7 +108,6 @@ if ($help_infos['title'] == NULL) {
                                 }
                                 $ratio_column = array_column($new_answers, 'ratio');
                                 array_multisort($ratio_column, SORT_DESC, $new_answers);
-
 
                                 foreach ($new_answers as $new_answer) { ?>
                                         <div class="card-body col-10 mx-auto mb-5" id="ContentPosts">
