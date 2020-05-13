@@ -187,6 +187,16 @@ else {
                                     <?php $post_comments = getPostComments($post['id']);
                                     foreach ($post_comments as $post_comment) { ?>
                                         <div class="card-body" id="ContentPosts">
+                                            <?php if (isset($_SESSION['auth_id'])) {
+                                                if ($post_comment['author_id'] == $_SESSION['auth_id']) { ?>
+                                                    <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
+                                                        <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
+                                                        <div class="card d-none text-center position-relative border-0">
+                                                            <a href="assets/delpostcomment.php?id=<?php echo $post_comment['id'] ?>" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
+                                                        </div>
+                                                    </div>
+                                                <?php }
+                                            } ?>
                                             <div class="d-flex justify-content-between">
                                                 <div>
                                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($post_comment['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
@@ -335,6 +345,16 @@ else {
                                     <?php $event_comments = getEventComments($event['id']);
                                     foreach ($event_comments as $event_comment) { ?>
                                         <div class="card-body" id="ContentPosts">
+                                            <?php if (isset($_SESSION['auth_id'])) {
+                                                if ($event_comment['author_id'] == $_SESSION['auth_id']) { ?>
+                                                    <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
+                                                        <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
+                                                        <div class="card d-none text-center position-relative border-0">
+                                                            <a href="assets/deleventcomment.php?id=<?php echo $event_comment['id'] ?>" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
+                                                        </div>
+                                                    </div>
+                                                <?php }
+                                            } ?>
                                             <div class="d-flex justify-content-between">
                                                 <div>
                                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($event_comment['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
@@ -474,6 +494,7 @@ else {
                                     <?php
                                     $help_answer_infos = getHelpComments($help['id']);
                                     $i_answers = 0;
+                                    $new_answers = [];
 
                                     foreach ($help_answer_infos as $help_answer_info) {
                                         $new_answers[] = ["id" => $help_answer_info["id"], "help_id" => $help_answer_info["help_id"], "author_id" => $help_answer_info["author_id"]];
@@ -488,6 +509,16 @@ else {
                                     foreach ($help_answer_infos as $help_answer_info) {
                                         if ($help_answer_info['id'] == $help_best_answer[0]['id']) { ?>
                                             <div class="card-body" id="ContentPosts">
+                                                <?php if (isset($_SESSION['auth_id'])) {
+                                                    if ($help_answer_info['author_id'] == $_SESSION['auth_id']) { ?>
+                                                        <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
+                                                            <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
+                                                            <div class="card d-none text-center position-relative border-0">
+                                                                <a href="assets/delhelpcomment.php?id=<?php echo $help_answer_info['id'] ?>&s=1" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    <?php }
+                                                } ?>
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <img src="https://www.gravatar.com/avatar/<?php echo md5($help_answer_info['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">

@@ -330,9 +330,9 @@ function getHelpsQueryOneParam($query_value, $column, $table_join) {
 
 function getHelpsQueryTwoParam($query_city, $query_school) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT helps.*, users.first_name, users.last_name, users.email, cities.name AS city_name, cities.id AS city_id, schools.name AS school_name, schools.id AS school_id
-                                    FROM users LEFT JOIN helps ON users.id = helps.author_id INNER JOIN cities ON users.city_id = cities.id INNER JOIN schools ON users.school_id = schools.id
-                                    WHERE users.city_id = :query_city AND users.school_id = :query_school AND helps.author_id != 'NULL' ORDER BY date_added DESC");
+    $stmt = $dbh->prepare("SELECT helps.*, users.first_name, users.last_name, users.email, cities.name AS city_name, cities.id AS city_id, schools.name AS school_name, schools.id 
+                                    AS school_id FROM users LEFT JOIN helps ON users.id = helps.author_id INNER JOIN cities ON users.city_id = cities.id INNER JOIN schools 
+                                    ON users.school_id = schools.id WHERE users.city_id = :query_city AND users.school_id = :query_school AND helps.author_id != 'NULL' ORDER BY date_added DESC");
     $stmt->bindValue(':query_school', $query_school);
     $stmt->bindValue(':query_city', $query_city);
     $stmt->execute();
@@ -377,9 +377,9 @@ function getHelpComments($help_id) {
 
 function getHelpComment($help_answer_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT help_answers.*, users.first_name, users.last_name, users.email FROM users LEFT JOIN help_answers 
-                            ON users.id = help_answers.author_id WHERE help_answers.author_id = :id LIMIT 1");
-    $stmt->bindValue(':id', $help_answer_id);
+    $stmt = $dbh->prepare("SELECT help_answers.*, users.first_name, users.last_name, users.email FROM help_answers LEFT JOIN users 
+                            ON users.id = help_answers.author_id WHERE help_answers.id = :help_answer_id LIMIT 1");
+    $stmt->bindValue(':help_answer_id', $help_answer_id);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -465,6 +465,14 @@ function addEventComment($author_id, $event_id, $data) {
     $stmt->execute();
 }
 
+function delEventComment($event_comment_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM event_comments WHERE (id = :event_comment_id AND author_id = :user_id)");
+    $stmt->bindValue(':event_comment_id', $event_comment_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
 function addPostComment($author_id, $post_id, $data) {
     $dbh = connectDB();
     $stmt = $dbh->prepare( "INSERT INTO post_comments (author_id, post_id, content) VALUES (:author_id, :post_id, :content)");
@@ -474,12 +482,28 @@ function addPostComment($author_id, $post_id, $data) {
     $stmt->execute();
 }
 
-function addHelpAnswer($data, $author_id, $help_id) {
+function delPostComment($post_comment_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM post_comments WHERE (id = :post_comment_id AND author_id = :user_id)");
+    $stmt->bindValue(':post_comment_id', $post_comment_id);
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function addHelpAnswer($author_id, $help_id, $data) {
     $dbh = connectDB();
     $stmt = $dbh->prepare( "INSERT INTO help_answers (author_id, help_id, content) VALUES (:author_id, :help_id, :content)");
     $stmt->bindValue(':author_id', $author_id);
     $stmt->bindValue(':help_id', $help_id);
     $stmt->bindValue(':content', $data['content']);
+    $stmt->execute();
+}
+
+function delHelpAnswer($help_answer_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM help_answers WHERE (id = :help_answer_id AND author_id = :user_id)");
+    $stmt->bindValue(':help_answer_id', $help_answer_id);
+    $stmt->bindValue(':user_id', $auth_id);
     $stmt->execute();
 }
 
