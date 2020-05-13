@@ -36,8 +36,7 @@ if ($user['email'] == NULL) {
             </div>
         <?php } ?>
     </div>
-
-
+  
     <section class="col-10 mx-0 p-0 d-flex ml-auto" style="margin-top: 60px">
         <?php
         $i_users = 0;

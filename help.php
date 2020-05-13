@@ -84,14 +84,32 @@ if ($help_infos['title'] == NULL) {
                                     </div>
                                 <?php } ?>
                                 <div class="d-flex">
-                                    <a href="help.php?id=<?php echo $help_infos['id'] ?>" class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Répondre</a>
+                                    <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Répondre</button>
                                 </div>
                                 <div class="d-flex">
                                     <a href="#" class="card-link ml-2 text-muted"><i class="fas fa-share mt-1 text-muted"></i> Partager</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body text-center">
+                        <div class="card-body text-center" id="newAnswer">
+                            <div id="ContentPosts" class="col-10 mx-auto d-none newcommentform">
+                                <div class="card-header text-center h5">
+                                    Ajouter une réponse
+                                </div>
+                                <div class="card-body my-3 p-1">
+                                    <form method="post" action="assets/addhelpcomment.php?id=<?php echo $help_infos['id'] ?>">
+                                        <div class="form-group">
+                                            <label for="content">Contenu de la réponse</label>
+                                            <textarea class="form-control mt-1" name="content" rows="3" required></textarea>
+                                        </div>
+                                        <?php if (isset($_SESSION['auth_id'])) { ?>
+                                            <button class="btn btn-outline-info my-2">Envoyer</button>
+                                        <?php } else { ?>
+                                            <a href="login.php" class="btn btn-outline-info my-2">Envoyer</a>
+                                        <?php } ?>
+                                    </form>
+                                </div>
+                            </div>
                             <div>
                                 <?php
                                 $help_answer_infos = getHelpComments($help_infos['id']);
@@ -110,7 +128,18 @@ if ($help_infos['title'] == NULL) {
                                 array_multisort($ratio_column, SORT_DESC, $new_answers);
 
                                 foreach ($new_answers as $new_answer) { ?>
-                                        <div class="card-body col-10 mx-auto mb-5" id="ContentPosts">
+                                    <div class="card-body col-10 mx-auto mb-5" id="ContentPosts">
+                                        <div>
+                                            <?php if (isset($_SESSION['auth_id'])) {
+                                                if ($new_answer['author_id'] == $_SESSION['auth_id']) { ?>
+                                                    <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
+                                                        <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
+                                                        <div class="card d-none text-center position-relative border-0">
+                                                            <a href="assets/delhelpcomment.php?id=<?php echo $new_answer['id'] ?>&s=2" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
+                                                        </div>
+                                                    </div>
+                                                <?php }
+                                            } ?>
                                             <div class="d-flex justify-content-between">
                                                 <div>
                                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($new_answer['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
@@ -182,13 +211,14 @@ if ($help_infos['title'] == NULL) {
                                                     </div>
                                                 <?php } ?>
                                                 <div class="d-flex">
-                                                    <a href="help.php?id=<?php echo $help_infos['id'] ?>" class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Répondre</a>
+                                                    <button class="btn btn-light bg-white py-0 text-muted border-0 showAnswerForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Répondre</button>
                                                 </div>
                                                 <div class="d-flex">
                                                     <a href="#" class="card-link ml-2 text-muted"><i class="fas fa-share mt-1 text-muted"></i> Partager</a>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                 <?php } ?>
                             </div>
                         </div>
@@ -196,7 +226,6 @@ if ($help_infos['title'] == NULL) {
                 </div>
             </div>
         </div>
-    </div>
 </section>
 
 <?php require_once 'includes/footer.php'; ?>

@@ -11395,7 +11395,8 @@ html::-webkit-scrollbar-thumb {
 #SortMenuAll:focus,
 #SortMenuPosts:focus,
 #SortMenuEvents:focus,
-#SortMenuHelps:focus {
+#SortMenuHelps:focus,
+.dropdownButtonPosts:focus {
   outline: none;
 }
 
