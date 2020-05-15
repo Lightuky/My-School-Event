@@ -68,6 +68,14 @@ $('#deleteCommentBlock div.position-relative').hover(function() {
     $('#deleteCommentBlock a.btn-outline-danger i').removeClass("text-danger").addClass("text-white");}, function() {$('#deleteCommentBlock a.btn-outline-danger i').removeClass("text-white").addClass("text-danger");}
 );
 
+if ($("section").hasClass("404")) {
+    $("#header form").hide();
+}
+if (!$("#section-up").hasClass("profile")) {
+    $("#header").removeClass("d-none").addClass("d-flex");
+}
+
+
 
 
 

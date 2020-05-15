@@ -17,8 +17,8 @@ foreach ($_POST as $name => $value) {
 if ($errored) {
     session_start();
     $_SESSION['fields'] = $fields;
-    $pathError =  '/mse/?errored=true';
-    header('Location: '. $pathError);
+    $pathError = $_SERVER['HTTP_REFERER'];
+    header("Location: $pathError");
 }
 else {
     $pathSuccess =  "/mse/results.php?q=" . $data['search'];
