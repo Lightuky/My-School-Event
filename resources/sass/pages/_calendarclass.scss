@@ -1,0 +1,22 @@
+/* calendar */
+table.calendar {
+  border-left: 1px solid #999;
+}
+* html div.calendar-day {
+  height: 80px;
+}
+td.calendar-day-np {
+  border-bottom: 1px solid lightgray;
+  border-left: 1px solid lightgray;
+}
+div.day-number {
+  width: 20px;
+}
+/* shared */
+td.calendar-day{
+  width: 120px;
+  height: 100px;
+  padding: 0;
+  border: 1px solid #999;
+  position: relative;
+}
