@@ -10,32 +10,29 @@ $categories = getCategories();
 $cities = getCities();
 $schools = getSchools();
 
-if (!$query_city AND !$query_school) {
+if (!$query_city AND !$query_school):
     $events = getEventsSorted();
     $posts = getPostsSorted();
     $helps = getHelpsSorted();
-}
-else {
-    if (!$query_city AND $query_school) {
+else:
+    if (!$query_city AND $query_school):
         $query_column = "school_id";
         $table_join = "schools";
         $events = getEventsQueryOneParam($query_school,$query_column,$table_join);
         $posts = getPostsQueryOneParam($query_school,$query_column,$table_join);
         $helps = getHelpsQueryOneParam($query_school,$query_column,$table_join);
-    }
-    elseif ($query_city AND !$query_school) {
+    elseif ($query_city AND !$query_school):
         $query_column = "city_id";
         $table_join = "cities";
         $events = getEventsQueryOneParam($query_city,$query_column,$table_join);
         $posts = getPostsQueryOneParam($query_city,$query_column,$table_join);
         $helps = getHelpsQueryOneParam($query_city,$query_column,$table_join);
-    }
-    else {
+    else:
         $events = getEventsQueryTwoParam($query_city,$query_school);
         $posts = getPostsQueryTwoParam($query_city,$query_school);
         $helps = getHelpsQueryTwoParam($query_city,$query_school);
-    }
-}
+    endif;
+endif;
 
 ?>
 
@@ -44,34 +41,32 @@ else {
         <div class="col-2 m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="height: calc(100vh - 60px); bottom: 0;">
             <div>
                 <a href="index.php" class="text-white nav-link border py-3 mt-2 border-left-0">Acceuil</a>
-                <?php if (!isset($_SESSION['auth_id'])) { ?>
+                <?php if (!isset($_SESSION['auth_id'])): ?>
                     <a href="login.php" class="text-white nav-link border py-3 mt-5 border-left-0">Se connecter</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
-                <?php }
-                else { ?>
+                <?php else: ?>
                     <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
                     <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
-                <?php } ?>
+                <?php endif; ?>
             </div>
-            <?php if (isset($_SESSION['auth_id'])) { ?>
+            <?php if (isset($_SESSION['auth_id'])): ?>
                 <div class="">
                     <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
                     <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
                 </div>
-            <?php } ?>
+            <?php endif; ?>
         </div>
         <div class="col-10 mx-0 p-0 d-flex ml-auto" style="padding-top: 60px!important;">
             <div class="col-2 mt-4 p-0 text-center">
-                <?php if (!isset($_SESSION['auth_id'])) {?>
+                <?php if (!isset($_SESSION['auth_id'])): ?>
                     <a href="login.php" class="btn btn-secondary">Ajouter un event</a>
-                <?php }
-                else { ?>
+                <?php else: ?>
                     <a href="addevent.php" class="btn btn-secondary">Ajouter un event</a>
-                <?php } ?>
+                <?php endif; ?>
             </div>
             <div class="col-7 p-0">
                 <div class="d-flex justify-content-around">
@@ -103,15 +98,15 @@ else {
                                     <label for="content">Contenu du post</label>
                                     <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
                                 </div>
-                                <?php if (isset($_SESSION['auth_id'])) { ?>
+                                <?php if (isset($_SESSION['auth_id'])): ?>
                                     <button class="btn btn-outline-info my-2">Poster</button>
-                                <?php } else { ?>
+                                <?php else: ?>
                                     <a href="login.php" class="btn btn-outline-info my-2">Poster</a>
-                                <?php } ?>
+                                <?php endif; ?>
                             </form>
                         </div>
                     </div>
-                    <?php foreach ($posts as $post){ ?>
+                    <?php foreach ($posts as $post): ?>
                         <div class="card col-10 mx-auto mt-4" id="ContentPosts">
                             <div class="card-body">
                                 <img src="https://www.gravatar.com/avatar/<?php echo md5($post['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
@@ -124,34 +119,31 @@ else {
                                 </div>
                                 <hr class="bg-secondary">
                                 <div class="d-flex justify-content-around mt-3">
-                                    <?php if (isset($_SESSION['auth_id'])) {
+                                    <?php if (isset($_SESSION['auth_id'])):
                                         $post_likes = getPostLikes($post['id']);
-                                        if (empty($post_likes)) { ?>
+                                        if (empty($post_likes)): ?>
                                             <div class="d-flex">
                                                 <a href="assets/addpostlike.php?id=<?php echo $post['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-star mt-1 text-muted"></i> Favori</a>
                                             </div>
-                                        <?php }
-                                        else {
-                                            foreach ($post_likes as $post_like) {
-                                                if ($post_like['user_id'] == $_SESSION['auth_id']) { ?>
+                                        <?php else:
+                                            foreach ($post_likes as $post_like):
+                                                if ($post_like['user_id'] == $_SESSION['auth_id']): ?>
                                                     <div class="d-flex">
                                                         <a href="assets/delpostlike.php?id=<?php echo $post['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-star mt-1 text-warning"></i> Favori</a>
                                                     </div>
                                                     <?php break;
-                                                }
-                                                elseif (end($post_likes) == $post_like) { ?>
+                                                elseif (end($post_likes) == $post_like): ?>
                                                     <div class="d-flex">
                                                         <a href="assets/addpostlike.php?id=<?php echo $post['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-star mt-1 text-muted"></i> Favori</a>
                                                     </div>
-                                                <?php }
-                                            }
-                                        }
-                                    }
-                                    else { ?>
+                                                <?php endif;
+                                            endforeach;
+                                        endif;
+                                    else: ?>
                                         <div class="d-flex">
                                             <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-star mt-1 text-muted"></i> Favori</a>
                                         </div>
-                                    <?php } ?>
+                                    <?php endif; ?>
                                     <div class="d-flex">
                                         <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
                                     </div>
@@ -171,11 +163,11 @@ else {
                                                 <label for="content">Contenu du commentaire</label>
                                                 <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
                                             </div>
-                                            <?php if (isset($_SESSION['auth_id'])) { ?>
+                                            <?php if (isset($_SESSION['auth_id'])): ?>
                                                 <button class="btn btn-outline-info my-2">Envoyer</button>
-                                            <?php } else { ?>
+                                            <?php else: ?>
                                                 <a href="login.php" class="btn btn-outline-info my-2">Envoyer</a>
-                                            <?php } ?>
+                                            <?php endif; ?>
                                         </form>
                                     </div>
                                 </div>
@@ -184,19 +176,20 @@ else {
                                     <div class="nav-link text-muted px-0">(<?php echo count(getPostComments($post['id'])) ?>)</div>
                                 </div>
                                 <div class="d-none ContentsComments">
-                                    <?php $post_comments = getPostComments($post['id']);
-                                    foreach ($post_comments as $post_comment) { ?>
+                                    <?php
+                                    $post_comments = getPostComments($post['id']);
+                                    foreach ($post_comments as $post_comment): ?>
                                         <div class="card-body" id="ContentPosts">
-                                            <?php if (isset($_SESSION['auth_id'])) {
-                                                if ($post_comment['author_id'] == $_SESSION['auth_id']) { ?>
+                                            <?php if (isset($_SESSION['auth_id'])):
+                                                if ($post_comment['author_id'] == $_SESSION['auth_id']): ?>
                                                     <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
                                                         <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
                                                         <div class="card d-none text-center position-relative border-0">
                                                             <a href="assets/delpostcomment.php?id=<?php echo $post_comment['id'] ?>" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
                                                         </div>
                                                     </div>
-                                                <?php }
-                                            } ?>
+                                                <?php endif;
+                                            endif; ?>
                                             <div class="d-flex justify-content-between">
                                                 <div>
                                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($post_comment['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
@@ -213,35 +206,32 @@ else {
                                             <p class="card-text text-muted"><?php echo $post_comment['content'] ?></p>
                                             <hr class="bg-secondary">
                                             <div class="d-flex justify-content-around mt-3">
-                                                <?php if (isset($_SESSION['auth_id'])) {
+                                                <?php if (isset($_SESSION['auth_id'])):
                                                     $post_comment_likes = getPostCommentLikes($post_comment['id']);
-                                                    if (empty($post_comment_likes)) { ?>
+                                                    if (empty($post_comment_likes)): ?>
                                                         <div class="d-flex">
                                                             <a href="assets/addpostcommentlike.php?id=<?php echo $post_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
                                                         </div>
                                                         <?php break;
-                                                    }
-                                                    else {
-                                                        foreach ($post_comment_likes as $post_comment_like) {
-                                                            if ($post_comment_like['user_id'] == $_SESSION['auth_id']) { ?>
+                                                    else:
+                                                        foreach ($post_comment_likes as $post_comment_like):
+                                                            if ($post_comment_like['user_id'] == $_SESSION['auth_id']): ?>
                                                                 <div class="d-flex">
                                                                     <a href="assets/delpostcommentlike.php?id=<?php echo $post_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-heart mt-1 text-danger"></i> Aimé</a>
                                                                 </div>
                                                                 <?php break;
-                                                            }
-                                                            elseif (end($post_comment_likes) == $post_comment_like) { ?>
+                                                            elseif (end($post_comment_likes) == $post_comment_like): ?>
                                                                 <div class="d-flex">
                                                                     <a href="assets/addpostcommentlike.php?id=<?php echo $post_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
                                                                 </div>
-                                                            <?php }
-                                                        }
-                                                    }
-                                                }
-                                                else { ?>
+                                                            <?php endif;
+                                                        endforeach;
+                                                    endif;
+                                                else: ?>
                                                     <div class="d-flex">
                                                         <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
                                                     </div>
-                                                <?php } ?>
+                                                <?php endif; ?>
                                                 <div class="d-flex">
                                                     <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
                                                 </div>
@@ -250,18 +240,18 @@ else {
                                                 </div>
                                             </div>
                                         </div>
-                                    <?php } ?>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php endforeach; ?>
                 </div>
 
                 <div id="allEvents">
-                    <?php foreach ($events as $event){ ?>
+                    <?php foreach ($events as $event): ?>
                         <div class="card col-10 mx-auto mt-5" id="ContentPosts">
                             <div class="card-body">
-                                <img src="https://www.gravatar.com/avatar/<?php echo md5($post['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
+                                <img src="https://www.gravatar.com/avatar/<?php echo md5($event['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                                 <h5 class="card-title"><?php echo $event['first_name'] . " " . $event['last_name'] ?></h5>
                                 <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($event['date_added']); ?></h6>
                                 <p class="card-text text-muted"><?php echo $event['description'] ?></p>
@@ -270,8 +260,7 @@ else {
                                 <div class="d-flex">
                                     <i class="fas fa-map-marker-alt mt-1" style="color: red"></i>
                                     <?php $event_address = getEventAddress($event['id']) ?>
-                                    <p class="card-text text-muted ml-2"><?php echo $event_address['street_number'] . " " . $event_address['address_line1'] . ", "
-                                            . $event_address['address_line2'] . " "  . $event_address['zip_code'] . " " . $event_address['city'] ?></p>
+                                    <p class="card-text text-muted ml-2"><?php echo $event_address['street_number'] . " " . $event_address['address_line1'] . ", " . $event_address['address_line2'] . " "  . $event_address['zip_code'] . " " . $event_address['city'] ?></p>
                                 </div>
                                 <div class="d-flex mt-3">
                                     <i class="fas fa-check-circle mt-1" style="color: forestgreen"></i>
@@ -279,38 +268,34 @@ else {
                                 </div>
                                 <hr class="bg-secondary">
                                 <div class="d-flex justify-content-around mt-3">
-                                    <?php if (isset($_SESSION['auth_id'])) {
-                                        if ($event['admin_id'] == $_SESSION['auth_id']) { ?>
+                                    <?php if (isset($_SESSION['auth_id'])):
+                                        if ($event['admin_id'] == $_SESSION['auth_id']): ?>
                                             <div class="d-flex">
                                                 <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
                                             </div>
-                                        <?php }
-                                        else {
+                                        <?php else:
                                             $event_state = checkEventState($event['id'], $_SESSION['auth_id']);
-                                            if (empty($event_state)) { ?>
+                                            if (empty($event_state)): ?>
                                                 <div class="d-flex">
                                                     <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
                                                 </div>
-                                            <?php }
-                                            else {
-                                                if ($event_state['private_pending'] == "1") { ?>
+                                            <?php else:
+                                                if ($event_state['private_pending'] == "1"): ?>
                                                     <div class="d-flex">
                                                         <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-warning"></i> Demande Envoyée</a>
                                                     </div>
-                                                <?php  }
-                                                elseif ($event_state['private_pending'] == "0") { ?>
+                                                <?php elseif ($event_state['private_pending'] == "0"): ?>
                                                     <div class="d-flex">
                                                         <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
                                                     </div>
-                                                <?php }
-                                            }
-                                        }
-                                    }
-                                    else { ?>
+                                                <?php endif;
+                                            endif;
+                                        endif;
+                                    else: ?>
                                         <div class="d-flex">
                                             <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
                                         </div>
-                                    <?php } ?>
+                                    <?php endif; ?>
                                     <div class="d-flex">
                                         <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
                                     </div>
@@ -330,11 +315,11 @@ else {
                                                 <label for="content">Contenu du commentaire</label>
                                                 <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
                                             </div>
-                                            <?php if (isset($_SESSION['auth_id'])) { ?>
+                                            <?php if (isset($_SESSION['auth_id'])): ?>
                                                 <button class="btn btn-outline-info my-2">Envoyer</button>
-                                            <?php } else { ?>
+                                            <?php else: ?>
                                                 <a href="login.php" class="btn btn-outline-info my-2">Envoyer</a>
-                                            <?php } ?>
+                                            <?php endif; ?>
                                         </form>
                                     </div>
                                 </div>
@@ -344,18 +329,18 @@ else {
                                 </div>
                                 <div class="d-none ContentsComments">
                                     <?php $event_comments = getEventComments($event['id']);
-                                    foreach ($event_comments as $event_comment) { ?>
+                                    foreach ($event_comments as $event_comment): ?>
                                         <div class="card-body" id="ContentPosts">
-                                            <?php if (isset($_SESSION['auth_id'])) {
-                                                if ($event_comment['author_id'] == $_SESSION['auth_id']) { ?>
+                                            <?php if (isset($_SESSION['auth_id'])):
+                                                if ($event_comment['author_id'] == $_SESSION['auth_id']): ?>
                                                     <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
                                                         <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
                                                         <div class="card d-none text-center position-relative border-0">
                                                             <a href="assets/deleventcomment.php?id=<?php echo $event_comment['id'] ?>" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
                                                         </div>
                                                     </div>
-                                                <?php }
-                                            } ?>
+                                                <?php endif;
+                                            endif; ?>
                                             <div class="d-flex justify-content-between">
                                                 <div>
                                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($event_comment['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
@@ -372,34 +357,31 @@ else {
                                             <p class="card-text text-muted"><?php echo $event_comment['content'] ?></p>
                                             <hr class="bg-secondary">
                                             <div class="d-flex justify-content-around mt-3">
-                                                <?php if (isset($_SESSION['auth_id'])) {
+                                                <?php if (isset($_SESSION['auth_id'])):
                                                     $event_comment_likes = getEventCommentLikes($event_comment['id']);
-                                                    if (empty($event_comment_likes)) { ?>
+                                                    if (empty($event_comment_likes)): ?>
                                                         <div class="d-flex">
                                                             <a href="assets/addeventcommentlike.php?id=<?php echo $event_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
                                                         </div>
-                                                    <?php }
-                                                    else {
-                                                        foreach ($event_comment_likes as $event_comment_like) {
-                                                            if ($event_comment_like['user_id'] == $_SESSION['auth_id']) { ?>
+                                                    <?php else:
+                                                        foreach ($event_comment_likes as $event_comment_like):
+                                                            if ($event_comment_like['user_id'] == $_SESSION['auth_id']): ?>
                                                                 <div class="d-flex">
                                                                     <a href="assets/deleventcommentlike.php?id=<?php echo $event_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-heart mt-1 text-danger"></i> Aimé</a>
                                                                 </div>
                                                                 <?php break;
-                                                            }
-                                                            elseif (end($event_comment_likes) == $event_comment_like) { ?>
+                                                            elseif (end($event_comment_likes) == $event_comment_like): ?>
                                                                 <div class="d-flex">
                                                                     <a href="assets/addeventcommentlike.php?id=<?php echo $event_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
                                                                 </div>
-                                                            <?php }
-                                                        }
-                                                    }
-                                                }
-                                                else { ?>
+                                                            <?php endif;
+                                                        endforeach;
+                                                    endif;
+                                                else: ?>
                                                     <div class="d-flex">
                                                         <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
                                                     </div>
-                                                <?php } ?>
+                                                <?php endif; ?>
                                                 <div class="d-flex">
                                                     <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
                                                 </div>
@@ -408,11 +390,11 @@ else {
                                                 </div>
                                             </div>
                                         </div>
-                                    <?php } ?>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php endforeach; ?>
                 </div>
                 <div id="allHelps">
                     <div class="card col-10 my-5 mx-auto" id="ContentPosts" style="display: none; border-radius: initial">
@@ -429,15 +411,15 @@ else {
                                     <label for="content">Description</label>
                                     <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
                                 </div>
-                                <?php if (isset($_SESSION['auth_id'])) { ?>
+                                <?php if (isset($_SESSION['auth_id'])): ?>
                                     <button class="btn btn-outline-info my-2">Poster</button>
-                                <?php } else { ?>
+                                <?php else: ?>
                                     <a href="login.php" class="btn btn-outline-info my-2">Poster</a>
-                                <?php } ?>
+                                <?php endif; ?>
                             </form>
                         </div>
                     </div>
-                    <?php foreach ($helps as $help){ ?>
+                    <?php foreach ($helps as $help): ?>
                         <div class="card col-10 mx-auto mt-4">
                             <div class="card-body">
                                 <img src="https://www.gravatar.com/avatar/<?php echo md5($help['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
@@ -451,34 +433,31 @@ else {
                                 </div>
                                 <hr class="bg-secondary">
                                 <div class="d-flex justify-content-around mt-3">
-                                    <?php if (isset($_SESSION['auth_id'])) {
+                                    <?php if (isset($_SESSION['auth_id'])):
                                         $help_likes = getHelpLikes($help['id']);
-                                        if (empty($help_likes)) { ?>
+                                        if (empty($help_likes)): ?>
                                             <div class="d-flex">
                                                 <a href="assets/addhelplike.php?s=1&id=<?php echo $help['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-muted"></i> Pertinent</a>
                                             </div>
-                                        <?php }
-                                        else {
-                                            foreach ($help_likes as $help_like) {
-                                                if ($help_like['user_id'] == $_SESSION['auth_id']) { ?>
+                                        <?php else:
+                                            foreach ($help_likes as $help_like):
+                                                if ($help_like['user_id'] == $_SESSION['auth_id']): ?>
                                                     <div class="d-flex">
                                                         <a href="assets/delhelplike.php?s=1&id=<?php echo $help['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-lightbulb mt-1 text-info"></i> Pertinent</a>
                                                     </div>
                                                     <?php break;
-                                                }
-                                                elseif (end($help_likes) == $help_like) { ?>
+                                                elseif (end($help_likes) == $help_like): ?>
                                                     <div class="d-flex">
                                                         <a href="assets/addhelplike.php?s=1&id=<?php echo $help['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-muted"></i> Pertinent</a>
                                                     </div>
-                                                <?php }
-                                            }
-                                        }
-                                    }
-                                    else { ?>
+                                                <?php endif;
+                                            endforeach;
+                                        endif;
+                                    else: ?>
                                         <div class="d-flex">
                                             <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-muted"></i> Pertinent</a>
                                         </div>
-                                    <?php } ?>
+                                    <?php endif; ?>
                                     <div class="d-flex">
                                         <a href="help.php?id=<?php echo $help['id'] ?>" class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Répondre</a>
                                     </div>
@@ -497,29 +476,30 @@ else {
                                     $i_answers = 0;
                                     $new_answers = [];
 
-                                    foreach ($help_answer_infos as $help_answer_info) {
+                                    foreach ($help_answer_infos as $help_answer_info):
                                         $new_answers[] = ["id" => $help_answer_info["id"], "help_id" => $help_answer_info["help_id"], "author_id" => $help_answer_info["author_id"]];
                                         $help_answer_ratio = (count(getHelpAnswerLikes($help_answer_info['id'])) - count(getHelpAnswerDislikes($help_answer_info['id'])));
                                         $new_answers[$i_answers]["ratio"] = "$help_answer_ratio";
                                         $i_answers++;
-                                    }
+                                    endforeach;
+
                                     $ratio_column = array_column($new_answers, 'ratio');
                                     array_multisort($ratio_column, SORT_DESC, $new_answers);
                                     $help_best_answer = array_slice($new_answers, 0, 1);
 
-                                    foreach ($help_answer_infos as $help_answer_info) {
-                                        if ($help_answer_info['id'] == $help_best_answer[0]['id']) { ?>
+                                    foreach ($help_answer_infos as $help_answer_info):
+                                        if ($help_answer_info['id'] == $help_best_answer[0]['id']): ?>
                                             <div class="card-body" id="ContentPosts">
-                                                <?php if (isset($_SESSION['auth_id'])) {
-                                                    if ($help_answer_info['author_id'] == $_SESSION['auth_id']) { ?>
+                                                <?php if (isset($_SESSION['auth_id'])):
+                                                    if ($help_answer_info['author_id'] == $_SESSION['auth_id']): ?>
                                                         <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
                                                             <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
                                                             <div class="card d-none text-center position-relative border-0">
                                                                 <a href="assets/delhelpcomment.php?id=<?php echo $help_answer_info['id'] ?>&s=1" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
                                                             </div>
                                                         </div>
-                                                    <?php }
-                                                } ?>
+                                                    <?php endif;
+                                                endif; ?>
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <img src="https://www.gravatar.com/avatar/<?php echo md5($help_answer_info['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
@@ -538,58 +518,53 @@ else {
                                                 <p class="card-text text-muted"><?php echo $help_answer_info['content'] ?></p>
                                                 <hr class="bg-secondary">
                                                 <div class="d-flex justify-content-around mt-3">
-                                                    <?php if (isset($_SESSION['auth_id'])) {
+                                                    <?php if (isset($_SESSION['auth_id'])):
                                                         $help_comment_likes = getHelpAnswerLikes($help_answer_info['id']);
                                                         $help_comment_dislikes = getHelpAnswerDislikes($help_answer_info['id']);
-                                                        if (empty($help_comment_likes)) { ?>
+                                                        if (empty($help_comment_likes)): ?>
                                                             <div class="d-flex">
                                                                 <a href="assets/addhelpcommentlike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-success"></i> Utile</a>
                                                             </div>
-                                                        <?php }
-                                                        else {
-                                                            foreach ($help_comment_likes as $help_comment_like) {
-                                                                if ($help_comment_like['user_id'] == $_SESSION['auth_id']) { ?>
+                                                        <?php else:
+                                                            foreach ($help_comment_likes as $help_comment_like):
+                                                                if ($help_comment_like['user_id'] == $_SESSION['auth_id']): ?>
                                                                     <div class="d-flex">
                                                                         <a href="assets/delhelpcommentlike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-lightbulb mt-1 text-success"></i> Voté utile</a>
                                                                     </div>
                                                                     <?php break;
-                                                                }
-                                                                elseif (end($help_comment_likes) == $help_comment_like) { ?>
+                                                                elseif (end($help_comment_likes) == $help_comment_like): ?>
                                                                     <div class="d-flex">
                                                                         <a href="assets/addhelpcommentlike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-success"></i> Utile</a>
                                                                     </div>
-                                                                <?php }
-                                                            }
-                                                        }
-                                                        if (empty($help_comment_dislikes)) { ?>
+                                                                <?php endif;
+                                                            endforeach;
+                                                        endif;
+                                                        if (empty($help_comment_dislikes)): ?>
                                                             <div class="d-flex">
                                                                 <a href="assets/addhelpcommentdislike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-danger"></i> Pas utile</a>
                                                             </div>
-                                                        <?php }
-                                                        else {
-                                                            foreach ($help_comment_dislikes as $help_comment_dislike) {
-                                                                if ($help_comment_dislike['user_id'] == $_SESSION['auth_id']) { ?>
+                                                        <?php else:
+                                                            foreach ($help_comment_dislikes as $help_comment_dislike):
+                                                                if ($help_comment_dislike['user_id'] == $_SESSION['auth_id']): ?>
                                                                     <div class="d-flex">
                                                                         <a href="assets/delhelpcommentdislike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-lightbulb mt-1 text-danger"></i> Voté inutile</a>
                                                                     </div>
                                                                     <?php break;
-                                                                }
-                                                                elseif (end($help_comment_dislikes) == $help_comment_dislike) { ?>
+                                                                elseif (end($help_comment_dislikes) == $help_comment_dislike): ?>
                                                                     <div class="d-flex">
                                                                         <a href="assets/addhelpcommentdislike.php?s=1&id=<?php echo $help_answer_info['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-danger"></i> Inutile</a>
                                                                     </div>
-                                                                <?php }
-                                                            }
-                                                        }
-                                                    }
-                                                    else { ?>
+                                                                <?php endif;
+                                                            endforeach;
+                                                        endif;
+                                                    else: ?>
                                                         <div class="d-flex">
                                                             <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-success"></i> Pertinent</a>
                                                         </div>
                                                         <div class="d-flex">
                                                             <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-lightbulb mt-1 text-danger"></i> Non Pertinent</a>
                                                         </div>
-                                                    <?php } ?>
+                                                    <?php endif; ?>
                                                     <div class="d-flex">
                                                         <a href="help.php?id=<?php echo $help['id'] ?>" class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Répondre</a>
                                                     </div>
@@ -598,47 +573,47 @@ else {
                                                     </div>
                                                 </div>
                                             </div>
-                                        <?php }
-                                    } ?>
+                                        <?php endif;
+                                    endforeach; ?>
                                 </div>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
             <div class="col-3 mt-4 p-0 text-center">
                 <div class="btn btn-secondary" id="btnSort">Trier</div>
-                <?php if ($query_school OR $query_city) { ?>
+                <?php if ($query_school OR $query_city): ?>
                     <a href="index.php" class="btn btn-danger d-block col-5 mx-auto my-3">Annuler le tri</a>
-                <?php } ?>
+                <?php endif; ?>
                 <div class="border col-8 mx-auto mt-2 d-none" id="SortForm" style="border-radius: 10px;">
                     <form method="post" action="assets/indexsort.php">
                         <div class="form-group">
                             <label for="content" class="d-block mt-2 h6 font-weight-bold">Ville</label>
                             <div class="d-flex flex-wrap">
-                                <?php foreach ($cities as $city) { ?>
+                                <?php foreach ($cities as $city): ?>
                                     <div class="form-check w-50">
                                         <input class="form-check-input" type="radio" name="city" id="city" value="<?php echo $city['id'] ?>">
                                         <label class="form-check-label" for="city"><?php echo $city['name'] ?></label>
                                     </div>
-                                <?php } ?>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                         <hr class="bg-secondary">
                         <div class="form-group">
                             <label for="content" class="d-block mt-2 h6 font-weight-bold">École</label>
-                            <?php foreach ($schools as $school) { ?>
+                            <?php foreach ($schools as $school): ?>
                                 <div class="form-check mx-0">
                                     <input class="form-check-input" type="radio" name="school" id="school" value="<?php echo $school['id'] ?>">
                                     <label class="form-check-label" for="school"><?php echo $school['name'] ?></label>
                                 </div>
-                            <?php } ?>
+                            <?php endforeach; ?>
                         </div>
-                        <?php if (isset($_SESSION['auth_id'])) { ?>
+                        <?php if (isset($_SESSION['auth_id'])): ?>
                             <button class="btn btn-outline-info my-2">Rechercher</button>
-                        <?php } else { ?>
+                        <?php else: ?>
                             <a href="login.php" class="btn btn-outline-info my-2">Rechercher</a>
-                        <?php } ?>
+                        <?php endif; ?>
                     </form>
                 </div>
             </div>

@@ -19,10 +19,7 @@ if (isset($_SESSION['auth_id'])) {
 }
 
 ?>
-
-
-    <section class="section-up"></section>
-    <script>document.getElementById('header').style.display = "none";</script>
+    <section class="section-up profile" id="section-up"></section>
     <div class="section-flex">
     <section class="menu-profile" style="width: 17%">
         <div class=" col-2 m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="width: 230px; height: 100vh; bottom: 0;">
@@ -35,7 +32,7 @@ if (isset($_SESSION['auth_id'])) {
                 <?php }
                 else { ?>
                     <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
-                    <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border-left-0">Calendrier</a>
+                    <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border-left-0 border py-3">Calendrier</a>
                     <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                 <?php } ?>
             </div>
@@ -69,7 +66,7 @@ if (isset($_SESSION['auth_id'])) {
                             <?php }
                             else { ?>
                                 <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
-                                <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border-left-0">Calendrier</a>
+                                <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border-left-0 border py-3">Calendrier</a>
                                 <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                             <?php } ?>
                         </div>

@@ -91,6 +91,14 @@ $('#deleteCommentBlock div.position-relative').hover(function () {
   $('#deleteCommentBlock a.btn-outline-danger i').removeClass("text-white").addClass("text-danger");
 });
 
+if ($("section").hasClass("404")) {
+  $("#header form").hide();
+}
+
+if (!$("#section-up").hasClass("profile")) {
+  $("#header").removeClass("d-none").addClass("d-flex");
+}
+
 /***/ }),
 
 /***/ "./resources/sass/app.scss":
@@ -111,8 +119,8 @@ $('#deleteCommentBlock div.position-relative').hover(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Applications/MAMP/htdocs/mse/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Applications/MAMP/htdocs/mse/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\wamp64\www\mse\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\wamp64\www\mse\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

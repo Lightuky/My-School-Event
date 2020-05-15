@@ -4,9 +4,9 @@ use Carbon\Carbon;
 
 ?>
 
-<section>
-    <div class="container">
-        <div class="card text-center mt-5">
+<section class="404">
+    <div class="container d-flex align-items-center" style="min-height: 100vh;">
+        <div class="card text-center mx-auto p-5">
             <div class="card-header">
                 <h3 class="card-title">Aucun contenu ne correspond à votre requête</h3>
             </div>

@@ -157,36 +157,28 @@ function updateUser($data, $id) {
 
 function searchUsers($query) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT * FROM users WHERE (user1_id = :user1_id AND user2_id = :user2_id) OR (user1_id = :user2_id AND user2_id = :user1_id)");
-    $stmt->bindValue(':user1_id', $auth_id);
-    $stmt->bindValue(':user2_id', $user2);
+    $stmt = $dbh->prepare("SELECT * FROM users WHERE first_name LIKE '%$query%' OR last_name LIKE '%$query%'");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function searchEvents($query) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT * FROM events WHERE (user1_id = :user1_id AND user2_id = :user2_id) OR (user1_id = :user2_id AND user2_id = :user1_id)");
-    $stmt->bindValue(':user1_id', $auth_id);
-    $stmt->bindValue(':user2_id', $user2);
+    $stmt = $dbh->prepare("SELECT * FROM events WHERE name LIKE '%$query%' OR description LIKE '%$query%'");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function searchHelps($query) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT * FROM help_posts WHERE (user1_id = :user1_id AND user2_id = :user2_id) OR (user1_id = :user2_id AND user2_id = :user1_id)");
-    $stmt->bindValue(':user1_id', $auth_id);
-    $stmt->bindValue(':user2_id', $user2);
+    $stmt = $dbh->prepare("SELECT * FROM helps WHERE title LIKE '%$query%' OR content LIKE '%$query%'");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function searchPosts($query) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT * FROM posts WHERE (user1_id = :user1_id AND user2_id = :user2_id) OR (user1_id = :user2_id AND user2_id = :user1_id)");
-    $stmt->bindValue(':user1_id', $auth_id);
-    $stmt->bindValue(':user2_id', $user2);
+    $stmt = $dbh->prepare("SELECT * FROM posts WHERE content LIKE '%$query%'");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -698,6 +690,22 @@ function getEventMembersCredentials($event_id) {
 function getOwnedEvents($user_id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT * FROM events WHERE admin_id = :admin_id");
+    $stmt->bindValue(':admin_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getUserJoinedEventsCalendar($auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT events.name, events.id, events.date, events.time, events.duration FROM events LEFT JOIN event_users ON events.id = event_users.event_id WHERE event_users.user_id = :auth_id");
+    $stmt->bindValue(':auth_id', $auth_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getOwnedEventsCalendar($user_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT events.name, events.id, events.date, events.time, events.duration FROM events WHERE admin_id = :admin_id");
     $stmt->bindValue(':admin_id', $user_id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
