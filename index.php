@@ -256,6 +256,7 @@ else {
                         </div>
                     <?php } ?>
                 </div>
+
                 <div id="allEvents">
                     <?php foreach ($events as $event){ ?>
                         <div class="card col-10 mx-auto mt-5" id="ContentPosts">
