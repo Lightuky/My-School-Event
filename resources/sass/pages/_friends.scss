@@ -1,8 +1,16 @@
+.none-flex-wrap{
+  flex-wrap: nowrap;
+}
+
 
 @media (max-width: 760px) {
 
   .menu-friends{
     display: none;
+  }
+
+  .feed-friends{
+    margin-left: 13px;
   }
 }
 
@@ -10,5 +18,9 @@
 
     .m-button-menu-friends{
       display: none;
+    }
+
+    .feed-friends{
+      margin-left: auto;
     }
 }
