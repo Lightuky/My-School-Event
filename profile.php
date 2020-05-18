@@ -1,5 +1,9 @@
 <?php
 require_once 'includes/header.php';
+use Carbon\Carbon;
+date_default_timezone_set('Europe/Paris');
+setlocale(LC_TIME, 'fr_FR');
+
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $user = getUser($id);
 
@@ -19,8 +23,8 @@ if (isset($_SESSION['auth_id'])) {
 }
 
 ?>
-    <section class="section-up profile" id="section-up"></section>
-    <div class="section-flex">
+<section class="section-up profile" id="section-up"></section>
+<div class="section-flex">
     <section class="menu-profile" style="width: 17%">
         <div class=" col-2 m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="width: 230px; height: 100vh; bottom: 0;">
             <div>
@@ -29,11 +33,13 @@ if (isset($_SESSION['auth_id'])) {
                     <a href="login.php" class="text-white nav-link border py-3 mt-5 border-left-0">Se connecter</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                    <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                 <?php }
                 else { ?>
                     <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
-                    <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border-left-0 border py-3">Calendrier</a>
+                    <a href="calendar.php" class="text-white nav-link border-left-0 border py-3">Calendrier</a>
                     <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                    <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                 <?php } ?>
             </div>
             <?php if (isset($_SESSION['auth_id'])) { ?>
@@ -43,42 +49,39 @@ if (isset($_SESSION['auth_id'])) {
                 </div>
             <?php } ?>
         </div>
-
     </section>
     <section class="section-down">
         <div class="m-button-menu">
             <button class="" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <i class="fas fa-bars  text-white"></i>
             </button>
-
             <div class="collapse" id="collapseExample">
-
-                    <div class=" m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="width: 100vw; height: 100vh; bottom: 0; z-index: 10;">
-                        <div>
-                            <button class="" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                <i class="fas fa-bars text-white turn"></i>
-                            </button>
-                            <a href="index.php" class="text-white nav-link border py-3 mt-2 border-left-0">Acceuil</a>
-                            <?php if (!isset($_SESSION['auth_id'])) { ?>
-                                <a href="login.php" class="text-white nav-link border py-3 mt-5 border-left-0">Se connecter</a>
-                                <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
-                                <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
-                            <?php }
-                            else { ?>
-                                <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
-                                <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border-left-0 border py-3">Calendrier</a>
-                                <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
-                            <?php } ?>
-                        </div>
-                        <?php if (isset($_SESSION['auth_id'])) { ?>
-                            <div class="">
-                                <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
-                                <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
-                            </div>
+                <div class=" m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="width: 100vw; height: 100vh; bottom: 0; z-index: 10;">
+                    <div>
+                        <button class="" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fas fa-bars text-white turn"></i>
+                        </button>
+                        <a href="index.php" class="text-white nav-link border py-3 mt-2 border-left-0">Acceuil</a>
+                        <?php if (!isset($_SESSION['auth_id'])) { ?>
+                            <a href="login.php" class="text-white nav-link border py-3 mt-5 border-left-0">Se connecter</a>
+                            <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
+                            <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                            <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                        <?php }
+                        else { ?>
+                            <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
+                            <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0 ">Calendrier</a>
+                            <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                            <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                         <?php } ?>
                     </div>
-
-
+                    <?php if (isset($_SESSION['auth_id'])) { ?>
+                        <div class="">
+                            <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
+                            <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
+                        </div>
+                    <?php } ?>
+                </div>
             </div>
         </div>
         <div class="container d-flex align-content-center information-profile">
@@ -94,39 +97,34 @@ if (isset($_SESSION['auth_id'])) {
                         } ?>
                     </div>
                     <div class="">
-                    <?php if (isset($_SESSION['auth_id'])): ?>
-                        <?php if ($_SESSION['auth_id'] != $id): ?>
-                            <?php if (!$friend): ?>
-                                <a href="assets/friends.php?s=0&id=<?php echo $id ?>" class="btn btn-success">Ajouter en ami</a>
-                            <?php else: ?>
-                                <?php if ($friend['pending'] === '2'): ?>
-                                    <div class="d-flex mb-2">
-                                        <div class="btn bg-success">Déja Amis</div>
-                                        <div class="ml-4"><a href="assets/friends.php?s=2&id=<?php echo $id ?>" class="btn btn-danger">Supprimer l'ami</a></div>
-                                    </div>
-                                    <span>(Ajouté en ami <?php echo getDateForHumans($friend['date_added']); ?>)</span>
+                        <?php if (isset($_SESSION['auth_id'])): ?>
+                            <?php if ($_SESSION['auth_id'] != $id): ?>
+                                <?php if (!$friend): ?>
+                                    <a href="assets/friends.php?s=0&id=<?php echo $id ?>" class="btn btn-success">Ajouter en ami</a>
                                 <?php else: ?>
-                                    <?php if ($friend['user1_id'] === $_SESSION['auth_id']): ?>
-                                        <div class="btn bg-info text-white">Demande Envoyée</div>
-                                    <?php elseif ($friend['user2_id'] === $_SESSION['auth_id']): ?>
-                                        <a href="assets/friends.php?s=1&id=<?php echo $id ?>" class="btn btn-success">Accepter la demande</a>
+                                    <?php if ($friend['pending'] === '2'): ?>
+                                        <div class="d-flex mb-2">
+                                            <div class="btn bg-success">Déja Amis</div>
+                                            <div class="ml-4"><a href="assets/friends.php?s=2&id=<?php echo $id ?>" class="btn btn-danger">Supprimer l'ami</a></div>
+                                        </div>
+                                        <span>(Ajouté en ami <?php echo getDateForHumans($friend['date_added']); ?>)</span>
+                                    <?php else: ?>
+                                        <?php if ($friend['user1_id'] === $_SESSION['auth_id']): ?>
+                                            <div class="btn bg-info text-white">Demande Envoyée</div>
+                                        <?php elseif ($friend['user2_id'] === $_SESSION['auth_id']): ?>
+                                            <a href="assets/friends.php?s=1&id=<?php echo $id ?>" class="btn btn-success">Accepter la demande</a>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 <?php endif; ?>
                             <?php endif; ?>
+                        <?php else: ?>
+                            <a href="login.php" class="btn btn-success">Ajouter en ami</a>
                         <?php endif; ?>
-                    <?php else: ?>
-                        <a href="login.php" class="btn btn-success">Ajouter en ami</a>
-                    <?php endif; ?>
                     </div>
                 </div>
                 <div class="">
                     <div class=" text-center">
-
                         <h1 class="font-size-name-profile color-text-white" ><?php echo $user['first_name'] . " " . $user['last_name'] ?></h1>
-
-                    <!--</div>
-                    <div class="mt-5 h3 text-muted">Événements gérés :</div>
-                    <div>-->
                     </div>
                 </div>
             </div>
@@ -141,48 +139,48 @@ if (isset($_SESSION['auth_id'])) {
         <div class="button-choice">
             <div class="d-flex ">
                 <div class="col-3  text-center">
-                    <a href="#" class="h5 nav-link text-white mt-3" id="SortMenuAll">Tout</a>
+                    <button class="h5 nav-link text-white bg-transparent mt-3 border-0" id="SortMenuAll">Tout</button>
                     <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                 </div>
                 <div class="col-3 text-center">
-                    <a href="#" class="h5 nav-link text-white mt-5" id="SortMenuPosts">Posts</a>
+                    <button class="h5 nav-link text-white bg-transparent mt-5 border-0" id="SortMenuPosts">Posts</button>
                     <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                 </div>
                 <div class="col-3 text-center">
-                    <a href="#" class="h5 nav-link text-white mt-5" id="SortMenuEvents">Événements</a>
+                    <button class="h5 nav-link text-white bg-transparent mt-5 border-0" id="SortMenuEvents">Événements</button>
                     <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                 </div>
                 <div class="col-3 text-center">
-                    <a href="#" class="h5 nav-link text-white mt-5" id="SortMenuHelps">Helps</a>
+                    <button class="h5 nav-link text-white bg-transparent mt-5 border-0" id="SortMenuHelps">Helps</button>
                     <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                 </div>
             </div>
             <div id="allPosts">
 
                 <?php if($_SESSION['auth_id'] == $id) { ?>
-                <div class="card col-10 my-5 mx-auto" id="ContentPosts" style="border-radius: initial">
-                    <div class="card-header text-center">
-                        Ajouter une publication
+                    <div class="card col-10 my-5 mx-auto" id="ContentPosts" style="border-radius: initial">
+                        <div class="card-header text-center">
+                            Ajouter une publication
+                        </div>
+                        <div class="card-body mt-2 p-1">
+                            <form method="post" action="assets/addpost.php">
+                                <div class="form-group">
+                                    <label for="content">Contenu du post</label>
+                                    <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
+                                </div>
+                                <?php if (isset($_SESSION['auth_id'])) { ?>
+                                    <button class="btn btn-outline-info my-2">Poster</button>
+                                <?php } else { ?>
+                                    <a href="login.php" class="btn btn-outline-info my-2">Poster</a>
+                                <?php } ?>
+                            </form>
+                        </div>
                     </div>
-                    <div class="card-body mt-2 p-1">
-                        <form method="post" action="assets/addpost.php">
-                            <div class="form-group">
-                                <label for="content">Contenu du post</label>
-                                <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
-                            </div>
-                            <?php if (isset($_SESSION['auth_id'])) { ?>
-                                <button class="btn btn-outline-info my-2">Poster</button>
-                            <?php } else { ?>
-                                <a href="login.php" class="btn btn-outline-info my-2">Poster</a>
-                            <?php } ?>
-                        </form>
-                    </div>
-                </div>
-                <?php } else{} ?>
+                <?php } ?>
                 <?php foreach ($posts as $post){ ?>
                     <div class="card col-10 mx-auto mt-4" id="ContentPosts">
                         <div class="card-body">
-                            <img src="https://www.gravatar.com/avatar/<?php echo md5($post['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
+                            <img src="https://www.gravatar.com/avatar/<?php echo md5($user['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                             <h5 class="card-title"><?php echo $user['first_name'] . " " . $user['last_name'] ?></h5>
                             <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($post['date_added']); ?></h6>
                             <p class="card-text text-muted"><?php echo $post['content'] ?></p>
@@ -277,8 +275,7 @@ if (isset($_SESSION['auth_id'])) {
                                                     <div class="d-flex">
                                                         <a href="assets/addpostcommentlike.php?id=<?php echo $post_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
                                                     </div>
-                                                    <?php break;
-                                                }
+                                                <?php }
                                                 else {
                                                     foreach ($post_comment_likes as $post_comment_like) {
                                                         if ($post_comment_like['user_id'] == $_SESSION['auth_id']) { ?>
@@ -315,15 +312,22 @@ if (isset($_SESSION['auth_id'])) {
                 <?php } ?>
             </div>
             <div id="allEvents">
-                <?php foreach ($events as $event){ ?>
+                <?php foreach ($events as $event) {
+                    $current_datetime = date('Y-m-d H:i:s');
+                    $event_duration_hours = date('G', strtotime($event['duration']));
+                    $event_duration_minutes = date('i', strtotime($event['duration']));
+                    $event_duration_seconds = date('s', strtotime($event['duration']));
+                    $event_start_date = date('Y-m-d H:i:s', strtotime($event['date'] . $event['time']));
+                    $event_end_date = date('Y-m-d H:i:s',strtotime("+" . $event_duration_hours . " hour +" . $event_duration_minutes . " minutes +" . $event_duration_seconds . " seconds",strtotime($event_start_date)));
+                    ?>
                     <div class="card col-10 mx-auto mt-5" id="ContentPosts">
                         <div class="card-body">
-                            <img src="https://www.gravatar.com/avatar/<?php echo md5($post['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
+                            <img src="https://www.gravatar.com/avatar/<?php echo md5($user['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                             <h5 class="card-title"><?php echo $user['first_name'] . " " . $user['last_name'] ?></h5>
                             <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($event['date_added']); ?></h6>
                             <p class="card-text text-muted"><?php echo $event['description'] ?></p>
                             <p class="h5 font-weight-bold"><?php echo $event['name'] ?></p>
-                            <p class="card-text mb-1"><?php echo "Le " . strftime("%A%e %B", strtotime($event['date'])) . " à " . strftime("%Hh%M", strtotime($event['time'])) ?></p>
+                            <p class="card-text mb-1"><?php echo "Le " . strftime("%A %e %B", strtotime($event['date'])) . " à " . strftime("%Hh%M", strtotime($event['time'])) ?></p>
                             <div class="d-flex">
                                 <i class="fas fa-map-marker-alt mt-1" style="color: red"></i>
                                 <?php $event_address = getEventAddress($event['id']) ?>
@@ -336,38 +340,40 @@ if (isset($_SESSION['auth_id'])) {
                             </div>
                             <hr class="bg-secondary">
                             <div class="d-flex justify-content-around mt-3">
-                                <?php if (isset($_SESSION['auth_id'])) {
-                                    if ($event['admin_id'] == $_SESSION['auth_id']) { ?>
-                                        <div class="d-flex">
-                                            <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
-                                        </div>
-                                    <?php }
-                                    else {
-                                        $event_state = checkEventState($event['id'], $_SESSION['auth_id']);
-                                        if (empty($event_state)) { ?>
-                                            <div class="d-flex">
-                                                <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
-                                            </div>
-                                        <?php }
-                                        else {
-                                            if ($event_state['private_pending'] == "1") { ?>
-                                                <div class="d-flex">
-                                                    <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-warning"></i> Demande Envoyée</a>
-                                                </div>
-                                            <?php  }
-                                            elseif ($event_state['private_pending'] == "0") { ?>
-                                                <div class="d-flex">
-                                                    <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
-                                                </div>
-                                            <?php }
-                                        }
-                                    }
-                                }
-                                else { ?>
+                                <?php if ($event_end_date < $current_datetime): ?>
                                     <div class="d-flex">
-                                        <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
+                                        <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-clock mt-1 text-warning"></i> Terminé</a>
                                     </div>
-                                <?php } ?>
+                                <?php else: ?>
+                                    <?php if (isset($_SESSION['auth_id'])):
+                                        if ($event['admin_id'] == $_SESSION['auth_id']): ?>
+                                            <div class="d-flex">
+                                                <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
+                                            </div>
+                                        <?php else:
+                                            $event_state = checkEventState($event['id'], $_SESSION['auth_id']);
+                                            if (empty($event_state)): ?>
+                                                <div class="d-flex">
+                                                    <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
+                                                </div>
+                                            <?php else:
+                                                if ($event_state['private_pending'] == "1"): ?>
+                                                    <div class="d-flex">
+                                                        <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-warning"></i> Demande Envoyée</a>
+                                                    </div>
+                                                <?php elseif ($event_state['private_pending'] == "0"): ?>
+                                                    <div class="d-flex">
+                                                        <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
+                                                    </div>
+                                                <?php endif;
+                                            endif;
+                                        endif;
+                                    else: ?>
+                                        <div class="d-flex">
+                                            <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endif; ?>
                                 <div class="d-flex">
                                     <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
                                 </div>
@@ -487,7 +493,7 @@ if (isset($_SESSION['auth_id'])) {
                 <?php foreach ($helps as $help){ ?>
                     <div class="card col-10 mx-auto mt-4" id="ContentPosts">
                         <div class="card-body">
-                            <img src="https://www.gravatar.com/avatar/<?php echo md5($help['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
+                            <img src="https://www.gravatar.com/avatar/<?php echo md5($user['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                             <h5 class="card-title"><?php echo $user['first_name'] . " " . $user['last_name'] ?></h5>
                             <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($help['date_added']); ?></h6>
                             <p class="card-text text-secondary font-weight-bold mb-0 mt-3"><?php echo $help['title'] ?></p>
@@ -647,4 +653,4 @@ if (isset($_SESSION['auth_id'])) {
 
 
 
-<?php require_once 'includes/footer.php'; ?>
+    <?php require_once 'includes/footer.php'; ?>
