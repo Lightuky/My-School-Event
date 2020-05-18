@@ -48,7 +48,7 @@ endif;
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                 <?php else: ?>
                     <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
-                    <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
+                    <a href="calendar.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                 <?php endif; ?>
@@ -212,8 +212,7 @@ endif;
                                                         <div class="d-flex">
                                                             <a href="assets/addpostcommentlike.php?id=<?php echo $post_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
                                                         </div>
-                                                        <?php break;
-                                                    else:
+                                                    <?php else:
                                                         foreach ($post_comment_likes as $post_comment_like):
                                                             if ($post_comment_like['user_id'] == $_SESSION['auth_id']): ?>
                                                                 <div class="d-flex">
@@ -248,7 +247,14 @@ endif;
                 </div>
 
                 <div id="allEvents">
-                    <?php foreach ($events as $event): ?>
+                    <?php foreach ($events as $event):
+                        $current_datetime = date('Y-m-d H:i:s');
+                        $event_duration_hours = date('G', strtotime($event['duration']));
+                        $event_duration_minutes = date('i', strtotime($event['duration']));
+                        $event_duration_seconds = date('s', strtotime($event['duration']));
+                        $event_start_date = date('Y-m-d H:i:s', strtotime($event['date'] . $event['time']));
+                        $event_end_date = date('Y-m-d H:i:s',strtotime("+" . $event_duration_hours . " hour +" . $event_duration_minutes . " minutes +" . $event_duration_seconds . " seconds",strtotime($event_start_date)));
+                        ?>
                         <div class="card col-10 mx-auto mt-5" id="ContentPosts">
                             <div class="card-body">
                                 <img src="https://www.gravatar.com/avatar/<?php echo md5($event['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
@@ -256,7 +262,7 @@ endif;
                                 <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($event['date_added']); ?></h6>
                                 <p class="card-text text-muted"><?php echo $event['description'] ?></p>
                                 <p class="h5 font-weight-bold"><?php echo $event['name'] ?></p>
-                                <p class="card-text mb-1"><?php echo "Le " . strftime("%A%e %B", strtotime($event['date'])) . " à " . strftime("%Hh%M", strtotime($event['time'])) ?></p>
+                                <p class="card-text mb-1"><?php echo "Le " . strftime("%A %e %B", strtotime($event['date'])) . " à " . strftime("%Hh%M", strtotime($event['time'])) ?></p>
                                 <div class="d-flex">
                                     <i class="fas fa-map-marker-alt mt-1" style="color: red"></i>
                                     <?php $event_address = getEventAddress($event['id']) ?>
@@ -268,33 +274,39 @@ endif;
                                 </div>
                                 <hr class="bg-secondary">
                                 <div class="d-flex justify-content-around mt-3">
-                                    <?php if (isset($_SESSION['auth_id'])):
-                                        if ($event['admin_id'] == $_SESSION['auth_id']): ?>
-                                            <div class="d-flex">
-                                                <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
-                                            </div>
-                                        <?php else:
-                                            $event_state = checkEventState($event['id'], $_SESSION['auth_id']);
-                                            if (empty($event_state)): ?>
+                                    <?php if ($event_end_date < $current_datetime): ?>
+                                        <div class="d-flex">
+                                            <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-clock mt-1 text-warning"></i> Terminé</a>
+                                        </div>
+                                    <?php else: ?>
+                                        <?php if (isset($_SESSION['auth_id'])):
+                                            if ($event['admin_id'] == $_SESSION['auth_id']): ?>
                                                 <div class="d-flex">
-                                                    <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
+                                                    <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
                                                 </div>
                                             <?php else:
-                                                if ($event_state['private_pending'] == "1"): ?>
+                                                $event_state = checkEventState($event['id'], $_SESSION['auth_id']);
+                                                if (empty($event_state)): ?>
                                                     <div class="d-flex">
-                                                        <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-warning"></i> Demande Envoyée</a>
+                                                        <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
                                                     </div>
-                                                <?php elseif ($event_state['private_pending'] == "0"): ?>
-                                                    <div class="d-flex">
-                                                        <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
-                                                    </div>
-                                                <?php endif;
+                                                <?php else:
+                                                    if ($event_state['private_pending'] == "1"): ?>
+                                                        <div class="d-flex">
+                                                            <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-warning"></i> Demande Envoyée</a>
+                                                        </div>
+                                                    <?php elseif ($event_state['private_pending'] == "0"): ?>
+                                                        <div class="d-flex">
+                                                            <a href="event.php?id=<?php echo $event['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
+                                                        </div>
+                                                    <?php endif;
+                                                endif;
                                             endif;
-                                        endif;
-                                    else: ?>
-                                        <div class="d-flex">
-                                            <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
-                                        </div>
+                                        else: ?>
+                                            <div class="d-flex">
+                                                <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
+                                            </div>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                     <div class="d-flex">
                                         <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>

@@ -7,6 +7,7 @@ setlocale(LC_TIME, 'fr_FR.UTF8');
 $nav_month = isset($_GET['m']) ? $_GET['m'] : null;
 $nav_year = isset($_GET['y']) ? $_GET['y'] : null;
 $events = [];
+
 require_once 'calendarclass.php';
 
 if (isset($_SESSION['auth_id'])):
