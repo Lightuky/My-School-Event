@@ -157,6 +157,7 @@ if (isset($_SESSION['auth_id'])) {
                     <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                 </div>
             </div>
+        </div>
             <div id="allPosts">
 
                 <?php if($_SESSION['auth_id'] == $id) { ?>
@@ -641,7 +642,6 @@ if (isset($_SESSION['auth_id'])) {
                     </div>
                 <?php } ?>
             </div>
-
     </section>
 
 
