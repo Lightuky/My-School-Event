@@ -760,3 +760,36 @@ function discardEventPending($event_id) {
     $stmt->bindValue(':private_pending', 1);
     $stmt->execute();
 }
+
+function getBadges() {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM badges");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getUserBadges($user_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT user_badges.*, badges.name, badges.description, badges.icon, badges.color FROM badges LEFT JOIN user_badges 
+                                    ON user_badges.badge_id = badges.id WHERE user_badges.user_id = :auth_id ORDER BY id");
+    $stmt->bindValue(':auth_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getCategoryOwnedEvents($user_id, $cat_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM events WHERE admin_id = :auth_id AND category = :cat_id");
+    $stmt->bindValue(':auth_id', $user_id);
+    $stmt->bindValue(':cat_id', $cat_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getUserAcceptedEvents($user_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM event_users WHERE user_id = :auth_id");
+    $stmt->bindValue(':auth_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
