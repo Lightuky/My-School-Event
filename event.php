@@ -127,6 +127,18 @@ if (isset($_SESSION['auth_id'])) {
         <?php }
         ?>
     </div>
+    <div class="mapEvent">
+        <div class="gMaps">
+            <div class="gmap_canvas">
+                <iframe
+                        id="gmap_canvas"
+                        src="https://maps.google.com/maps?q=<?php echo $event_infos["description"];?>&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                        frameborder="0"
+                        scrolling="no"
+                        style="width: 40vw; height: 40vh;">
+                </iframe>
+            </div>
+        </div>
 </section>
 
 <?php require_once 'includes/footer.php'; ?>
