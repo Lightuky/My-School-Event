@@ -13,7 +13,7 @@ $categories = getCategories();
             <form method="post" action="assets/addevent.php">
                 <div class="form-group">
                     <label for="name">Nom de l'événement</label>
-                    <input type="text" name="name" id="name" class="form-control">
+                    <input type="text" name="name" id="name" class="form-control" required>
                     <small class="invalid-feedback"><?php echo isset($errors['last_name']) && isset($errors['last_name']['error']) ?></small>
                 </div>
                 <div class="form-group">
@@ -26,53 +26,39 @@ $categories = getCategories();
                 </div>
                 <div class="form-group">
                     <label for="date">Date</label>
-                    <input type="date" name="date" id="date" class="form-control">
+                    <input type="date" name="date" id="date" class="form-control" required>
                     <small class="invalid-feedback"><?php echo isset($errors) ?></small>
                 </div>
                 <div class="form-group">
                     <label for="time">Heure de début</label>
-                    <input type="time" name="time" id="time" class="form-control">
+                    <input type="time" name="time" id="time" class="form-control" required>
                     <small class="invalid-feedback"><?php echo isset($errors) ?></small>
                 </div>
                 <div class="form-group">
                     <label for="duration">Durée de l'événement</label>
-                    <input type="time" name="duration" id="duration" class="form-control">
+                    <input type="time" name="duration" id="duration" class="form-control" required>
                     <small class="invalid-feedback"><?php echo isset($errors) ?></small>
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea rows="4" name="description" id="description" class="form-control"></textarea>
+                    <textarea rows="4" name="description" id="description" class="form-control" required></textarea>
                     <small class="invalid-feedback"><?php echo isset($errors) ?></small>
                 </div>
                 <div class="form-group">
                     <label for="member_limit">Nombre de membres (0 si illimité)</label>
-                    <input type="number" id="member_limit" name="member_limit" min="0" class="form-control">
+                    <input type="number" id="member_limit" name="member_limit" min="0" class="form-control" required>
                     <small class="invalid-feedback"><?php echo isset($errors) ?></small>
                 </div>
                 <div class="form-group">
                     <label for="address">Adressse</label>
-                    <input type="text" name="street_number" id="address" class="form-control" placeholder="4">
-                    <input type="text" name="address_line1" id="address" class="form-control" placeholder="Rue des Oliviers">
-                    <input type="text" name="address_line2" id="address" class="form-control" placeholder="Le Bois Bourgerel">
-                    <input type="text" name="city" id="address" class="form-control" placeholder="Nantes">
-                    <input type="text" name="zip_code" id="address" class="form-control" placeholder="44000">
-                    <input type="text" name="country" id="address" class="form-control" placeholder="France">
+                    <input type="text" name="street_number" id="address" class="form-control" placeholder="4" required>
+                    <input type="text" name="address_line1" id="address" class="form-control" placeholder="Rue des Oliviers" required>
+                    <input type="text" name="address_line2" id="address" class="form-control" placeholder="Le Bois Bourgerel" required>
+                    <input type="text" name="city" id="address" class="form-control" placeholder="Nantes" required>
+                    <input type="text" name="zip_code" id="address" class="form-control" placeholder="44000" required>
+                    <input type="text" name="country" id="address" class="form-control" placeholder="France" required>
                     <small class="invalid-feedback"><?php echo isset($errors) ?></small>
                 </div>
-                <!--
-                <div class="form-group">
-                    <label for="address">Adressse</label>
-                    <input id="user_input_autocomplete_address" placeholder="4 rue des oliviers..." name="address" class="form-control">
-                    <label>street_number</label>
-                    <input id="street_number" name="street_number" disabled class="form-control">
-                    <label>route</label>
-                    <input id="route" name="route" disabled class="form-control">
-                    <label>locality</label>
-                    <input id="locality" name="locality" disabled class="form-control">
-                    <label>country</label>
-                    <input id="country" name="country" disabled class="form-control">
-                </div>
-                -->
                 <div class="form-group">
                     <label for="is_private" class="d-block">Événement privé (amis uniquement)</label>
                     <div class="form-check form-check-inline">
