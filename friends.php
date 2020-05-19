@@ -13,11 +13,11 @@ if ($user['email'] == NULL) {
 
 ?>
 
-<div class="row m-0">
+<div class="row m-0 ">
 
-    <section>
+    <section class="col-2 m-0 p-0">
     <div class="menu-friends">
-    <div class="col-2 m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="height: calc(100vh - 60px); bottom: 0;">
+    <div class="bg-dark d-flex flex-column justify-content-between position-fixed" style="height: calc(100vh - 60px); bottom: 0;">
         <div>
             <a href="index.php" class="text-white nav-link border py-3 mt-2 border-left-0">Acceuil</a>
             <?php if (!isset($_SESSION['auth_id'])) { ?>

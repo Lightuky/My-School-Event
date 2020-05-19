@@ -92,7 +92,8 @@ $categories = getCategories();
                 </div>
             </form>
         </div>
-    </div>
+     </div>
+
 </section>
 
 <!--
