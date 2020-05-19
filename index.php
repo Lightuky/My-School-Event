@@ -46,11 +46,13 @@ endif;
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                    <a href="login.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                 <?php else: ?>
                     <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
                     <a href="calendar.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                    <a href="progress.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                 <?php endif; ?>
             </div>
             <?php if (isset($_SESSION['auth_id'])): ?>

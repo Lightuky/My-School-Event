@@ -34,12 +34,14 @@ if (isset($_SESSION['auth_id'])) {
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                    <a href="login.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                 <?php }
                 else { ?>
                     <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
                     <a href="calendar.php" class="text-white nav-link border-left-0 border py-3">Calendrier</a>
                     <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                    <a href="progress.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                 <?php } ?>
             </div>
             <?php if (isset($_SESSION['auth_id'])) { ?>
@@ -67,12 +69,14 @@ if (isset($_SESSION['auth_id'])) {
                             <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                             <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                             <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                            <a href="login.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                         <?php }
                         else { ?>
                             <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
                             <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0 ">Calendrier</a>
                             <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                             <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                            <a href="progress.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                         <?php } ?>
                     </div>
                     <?php if (isset($_SESSION['auth_id'])) { ?>
@@ -139,19 +143,19 @@ if (isset($_SESSION['auth_id'])) {
         <div class="button-choice">
             <div class="d-flex ">
                 <div class="col-3  text-center">
-                    <button class="h5 nav-link text-white bg-transparent mt-3 border-0" id="SortMenuAll">Tout</button>
+                    <button class="h5 nav-link text-white bg-transparent mt-3 border-0 mx-auto" id="SortMenuAll">Tout</button>
                     <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                 </div>
                 <div class="col-3 text-center">
-                    <button class="h5 nav-link text-white bg-transparent mt-5 border-0" id="SortMenuPosts">Posts</button>
+                    <button class="h5 nav-link text-white bg-transparent mt-5 border-0 mx-auto" id="SortMenuPosts">Posts</button>
                     <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                 </div>
                 <div class="col-3 text-center">
-                    <button class="h5 nav-link text-white bg-transparent mt-5 border-0" id="SortMenuEvents">Événements</button>
+                    <button class="h5 nav-link text-white bg-transparent mt-5 border-0 mx-auto" id="SortMenuEvents">Événements</button>
                     <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                 </div>
                 <div class="col-3 text-center">
-                    <button class="h5 nav-link text-white bg-transparent mt-5 border-0" id="SortMenuHelps">Helps</button>
+                    <button class="h5 nav-link text-white bg-transparent mt-5 border-0 mx-auto" id="SortMenuHelps">Helps</button>
                     <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                 </div>
             </div>
