@@ -81,12 +81,27 @@ function getUser($id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+function getUserQuery($user_id, $query) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM users WHERE id = :user_id AND (first_name LIKE '%$query%' OR last_name LIKE '%$query%')");
+    $stmt->bindValue(':user_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 function getUserSchool($id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT users.id, schools.* FROM users LEFT JOIN schools ON users.school_id = schools.id WHERE users.id = :id LIMIT 1");
     $stmt->bindValue(':id', $id);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getAllUsers() {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM users");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getUsers($id) {
@@ -465,6 +480,13 @@ function delEventComment($event_comment_id, $auth_id) {
     $stmt->execute();
 }
 
+function delEventCommentAllLikes($event_comment_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM event_comment_likes WHERE comment_id = :event_comment_id");
+    $stmt->bindValue(':event_comment_id', $event_comment_id);
+    $stmt->execute();
+}
+
 function addPostComment($author_id, $post_id, $data) {
     $dbh = connectDB();
     $stmt = $dbh->prepare( "INSERT INTO post_comments (author_id, post_id, content) VALUES (:author_id, :post_id, :content)");
@@ -482,6 +504,13 @@ function delPostComment($post_comment_id, $auth_id) {
     $stmt->execute();
 }
 
+function delPostCommentAllLikes($post_comment_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM post_comments_likes WHERE comment_id = :post_comment_id");
+    $stmt->bindValue(':post_comment_id', $post_comment_id);
+    $stmt->execute();
+}
+
 function addHelpAnswer($author_id, $help_id, $data) {
     $dbh = connectDB();
     $stmt = $dbh->prepare( "INSERT INTO help_answers (author_id, help_id, content) VALUES (:author_id, :help_id, :content)");
@@ -496,6 +525,20 @@ function delHelpAnswer($help_answer_id, $auth_id) {
     $stmt = $dbh->prepare( "DELETE FROM help_answers WHERE (id = :help_answer_id AND author_id = :user_id)");
     $stmt->bindValue(':help_answer_id', $help_answer_id);
     $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+}
+
+function delHelpAnswerAllLikes($help_answer_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM help_answers_likes WHERE comment_id = :help_answer_id");
+    $stmt->bindValue(':help_answer_id', $help_answer_id);
+    $stmt->execute();
+}
+
+function delHelpAnswerAllDislikes($help_answer_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "DELETE FROM help_answers_dislikes WHERE comment_id = :help_answer_id");
+    $stmt->bindValue(':help_answer_id', $help_answer_id);
     $stmt->execute();
 }
 
@@ -771,15 +814,33 @@ function getBadges() {
 function getUserBadges($user_id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT user_badges.*, badges.name, badges.description, badges.icon, badges.color FROM badges LEFT JOIN user_badges 
-                                    ON user_badges.badge_id = badges.id WHERE user_badges.user_id = :auth_id ORDER BY id");
+                                    ON user_badges.badge_id = badges.id WHERE user_badges.user_id = :auth_id ORDER BY badge_id");
     $stmt->bindValue(':auth_id', $user_id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getCategoryOwnedEvents($user_id, $cat_id) {
+function getUserBadge($auth_id, $badge_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("SELECT * FROM events WHERE admin_id = :auth_id AND category = :cat_id");
+    $stmt = $dbh->prepare("SELECT * FROM user_badges WHERE user_id = :auth_id AND badge_id = :badge_id LIMIT 1");
+    $stmt->bindValue(':auth_id', $auth_id);
+    $stmt->bindValue(':badge_id', $badge_id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function setNewBadge($auth_id, $badge_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO user_badges (user_id, badge_id) VALUES (:user_id, :badge_id)");
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->bindValue(':badge_id', $badge_id);
+    $stmt->execute();
+}
+
+function getCategoryJoinedEvents($user_id, $cat_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT event_users.* FROM event_users LEFT JOIN events ON event_users.event_id = events.id 
+                                    WHERE event_users.user_id = :auth_id AND events.category = :cat_id");
     $stmt->bindValue(':auth_id', $user_id);
     $stmt->bindValue(':cat_id', $cat_id);
     $stmt->execute();

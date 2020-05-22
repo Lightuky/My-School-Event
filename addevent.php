@@ -51,12 +51,12 @@ $categories = getCategories();
                 </div>
                 <div class="form-group">
                     <label for="address">Adressse</label>
-                    <input type="text" name="street_number" id="address" class="form-control" placeholder="4" required>
-                    <input type="text" name="address_line1" id="address" class="form-control" placeholder="Rue des Oliviers" required>
-                    <input type="text" name="address_line2" id="address" class="form-control" placeholder="Le Bois Bourgerel" required>
-                    <input type="text" name="city" id="address" class="form-control" placeholder="Nantes" required>
-                    <input type="text" name="zip_code" id="address" class="form-control" placeholder="44000" required>
-                    <input type="text" name="country" id="address" class="form-control" placeholder="France" required>
+                    <input type="text" name="street_number" id="street_number" class="form-control" placeholder="4">
+                    <input type="text" name="address_line1" id="address_line1" class="form-control" placeholder="Rue des Oliviers" required>
+                    <input type="text" name="address_line2" id="address_line2" class="form-control" placeholder="Le Bois Bourgerel">
+                    <input type="text" name="city" id="city" class="form-control" placeholder="Nantes" required>
+                    <input type="text" name="zip_code" id="zip_code" class="form-control" placeholder="44000" required>
+                    <input type="text" name="country" id="country" class="form-control" placeholder="France" required>
                     <small class="invalid-feedback"><?php echo isset($errors) ?></small>
                 </div>
                 <div class="form-group">

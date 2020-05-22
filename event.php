@@ -2,7 +2,7 @@
 require_once 'includes/header.php';
 use Carbon\Carbon;
 date_default_timezone_set('Europe/Paris');
-setlocale(LC_TIME, 'fr_FR');
+setlocale(LC_TIME, 'fr_FR.UTF8');
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $event_infos = getEvent($id);
@@ -193,6 +193,7 @@ if (isset($_SESSION['auth_id'])) {
                 ?>
             </div>
         </div>
+      
         <div class="container col-5">
             <div class="mapEvent" style="margin-top: 50%">
                 <div class="gMaps">
@@ -207,8 +208,46 @@ if (isset($_SESSION['auth_id'])) {
                         </iframe>
                     </div>
                 </div>
+              
+        <div class="row mt-5">
+            <div class="container mt-5">
+                <span class="text-muted d-block">Catégorie : <?php echo $event_category['name'] ?></span>
+                <?php if ($event_end_date < $current_datetime): ?>
+                    <span class="text-muted d-block">Événement passé : Terminé le <?php echo strftime("%A %e %B", strtotime($event_end_date)) . " à " . strftime("%Hh%M", strtotime($event_end_date)) ?></span>
+                <?php elseif ($event_start_date < $current_datetime && $event_end_date > $current_datetime ): ?>
+                    <span class="text-muted d-block">Événement en cours : Encore <?php echo gmdate("G\h i\m", strtotime($event_end_date) - strtotime($current_datetime)) ?></span>
+                <?php elseif ($event_start_date > $current_datetime):
+                    if ($current_date == $event_infos['date']): ?>
+                        <span class="text-muted d-block">Date de l'évenement : <?php echo getDateForHumans($event_infos['time']) . " (" . strftime("%A %e %B", strtotime($event_infos['date'])) . ")" ?></span>
+                        <span class="text-muted d-block">Heure de début : <?php echo strftime("%Hh%M", strtotime($event_infos['time'])) ?></span>
+                        <span class="text-muted d-block">Durée : <?php echo strftime("%Hh%M", strtotime($event_infos['duration'])) ?></span>
+                    <?php else: ?>
+                        <span class="text-muted d-block">Date de l'évenement : <?php echo getDateForHumans($event_infos['date']) . " (" . strftime("%A %e %B", strtotime($event_infos['date'])) . ")" ?></span>
+                        <span class="text-muted d-block">Heure de début : <?php echo strftime("%Hh%M", strtotime($event_infos['time'])) ?></span>
+                        <span class="text-muted d-block">Durée : <?php echo strftime("%Hh%M", strtotime($event_infos['duration'])) ?></span>
+                    <?php endif;
+                endif; ?>
+                <span class="text-muted d-block">Description : <?php echo $event_infos['description'] ?></span>
+                <?php $event_address = getEventAddress($event_infos['id']) ?>
+                <span class="text-muted d-block">Adresse : <?php echo $event_address['street_number'] . " " . $event_address['address_line1'] . ", "
+                        . $event_address['address_line2'] . " "  . $event_address['zip_code'] . " " . $event_address['city'] ?></span>
+                <span class="text-muted d-block">Responsable de l'événement : <?php echo $event_admin['first_name'] . " " . $event_admin['last_name'] ?></span>
+                <?php if ($event_infos['member_limit'] != '0') { ?>
+                    <span class="text-muted d-block">Membres maximum : <?php echo $event_infos['member_limit'] . " (Encore " . ($event_infos['member_limit'] - count($event_members)) . " places)" ?></span>
+                <?php } ?>
+                <span class="text-muted d-block">Privé ? : <?php echo $event_infos['is_private'] == 1 ? "Oui" : "Non" ?></span>
             </div>
         </div>
+        <?php if (isset($_SESSION['auth_id'])) { ?>
+            <?php if ($_SESSION['auth_id'] != $event_admin['id']) { ?>
+                <a href="eventmembers.php?id=<?php echo $id ?>" class="btn btn-info mt-4">Voir les membres</a>
+            <?php }
+        }
+        else { ?>
+            <a href="login.php" class="btn btn-info mt-4">Voir les membres</a>
+        <?php }
+        ?>
+    </div>
 
 </section>
 
