@@ -2,8 +2,11 @@
 
 require_once 'includes/header.php';
 use Carbon\Carbon;
+$errored = isset($_GET['errored']) ? $_GET['errored'] : null;
 
-$errors_e = $errors_pw = [];
+if (empty($errored)):
+    $_SESSION['fields'] = [];
+endif;
 
 ?>
 <section>
@@ -13,13 +16,18 @@ $errors_e = $errors_pw = [];
             <form method="post" action="assets/login.php">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="text" name="email" id="email" placeholder="example@example.com" class="form-control">
-                    <div class="errors form-text text-muted" style="margin-bottom: 10px;"><?php echo implode('<br>', $errors_e); ?></div>
+                    <input type="text" name="email" id="email" placeholder="example@example.com" class="form-control"
+                           value="<?php echo ($errored ? ((isset($_SESSION['fields']["email"])) ? $_SESSION['fields']["email"]['old'] : NULL) : NULL) ?>" required>
+                    <div class="errors form-text text-muted" style="margin-bottom: 10px;">
+                        <?php echo (isset($_SESSION['fields']["email"])) ? $_SESSION['fields']["email"]['error'] : NULL ?>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" name="password" id="password" class="form-control">
-                    <div class="errors form-text text-muted" style="margin-bottom: 10px;"><?php echo implode('<br>', $errors_pw); ?></div>
+                    <input type="password" name="password" id="password" class="form-control" required>
+                    <div class="errors form-text text-muted" style="margin-bottom: 10px;">
+                        <?php echo (isset($_SESSION['fields']["password"])) ? $_SESSION['fields']["password"]['error'] : NULL ?>
+                    </div>
                 </div>
                 <div>
                     <div style="display: flex">

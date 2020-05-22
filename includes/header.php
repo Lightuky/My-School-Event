@@ -3,7 +3,7 @@ require_once 'vendor/autoload.php';
 require_once 'config.php';
 require_once 'helpers.php';
 session_start();
-//include 'debug.php';
+/*include 'debug.php';*/
 ?>
 <!doctype html>
 <html lang="fr">

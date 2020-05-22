@@ -2,7 +2,7 @@
 require_once 'includes/header.php';
 use Carbon\Carbon;
 date_default_timezone_set('Europe/Paris');
-setlocale(LC_TIME, 'fr_FR');
+setlocale(LC_TIME, 'fr_FR.UTF8');
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $event_infos = getEvent($id);
@@ -109,7 +109,9 @@ if (isset($_SESSION['auth_id'])) {
                     <?php endif;
                 endif; ?>
                 <span class="text-muted d-block">Description : <?php echo $event_infos['description'] ?></span>
-                <span class="text-muted d-block">Adresse : <?php echo $event_infos['description'] ?></span>
+                <?php $event_address = getEventAddress($event_infos['id']) ?>
+                <span class="text-muted d-block">Adresse : <?php echo $event_address['street_number'] . " " . $event_address['address_line1'] . ", "
+                        . $event_address['address_line2'] . " "  . $event_address['zip_code'] . " " . $event_address['city'] ?></span>
                 <span class="text-muted d-block">Responsable de l'événement : <?php echo $event_admin['first_name'] . " " . $event_admin['last_name'] ?></span>
                 <?php if ($event_infos['member_limit'] != '0') { ?>
                     <span class="text-muted d-block">Membres maximum : <?php echo $event_infos['member_limit'] . " (Encore " . ($event_infos['member_limit'] - count($event_members)) . " places)" ?></span>

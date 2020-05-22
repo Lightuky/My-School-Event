@@ -5,4 +5,4 @@ require_once '../includes/helpers.php';
 
 authOut();
 
-header("Location: /mse/");
+header("Location: /mse/index.php");
