@@ -2,25 +2,26 @@
 require_once 'includes/header.php';
 use Carbon\Carbon;
 date_default_timezone_set('Europe/Paris');
-setlocale(LC_TIME, 'fr_FR');
+setlocale(LC_TIME, 'fr_FR.UTF8');
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $user = getUser($id);
+$user_badges = getUserBadges($id);
 
 $events = getOwnedEvents($id);
 $posts = getUserPosts($id);
 $helps = getUserHelps($id);
 
-if ($user['email'] == NULL) {
+if ($user['email'] == NULL):
     $pathError =  "/mse/404.php";
     header('Location: '. $pathError);
-}
+endif;
 
 $user_school = getUserSchool($id);
 
-if (isset($_SESSION['auth_id'])) {
+if (isset($_SESSION['auth_id'])):
     $friend = checkFriend($_SESSION['auth_id'], $id);
-}
+endif;
 
 ?>
 <section class="section-up profile" id="section-up"></section>
@@ -29,27 +30,26 @@ if (isset($_SESSION['auth_id'])) {
         <div class=" col-2 m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="width: 230px; height: 100vh; bottom: 0;">
             <div>
                 <a href="index.php" class="text-white nav-link border py-3 mt-2 border-left-0">Acceuil</a>
-                <?php if (!isset($_SESSION['auth_id'])) { ?>
+                <?php if (!isset($_SESSION['auth_id'])): ?>
                     <a href="login.php" class="text-white nav-link border py-3 mt-5 border-left-0">Se connecter</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
-                <?php }
-                else { ?>
+                <?php else: ?>
                     <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
                     <a href="calendar.php" class="text-white nav-link border-left-0 border py-3">Calendrier</a>
                     <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                     <a href="progress.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
-                <?php } ?>
+                <?php endif; ?>
             </div>
-            <?php if (isset($_SESSION['auth_id'])) { ?>
+            <?php if (isset($_SESSION['auth_id'])): ?>
                 <div class="">
                     <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
                     <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
                 </div>
-            <?php } ?>
+            <?php endif; ?>
         </div>
     </section>
     <section class="section-down">
@@ -64,27 +64,26 @@ if (isset($_SESSION['auth_id'])) {
                             <i class="fas fa-bars text-white turn"></i>
                         </button>
                         <a href="index.php" class="text-white nav-link border py-3 mt-2 border-left-0">Acceuil</a>
-                        <?php if (!isset($_SESSION['auth_id'])) { ?>
+                        <?php if (!isset($_SESSION['auth_id'])): ?>
                             <a href="login.php" class="text-white nav-link border py-3 mt-5 border-left-0">Se connecter</a>
                             <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                             <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                             <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                             <a href="login.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
-                        <?php }
-                        else { ?>
+                        <?php else: ?>
                             <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
                             <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0 ">Calendrier</a>
                             <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                             <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                             <a href="progress.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
-                        <?php } ?>
+                        <?php endif; ?>
                     </div>
-                    <?php if (isset($_SESSION['auth_id'])) { ?>
+                    <?php if (isset($_SESSION['auth_id'])): ?>
                         <div class="">
                             <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
                             <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
                         </div>
-                    <?php } ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -94,11 +93,11 @@ if (isset($_SESSION['auth_id'])) {
                     <img src="https://www.gravatar.com/avatar/<?php echo md5($user['email']); ?>?s=600" alt="" class="d-profile-picture d-block shadow border border-white rounded-circle ">
                     <strong class="small color-text-white">Inscrit <?php echo getDateForHumans($user['date_added']); ?></strong>
                     <div class="container">
-                        <?php if (isset($_SESSION['auth_id'])) {
-                            if ($id == $_SESSION['auth_id']) { ?>
+                        <?php if (isset($_SESSION['auth_id'])):
+                            if ($id == $_SESSION['auth_id']): ?>
                                 <a href="edituser.php?id=<?php echo $id ?>" class="">Editer le profile</a>
-                            <?php }
-                        } ?>
+                            <?php endif;
+                        endif; ?>
                     </div>
                     <div class="">
                         <?php if (isset($_SESSION['auth_id'])): ?>
@@ -138,6 +137,16 @@ if (isset($_SESSION['auth_id'])) {
             <span class="fs-1vw fs-info-profile pr-2 pl-2  border-right d-block color-text-white"><?php echo $user_school['name'] ?></span>
             <span class="fs-1vw fs-info-profile pl-2 d-block color-text-white"><?php echo $user['email'] ?></span>
         </div>
+        <div class="d-flex justify-content-between flex-wrap pr-4">
+            <?php foreach ($user_badges as $user_badge): ?>
+                <div class="w-25 my-2 text-center" style="font-size: 0.7rem;">
+                    <span class="fa-stack fa-2x mx-auto" title="<?php echo $user_badge['name'] . " : " . $user_badge['description'] . "\n" . "Obtenu le : " . date('d/m/Y', strtotime($user_badge['date_added'])) ?>">
+                        <i class="fas fa-certificate fa-stack-2x" style="color: <?php echo $user_badge['color'] ?>"></i>
+                        <i class="fab <?php echo $user_badge['icon'] ?> fa-stack-1x fa-inverse"></i>
+                    </span>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </section>
     <section class="section-feed align-content-center">
         <div class="button-choice">
@@ -161,27 +170,24 @@ if (isset($_SESSION['auth_id'])) {
             </div>
         </div>
             <div id="allPosts">
-
-                <?php if($_SESSION['auth_id'] == $id) { ?>
+                <?php if($_SESSION['auth_id'] == $id): ?>
                     <div class="card col-10 my-5 mx-auto" id="ContentPosts" style="border-radius: initial">
-                        <div class="card-header text-center">
-                            Ajouter une publication
-                        </div>
+                        <div class="card-header text-center">Ajouter une publication</div>
                         <div class="card-body mt-2 p-1">
                             <form method="post" action="assets/addpost.php">
                                 <div class="form-group">
                                     <label for="content">Contenu du post</label>
                                     <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
                                 </div>
-                                <?php if (isset($_SESSION['auth_id'])) { ?>
+                                <?php if (isset($_SESSION['auth_id'])): ?>
                                     <button class="btn btn-outline-info my-2">Poster</button>
-                                <?php } else { ?>
+                                <?php else: ?>
                                     <a href="login.php" class="btn btn-outline-info my-2">Poster</a>
-                                <?php } ?>
+                                <?php endif; ?>
                             </form>
                         </div>
                     </div>
-                <?php } ?>
+                <?php endif; ?>
                 <?php foreach ($posts as $post){ ?>
                     <div class="card col-10 mx-auto mt-4" id="ContentPosts">
                         <div class="card-body">
@@ -258,6 +264,16 @@ if (isset($_SESSION['auth_id'])) {
                                 <?php $post_comments = getPostComments($post['id']);
                                 foreach ($post_comments as $post_comment) { ?>
                                     <div class="card-body" id="ContentPosts">
+                                        <?php if (isset($_SESSION['auth_id'])):
+                                            if ($post_comment['author_id'] == $_SESSION['auth_id']): ?>
+                                                <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
+                                                    <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
+                                                    <div class="card d-none text-center position-relative border-0">
+                                                        <a href="assets/delpostcomment.php?id=<?php echo $post_comment['id'] ?>&s=2&p=<?php echo $id ?>" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
+                                                    </div>
+                                                </div>
+                                            <?php endif;
+                                        endif; ?>
                                         <div class="d-flex justify-content-between">
                                             <div>
                                                 <img src="https://www.gravatar.com/avatar/<?php echo md5($post_comment['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
@@ -414,6 +430,16 @@ if (isset($_SESSION['auth_id'])) {
                                 <?php $event_comments = getEventComments($event['id']);
                                 foreach ($event_comments as $event_comment) { ?>
                                     <div class="card-body" id="ContentPosts">
+                                        <?php if (isset($_SESSION['auth_id'])):
+                                            if ($event_comment['author_id'] == $_SESSION['auth_id']): ?>
+                                                <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
+                                                    <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
+                                                    <div class="card d-none text-center position-relative border-0">
+                                                        <a href="assets/deleventcomment.php?id=<?php echo $event_comment['id'] ?>&s=2&p=<?php echo $id ?>" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
+                                                    </div>
+                                                </div>
+                                            <?php endif;
+                                        endif; ?>
                                         <div class="d-flex justify-content-between">
                                             <div>
                                                 <img src="https://www.gravatar.com/avatar/<?php echo md5($event_comment['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
@@ -567,6 +593,16 @@ if (isset($_SESSION['auth_id'])) {
                                 foreach ($help_answer_infos as $help_answer_info) {
                                     if ($help_answer_info['id'] == $help_best_answer[0]['id']) { ?>
                                         <div class="card-body" id="ContentPosts">
+                                            <?php if (isset($_SESSION['auth_id'])):
+                                                if ($help_answer_info['author_id'] == $_SESSION['auth_id']): ?>
+                                                    <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
+                                                        <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
+                                                        <div class="card d-none text-center position-relative border-0">
+                                                            <a href="assets/delhelpcomment.php?id=<?php echo $help_answer_info['id'] ?>&s=3&p=<?php echo $id ?>" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
+                                                        </div>
+                                                    </div>
+                                                <?php endif;
+                                            endif; ?>
                                             <div class="d-flex justify-content-between">
                                                 <div>
                                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($help_answer_info['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">

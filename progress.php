@@ -29,7 +29,7 @@ endif;
                                     <i class="fab <?php echo $badge['icon'] ?> fa-stack-1x fa-inverse"></i>
                                 </span>
                                 <div class="text-muted font-weight-light"><?php echo $badge['description'] ?></div>
-                                <div class="text-muted font-weight-light">Obtenu le : <?php echo  date('d/m/Y', strtotime($user_badge['date_added'])) ?></div>
+                                <div class="text-muted font-weight-light">Obtenu le : <?php echo date('d/m/Y', strtotime($user_badge['date_added'])) ?></div>
                                 <?php $misssing_badge = 1;
                             elseif($misssing_badge != 1): $misssing_badge = 2;
                             endif;
@@ -44,10 +44,10 @@ endif;
                                 <?php if ($badge['id'] == "1"): echo count(getOwnedEvents($_SESSION['auth_id'])) . " sur 5";
                                 elseif ($badge['id'] == "2"): echo count(getOwnedEvents($_SESSION['auth_id'])) . " sur 15";
                                 elseif ($badge['id'] == "3"): echo count(getOwnedEvents($_SESSION['auth_id'])) . " sur 50";
-                                elseif ($badge['id'] == "4"): echo count(getCategoryOwnedEvents($_SESSION['auth_id'], 1)) . " sur 15";
-                                elseif ($badge['id'] == "5"): echo count(getCategoryOwnedEvents($_SESSION['auth_id'], 2)) . " sur 15";
-                                elseif ($badge['id'] == "6"): echo count(getCategoryOwnedEvents($_SESSION['auth_id'], 4)) . " sur 15";
-                                elseif ($badge['id'] == "7"): echo count(getCategoryOwnedEvents($_SESSION['auth_id'], 3)) . " sur 15";
+                                elseif ($badge['id'] == "4"): echo count(getCategoryJoinedEvents($_SESSION['auth_id'], 1)) . " sur 15";
+                                elseif ($badge['id'] == "5"): echo count(getCategoryJoinedEvents($_SESSION['auth_id'], 2)) . " sur 15";
+                                elseif ($badge['id'] == "6"): echo count(getCategoryJoinedEvents($_SESSION['auth_id'], 4)) . " sur 15";
+                                elseif ($badge['id'] == "7"): echo count(getCategoryJoinedEvents($_SESSION['auth_id'], 3)) . " sur 15";
                                 elseif ($badge['id'] == "8"): echo count(getUserAcceptedEvents($_SESSION['auth_id'])) . " sur 25";
                                 elseif ($badge['id'] == "9"): echo count(getUserAcceptedEvents($_SESSION['auth_id'])) . " sur 50";
                                 elseif ($badge['id'] == "10"): echo "Le : " . date('d/m/Y',strtotime("+ 1 year",strtotime($user['date_added'])));
@@ -66,15 +66,15 @@ endif;
                             <?php if ($badge['id'] == "1"): echo count(getOwnedEvents($_SESSION['auth_id'])) . " sur 5";
                             elseif ($badge['id'] == "2"): echo count(getOwnedEvents($_SESSION['auth_id'])) . " sur 15";
                             elseif ($badge['id'] == "3"): echo count(getOwnedEvents($_SESSION['auth_id'])) . " sur 50";
-                            elseif ($badge['id'] == "4"): echo count(getCategoryOwnedEvents($_SESSION['auth_id'], 1)) . " sur 15";
-                            elseif ($badge['id'] == "5"): echo count(getCategoryOwnedEvents($_SESSION['auth_id'], 2)) . " sur 15";
-                            elseif ($badge['id'] == "6"): echo count(getCategoryOwnedEvents($_SESSION['auth_id'], 4)) . " sur 15";
-                            elseif ($badge['id'] == "7"): echo count(getCategoryOwnedEvents($_SESSION['auth_id'], 3)) . " sur 15";
+                            elseif ($badge['id'] == "4"): echo count(getCategoryJoinedEvents($_SESSION['auth_id'], 1)) . " sur 15";
+                            elseif ($badge['id'] == "5"): echo count(getCategoryJoinedEvents($_SESSION['auth_id'], 2)) . " sur 15";
+                            elseif ($badge['id'] == "6"): echo count(getCategoryJoinedEvents($_SESSION['auth_id'], 4)) . " sur 15";
+                            elseif ($badge['id'] == "7"): echo count(getCategoryJoinedEvents($_SESSION['auth_id'], 3)) . " sur 15";
                             elseif ($badge['id'] == "8"): echo count(getUserAcceptedEvents($_SESSION['auth_id'])) . " sur 25";
                             elseif ($badge['id'] == "9"): echo count(getUserAcceptedEvents($_SESSION['auth_id'])) . " sur 50";
-                            elseif ($badge['id'] == "10"): echo "Le : " . date('d/m/Y',strtotime(strtotime("+ 1 year",strtotime($user['date_added']))));
-                            elseif ($badge['id'] == "11"): echo "Le : " . date('d/m/Y',strtotime(strtotime("+ 2 year",strtotime($user['date_added']))));
-                            elseif ($badge['id'] == "12"): echo "Le : " . date('d/m/Y',strtotime(strtotime("+ 3 year",strtotime($user['date_added']))));
+                            elseif ($badge['id'] == "10"): echo "Le : " . date('d/m/Y',strtotime("+ 1 year",strtotime($user['date_added'])));
+                            elseif ($badge['id'] == "11"): echo "Le : " . date('d/m/Y',strtotime("+ 2 year",strtotime($user['date_added'])));
+                            elseif ($badge['id'] == "12"): echo "Le : " . date('d/m/Y',strtotime("+ 3 year",strtotime($user['date_added'])));
                             endif; ?>
                         </div>
                     <?php endif; ?>

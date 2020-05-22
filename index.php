@@ -2,7 +2,7 @@
 require_once 'includes/header.php';
 use Carbon\Carbon;
 date_default_timezone_set('Europe/Paris');
-setlocale(LC_TIME, 'fr_FR');
+setlocale(LC_TIME, 'fr_FR.UTF8');
 
 $query_city = isset($_GET['c']) ? $_GET['c'] : null;
 $query_school = isset($_GET['s']) ? $_GET['s'] : null;
@@ -112,7 +112,20 @@ endif;
                         <div class="card col-10 mx-auto mt-4" id="ContentPosts">
                             <div class="card-body">
                                 <img src="https://www.gravatar.com/avatar/<?php echo md5($post['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
-                                <h5 class="card-title"><?php echo $post['first_name'] . " " . $post['last_name'] ?></h5>
+                                <div class="d-flex">
+                                    <h5 class="card-title mr-2"><?php echo $post['first_name'] . " " . $post['last_name'] ?></h5>
+                                    <div class="d-flex justify-content-between" style="margin-top: -4px;">
+                                        <?php $user_badges = getUserBadges($post['author_id']);
+                                        foreach ($user_badges as $user_badge): ?>
+                                            <div class="my-2 text-center" style="font-size: 0.3rem;">
+                                                <span class="fa-stack fa-2x mx-auto" title="<?php echo $user_badge['name'] . " : " . $user_badge['description'] . "\n" . "Obtenu le : " . date('d/m/Y', strtotime($user_badge['date_added'])) ?>">
+                                                    <i class="fas fa-certificate fa-stack-2x" style="color: <?php echo $user_badge['color'] ?>"></i>
+                                                    <i class="fab <?php echo $user_badge['icon'] ?> fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
                                 <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($post['date_added']); ?></h6>
                                 <p class="card-text text-muted"><?php echo $post['content'] ?></p>
                                 <div class="d-flex">
@@ -187,7 +200,7 @@ endif;
                                                     <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
                                                         <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
                                                         <div class="card d-none text-center position-relative border-0">
-                                                            <a href="assets/delpostcomment.php?id=<?php echo $post_comment['id'] ?>" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
+                                                            <a href="assets/delpostcomment.php?id=<?php echo $post_comment['id'] ?>&s=1" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
                                                         </div>
                                                     </div>
                                                 <?php endif;
@@ -195,8 +208,21 @@ endif;
                                             <div class="d-flex justify-content-between">
                                                 <div>
                                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($post_comment['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
-                                                    <h6 class="card-title"><?php echo $post_comment['first_name'] . " " . $post_comment['last_name'] ?></h6>
-                                                    <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($post_comment['date_added']); ?></h6>
+                                                    <div class="d-flex">
+                                                        <h6 class="card-title"><?php echo $post_comment['first_name'] . " " . $post_comment['last_name'] ?></h6>
+                                                        <div class="d-flex justify-content-between ml-1" style="margin-top: -4px;">
+                                                        <?php $user_badges = getUserBadges($post_comment['author_id']);
+                                                            foreach ($user_badges as $user_badge): ?>
+                                                                <div class="my-2 text-center" style="font-size: 0.25rem;">
+                                                                    <span class="fa-stack fa-2x mx-auto" title="<?php echo $user_badge['name'] . " : " . $user_badge['description'] . "\n" . "Obtenu le : " . date('d/m/Y', strtotime($user_badge['date_added'])) ?>">
+                                                                        <i class="fas fa-certificate fa-stack-2x" style="color: <?php echo $user_badge['color'] ?>"></i>
+                                                                        <i class="fab <?php echo $user_badge['icon'] ?> fa-stack-1x fa-inverse"></i>
+                                                                    </span>
+                                                                </div>
+                                                            <?php endforeach; ?>
+                                                        </div>
+                                                    </div>
+                                                    <h6 class="card-subtitle mb-2 text-muted text-left"><?php echo "Il y à " . getDateForHumans($post_comment['date_added']); ?></h6>
                                                 </div>
                                                 <div class="mt-auto mb-4">
                                                     <div class="d-flex">
@@ -260,7 +286,20 @@ endif;
                         <div class="card col-10 mx-auto mt-5" id="ContentPosts">
                             <div class="card-body">
                                 <img src="https://www.gravatar.com/avatar/<?php echo md5($event['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
-                                <h5 class="card-title"><?php echo $event['first_name'] . " " . $event['last_name'] ?></h5>
+                                <div class="d-flex">
+                                    <h5 class="card-title"><?php echo $event['first_name'] . " " . $event['last_name'] ?></h5>
+                                    <div class="d-flex justify-content-between ml-1" style="margin-top: -4px;">
+                                        <?php $user_badges = getUserBadges($event['admin_id']);
+                                        foreach ($user_badges as $user_badge): ?>
+                                            <div class="my-2 text-center" style="font-size: 0.3rem;">
+                                                <span class="fa-stack fa-2x mx-auto" title="<?php echo $user_badge['name'] . " : " . $user_badge['description'] . "\n" . "Obtenu le : " . date('d/m/Y', strtotime($user_badge['date_added'])) ?>">
+                                                    <i class="fas fa-certificate fa-stack-2x" style="color: <?php echo $user_badge['color'] ?>"></i>
+                                                    <i class="fab <?php echo $user_badge['icon'] ?> fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
                                 <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($event['date_added']); ?></h6>
                                 <p class="card-text text-muted"><?php echo $event['description'] ?></p>
                                 <p class="h5 font-weight-bold"><?php echo $event['name'] ?></p>
@@ -350,7 +389,7 @@ endif;
                                                     <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
                                                         <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
                                                         <div class="card d-none text-center position-relative border-0">
-                                                            <a href="assets/deleventcomment.php?id=<?php echo $event_comment['id'] ?>" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
+                                                            <a href="assets/deleventcomment.php?id=<?php echo $event_comment['id'] ?>&s=1" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
                                                         </div>
                                                     </div>
                                                 <?php endif;
@@ -358,7 +397,20 @@ endif;
                                             <div class="d-flex justify-content-between">
                                                 <div>
                                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($event_comment['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
-                                                    <h6 class="card-title"><?php echo $event_comment['first_name'] . " " . $event_comment['last_name'] ?></h6>
+                                                    <div class="d-flex">
+                                                        <h6 class="card-title"><?php echo $event_comment['first_name'] . " " . $event_comment['last_name'] ?></h6>
+                                                        <div class="d-flex justify-content-between ml-1" style="margin-top: -4px;">
+                                                            <?php $user_badges = getUserBadges($event_comment['author_id']);
+                                                            foreach ($user_badges as $user_badge): ?>
+                                                                <div class="my-2 text-center" style="font-size: 0.25rem;">
+                                                                    <span class="fa-stack fa-2x mx-auto" title="<?php echo $user_badge['name'] . " : " . $user_badge['description'] . "\n" . "Obtenu le : " . date('d/m/Y', strtotime($user_badge['date_added'])) ?>">
+                                                                        <i class="fas fa-certificate fa-stack-2x" style="color: <?php echo $user_badge['color'] ?>"></i>
+                                                                        <i class="fab <?php echo $user_badge['icon'] ?> fa-stack-1x fa-inverse"></i>
+                                                                    </span>
+                                                                </div>
+                                                            <?php endforeach; ?>
+                                                        </div>
+                                                    </div>
                                                     <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($event_comment['date_added']); ?></h6>
                                                 </div>
                                                 <div class="mt-auto mb-4">
@@ -437,7 +489,20 @@ endif;
                         <div class="card col-10 mx-auto mt-4">
                             <div class="card-body">
                                 <img src="https://www.gravatar.com/avatar/<?php echo md5($help['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
-                                <h5 class="card-title"><?php echo $help['first_name'] . " " . $help['last_name'] ?></h5>
+                                <div class="d-flex">
+                                    <h5 class="card-title"><?php echo $help['first_name'] . " " . $help['last_name'] ?></h5>
+                                    <div class="d-flex justify-content-between ml-1" style="margin-top: -4px;">
+                                        <?php $user_badges = getUserBadges($help['author_id']);
+                                        foreach ($user_badges as $user_badge): ?>
+                                            <div class="my-2 text-center" style="font-size: 0.3rem;">
+                                                <span class="fa-stack fa-2x mx-auto" title="<?php echo $user_badge['name'] . " : " . $user_badge['description'] . "\n" . "Obtenu le : " . date('d/m/Y', strtotime($user_badge['date_added'])) ?>">
+                                                    <i class="fas fa-certificate fa-stack-2x" style="color: <?php echo $user_badge['color'] ?>"></i>
+                                                    <i class="fab <?php echo $user_badge['icon'] ?> fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
                                 <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($help['date_added']); ?></h6>
                                 <p class="card-text text-secondary font-weight-bold mb-0 mt-3"><?php echo $help['title'] ?></p>
                                 <p class="card-text text-muted"><?php echo $help['content'] ?></p>
@@ -517,8 +582,21 @@ endif;
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <img src="https://www.gravatar.com/avatar/<?php echo md5($help_answer_info['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
-                                                        <h6 class="card-title"><?php echo $help_answer_info['first_name'] . " " . $help_answer_info['last_name'] ?></h6>
-                                                        <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($help_answer_info['date_added']); ?></h6>
+                                                        <div class="d-flex">
+                                                            <h6 class="card-title"><?php echo $help_answer_info['first_name'] . " " . $help_answer_info['last_name'] ?></h6>
+                                                            <div class="d-flex justify-content-between ml-1" style="margin-top: -4px;">
+                                                                <?php $user_badges = getUserBadges($help_answer_info['author_id']);
+                                                                foreach ($user_badges as $user_badge): ?>
+                                                                    <div class="my-2 text-center" style="font-size: 0.25rem;">
+                                                                        <span class="fa-stack fa-2x mx-auto" title="<?php echo $user_badge['name'] . " : " . $user_badge['description'] . "\n" . "Obtenu le : " . date('d/m/Y', strtotime($user_badge['date_added'])) ?>">
+                                                                            <i class="fas fa-certificate fa-stack-2x" style="color: <?php echo $user_badge['color'] ?>"></i>
+                                                                            <i class="fab <?php echo $user_badge['icon'] ?> fa-stack-1x fa-inverse"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                <?php endforeach; ?>
+                                                            </div>
+                                                        </div>
+                                                        <h6 class="card-subtitle mb-2 text-muted text-left"><?php echo "Il y à " . getDateForHumans($help_answer_info['date_added']); ?></h6>
                                                     </div>
                                                     <div class="mt-auto mb-4">
                                                         <div class="d-flex">

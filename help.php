@@ -24,12 +24,14 @@ if ($help_infos['title'] == NULL) {
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                    <a href="login.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                 <?php }
                 else { ?>
                     <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
                     <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                    <a href="progress.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                 <?php } ?>
             </div>
             <?php if (isset($_SESSION['auth_id'])) { ?>
@@ -45,7 +47,20 @@ if ($help_infos['title'] == NULL) {
                     <div class="card col-10 mx-auto mt-4" id="ContentPosts">
                         <div class="card-body">
                             <img src="https://www.gravatar.com/avatar/<?php echo md5($help_infos['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
-                            <h5 class="card-title"><?php echo $help_infos['first_name'] . " " . $help_infos['last_name'] ?></h5>
+                            <div class="d-flex">
+                                <h5 class="card-title"><?php echo $help_infos['first_name'] . " " . $help_infos['last_name'] ?></h5>
+                                <div class="d-flex justify-content-between ml-1" style="margin-top: -4px;">
+                                    <?php $user_badges = getUserBadges($help_infos['author_id']);
+                                    foreach ($user_badges as $user_badge): ?>
+                                        <div class="my-2 text-center" style="font-size: 0.3rem;">
+                                            <span class="fa-stack fa-2x mx-auto" title="<?php echo $user_badge['name'] . " : " . $user_badge['description'] . "\n" . "Obtenu le : " . date('d/m/Y', strtotime($user_badge['date_added'])) ?>">
+                                                <i class="fas fa-certificate fa-stack-2x" style="color: <?php echo $user_badge['color'] ?>"></i>
+                                                <i class="fab <?php echo $user_badge['icon'] ?> fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
                             <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($help_infos['date_added']); ?></h6>
                             <p class="card-text text-secondary font-weight-bold mb-0 mt-3"><?php echo $help_infos['title'] ?></p>
                             <p class="card-text text-muted"><?php echo $help_infos['content'] ?></p>
@@ -143,7 +158,20 @@ if ($help_infos['title'] == NULL) {
                                             <div class="d-flex justify-content-between">
                                                 <div>
                                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($new_answer['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
-                                                    <h6 class="card-title"><?php echo $new_answer['first_name'] . " " . $new_answer['last_name'] ?></h6>
+                                                    <div class="d-flex">
+                                                        <h6 class="card-title"><?php echo $new_answer['first_name'] . " " . $new_answer['last_name'] ?></h6>
+                                                        <div class="d-flex justify-content-between ml-1" style="margin-top: -4px;">
+                                                            <?php $user_badges = getUserBadges($new_answer['author_id']);
+                                                            foreach ($user_badges as $user_badge): ?>
+                                                                <div class="my-2 text-center" style="font-size: 0.25rem;">
+                                                                    <span class="fa-stack fa-2x mx-auto" title="<?php echo $user_badge['name'] . " : " . $user_badge['description'] . "\n" . "Obtenu le : " . date('d/m/Y', strtotime($user_badge['date_added'])) ?>">
+                                                                        <i class="fas fa-certificate fa-stack-2x" style="color: <?php echo $user_badge['color'] ?>"></i>
+                                                                        <i class="fab <?php echo $user_badge['icon'] ?> fa-stack-1x fa-inverse"></i>
+                                                                    </span>
+                                                                </div>
+                                                            <?php endforeach; ?>
+                                                        </div>
+                                                    </div>
                                                     <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($new_answer['date_added']); ?></h6>
                                                 </div>
                                                 <div class="mt-auto mb-4">
