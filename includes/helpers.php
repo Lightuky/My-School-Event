@@ -854,3 +854,29 @@ function getUserAcceptedEvents($user_id) {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getFriendsSorted($auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT user1_id, user2_id FROM chat_messages WHERE (user1_id = :user_id OR user2_id = :user_id) ORDER BY date_added DESC");
+    $stmt->bindValue(':user_id', $auth_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getLastPersonMessages($other_user_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM chat_messages WHERE (user1_id = :other_user_id AND user2_id = :auth_id) OR (user1_id = :auth_id AND user2_id = :other_user_id) ORDER BY date_added");
+    $stmt->bindValue(':other_user_id', $other_user_id);
+    $stmt->bindValue(':auth_id', $auth_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getLastMessageByPerson($other_user_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT user1_id ,message FROM chat_messages WHERE (user1_id = :other_user_id AND user2_id = :auth_id) OR (user1_id = :auth_id AND user2_id = :other_user_id) ORDER BY date_added DESC LIMIT 1");
+    $stmt->bindValue(':other_user_id', $other_user_id);
+    $stmt->bindValue(':auth_id', $auth_id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
