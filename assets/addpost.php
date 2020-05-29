@@ -8,20 +8,33 @@ $errored = false;
 
 session_start();
 
-foreach ($_POST as $name => $value) {
+foreach ($_POST as $name => $value):
     $data[$name] = $value;
-}
+endforeach;
 
-if ($errored) {
+if ($data['linkYoutube']):
+    $headers = get_headers('http://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=' . $data['linkYoutube']);
+
+    if (!strpos($headers[0], '200')):
+        $errored = true;
+    endif;
+endif;
+
+if ($errored):
     session_start();
     $_SESSION['fields'] = $fields;
-    $pathError =  '/index.php?errored=true';
-    header('Location: '. $pathError);
-}
-else {
-    setNewPost($data, $_SESSION['auth_id']);
 
-    $pathSuccess =  "/mse/index.php";
-    header('Location: '. $pathSuccess);
+    $pathError = $_SERVER['HTTP_REFERER'];
+    header("Location: $pathError");
+else:
+    $post_id = setNewPost($data, $_SESSION['auth_id']);
 
-}
+    if ($data['linkImgur']):
+        setPostAttachments($post_id, "imgur", $data['linkImgur']);
+    elseif($data['linkYoutube']):
+        setPostAttachments($post_id, "youtube", $data['linkYoutube']);
+    endif;
+
+    $pathSuccess = $_SERVER['HTTP_REFERER'];
+    header("Location: $pathSuccess");
+endif;
