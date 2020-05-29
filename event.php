@@ -31,9 +31,11 @@ if (isset($_SESSION['auth_id'])) {
 
 ?>
 
+
 <section>
-    <div class="d-flex">
+    <div class="desktop">
         <div>
+            <section class="menu-event">
             <div class="col-2 m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="height: calc(100vh - 60px); bottom: 0;">
                 <div>
                     <a href="index.php" class="text-white nav-link border py-3 mt-2 border-left-0">Acceuil</a>
@@ -58,7 +60,7 @@ if (isset($_SESSION['auth_id'])) {
                     </div>
                 <?php endif; ?>
             </div>
-            <div class="card container col-4" style="padding-top: 5px!important;max-width: 70%; margin-left: 30%;  margin-top: 262px;">
+            <div class="card container col-4" style="padding-top: 5px!important;max-width: 70%; margin-left: 30%;  margin-top: 10%; z-index: 99;">
                 <div class="d-flex justify-content-between">
                     <div class="d-flex">
                         <div class="text-muted mr-2">Évenement crée par</div>
@@ -69,14 +71,23 @@ if (isset($_SESSION['auth_id'])) {
                             <i class="fas fa-cog mt-2" style="color: black; font-size: 30px;" title="Éditer l'event"></i>
                         </button>
                         <div class="collapse" id="collapseEvent">
-                            <div class="card" style="position: absolute">
+                            <div class="card" style="position: absolute; width: 150px; z-index: 99; ">
                                 <?php if (isset($_SESSION['auth_id'])) {
                                     if ($event_admin['id'] == $_SESSION['auth_id']) { ?>
-                                        <a href="editevent.php?id=<?php echo $id ?>">Éditer event</a>
-                                    <?php } else{ ?>
-                                        <a href="eventmembers.php?id=<?php echo $id ?>" style="color: black">voir les membre</a>
-                                    <?php   }
-                                } ?>
+                                        <a href="editevent.php?id=<?php echo $id ?>" style="color: black; border: solid 1px; height: 40px;">Éditer l'event</a>
+                                        <a href="eventmembers.php?id=<?php echo $id ?>" style="color: black; border: solid 1px; height: 40px;">voir les membres</a>
+                                        <a href="manageeventusers.php?id=<?php echo $id ?>" style="color: black; border: solid 1px; height: 40px;">gérer les membres</a>
+                                        <a href="eventmembers.php?id=<?php echo $id ?>" style="color: black; border: solid 1px; height: 40px;">supprimer l'event</a>
+                                    <?php } else{  ?>
+                                        <a href="eventmembers.php?id=<?php echo $id ?>" style="color: black; border: solid 1px; height: 40px;">voir les membres</a>
+                                 <?php   } if($event_state['private_pending'] === '0'){ ?>
+                                        <a href="eventmembers.php?id=<?php echo $id ?>" style="color: black; border: solid 1px; height: 40px;">voir les membres</a>
+                                        <a href="assets/eventactions.php?s=2&id=<?php echo $id ?>" style="color: black; border: solid 1px; height: 40px;">Annuler la demande</a>
+                                        <a href="assets/eventactions.php?s=2&id=<?php echo $id ?>" style="color: black; border: solid 1px; height: 40px;">Quitter l'event</a>
+                             <?php  }
+                                } else { ?>
+                                    <a href="login.php">se connecter</a>
+                            <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -110,75 +121,158 @@ if (isset($_SESSION['auth_id'])) {
                         <span class="text-muted d-block"><?php echo  count($event_members) . " personnes"?><?php if ($event_infos['is_private'] == 1){ echo " (Événement privée) "; } ?></span>
                     <?php } ?>
                 </div>
-                <div class="row">
-                    <div class="">
-                        <div class="container mt-3">
-                            <?php if (isset($_SESSION['auth_id'])) {
-                                if ($event_admin['id'] == $_SESSION['auth_id']) { ?>
-                                    <div class="d-flex">
-                                        <a href="editevent.php?id=<?php echo $id ?>" class="btn btn-secondary">Editer cet event</a>
-                                        <?php if ($event_members) { ?>
-                                            <a href="manageeventusers.php?id=<?php echo $id ?>" class="btn btn-dark ml-4">Gérer les membres</a>
-                                        <?php }
-                                        if ($pending_users) { ?>
-                                            <a href="accepteventusers.php?id=<?php echo $id ?>" class="btn btn-info ml-4"><span class="font-weight-bold"><?php echo count($pending_users) ?></span> Demandes</a>
-                                        <?php } ?>
-                                    </div>
-                                <?php }
-                            } ?>
-                        </div>
-                        <div class="mt-3">
-                            <?php if ($event_end_date < $current_datetime): ?>
-                            <?php else: ?>
-                                <?php if (isset($_SESSION['auth_id'])): ?>
-                                    <?php if ($_SESSION['auth_id'] != $event_admin['id']): ?>
-                                        <?php if (!$event_state): ?>
-                                            <?php if ($event_infos['member_limit'] != '0') {
-                                                if (($event_infos['member_limit'] - count($event_members)) != '0') { ?>
-                                                    <a href="assets/eventactions.php?s=0&id=<?php echo $id ?>" class="btn btn-success">Participer</a>
-                                                <?php }
-                                                else { ?>
-                                                    <div class="btn btn-warning">Événement Plein</div>
-                                                <?php }
-                                            } ?>
-                                        <?php else: ?>
-                                            <?php if ($event_state['private_pending'] === '0'): ?>
-                                                <div class="d-flex mb-2">
-                                                    <div class="btn bg-success text-white">Event rejoint</div>
-                                                    <div class="ml-4"><a href="assets/eventactions.php?s=2&id=<?php echo $id ?>" class="btn btn-danger">Quitter l'event</a></div>
+                <hr class="bg-secondary">
+                                <div class="d-flex justify-content-around mt-3">
+                                    <?php if ($event_end_date < $current_datetime): ?>
+                                        <div class="d-flex">
+                                            <a href="event.php?id=<?php echo $event_infos['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-clock mt-1 text-warning"></i> Terminé</a>
+                                        </div>
+                                    <?php else: ?>
+                                        <?php if (isset($_SESSION['auth_id'])):
+                                            if ($event_infos['admin_id'] == $_SESSION['auth_id']): ?>
+                                                <div class="d-flex">
+                                                    <a href="event.php?id=<?php echo $event_infos['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
                                                 </div>
-                                            <?php else: ?>
-                                                <div><a href="assets/eventactions.php?s=2&id=<?php echo $id ?>" class="btn btn-danger">Annuler la demande</a></div>
-                                            <?php endif; ?>
+                                            <?php else:
+                                                $event_state = checkEventState($event_infos['id'], $_SESSION['auth_id']);
+                                                if (empty($event_state)): ?>
+                                                    <div class="d-flex">
+                                                        <a href="event.php?id=<?php echo $event_infos['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
+                                                    </div>
+                                                <?php else:
+                                                    if ($event_state['private_pending'] == "1"): ?>
+                                                        <div class="d-flex">
+                                                            <a href="event.php?id=<?php echo $event_infos['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-warning"></i> Demande Envoyée</a>
+                                                        </div>
+                                                    <?php elseif ($event_state['private_pending'] == "0"): ?>
+                                                        <div class="d-flex">
+                                                            <a href="event.php?id=<?php echo $event_infos['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-success"></i> Rejoint</a>
+                                                        </div>
+                                                    <?php endif;
+                                                endif;
+                                            endif;
+                                        else: ?>
+                                            <div class="d-flex">
+                                                <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-check-circle mt-1 text-muted"></i> Participer</a>
+                                            </div>
                                         <?php endif; ?>
                                     <?php endif; ?>
-                                <?php else: ?>
-                                    <?php if ($event_infos['member_limit'] != '0') {
-                                        if (($event_infos['member_limit'] - count($event_members)) != '0') { ?>
-                                            <a href="login.php" class="btn btn-success">Participer</a>
-                                        <?php }
-                                        else { ?>
-                                            <div class="btn btn-warning">Événement Plein</div>
-                                        <?php }
-                                    } ?>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-                <?php if (isset($_SESSION['auth_id'])) { ?>
-                    <?php if ($_SESSION['auth_id'] != $event_admin['id']) { ?>
-                        <a href="eventmembers.php?id=<?php echo $id ?>" class="btn btn-info mt-4">Voir les membres</a>
-                    <?php }
-                }
-                else { ?>
-                    <a href="login.php" class="btn btn-info mt-4">Voir les membres</a>
-                <?php }
-                ?>
+                                    <div class="d-flex">
+                                        <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
+                                    </div>
+                                    <div class="d-flex">
+                                        <a href="#" class="card-link ml-2 text-muted"><i class="fas fa-share mt-1 text-muted"></i> Partager</a>
+                                    </div>
+                                </div>
+
+                            <div class="card-body text-center">
+                                <div id="ContentPosts" class="col-10 mx-auto d-none newcommentform">
+                                    <div class="card-header text-center h5">
+                                        Ajouter un commentaire
+                                    </div>
+                                    <div class="card-body my-3 p-1">
+                                        <form method="post" action="assets/addeventcomment.php?id=<?php echo $event_infos['id'] ?>">
+                                            <div class="form-group">
+                                                <label for="content">Contenu du commentaire</label>
+                                                <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
+                                            </div>
+                                            <?php if (isset($_SESSION['auth_id'])): ?>
+                                                <button class="btn btn-outline-info my-2">Envoyer</button>
+                                            <?php else: ?>
+                                                <a href="login.php" class="btn btn-outline-info my-2">Envoyer</a>
+                                            <?php endif; ?>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowComments">Montrer les commentaires</button>
+                                    <div class="nav-link text-muted px-0">(<?php echo count(getEventComments($event_infos['id'])) ?>)</div>
+                                </div>
+                                <div class="d-none ContentsComments">
+                                    <?php $event_comments = getEventComments($event_infos['id']);
+                                    foreach ($event_comments as $event_comment): ?>
+                                        <div class="card-body" id="ContentPosts">
+                                            <?php if (isset($_SESSION['auth_id'])):
+                                                if ($event_comment['author_id'] == $_SESSION['auth_id']): ?>
+                                                    <div class="d-flex flex-column align-items-end" id="deleteCommentBlock" style="border-radius: 10px;" title="Options du commentaire">
+                                                        <button class="border-0 dropdownButtonPosts"><i class="fas fa-chevron-down"></i></button>
+                                                        <div class="card d-none text-center position-relative border-0">
+                                                            <a href="assets/deleventcomment.php?id=<?php echo $event_comment['id'] ?>&s=1" class="btn btn-outline-danger card-body px-2 py-0">Supprimer <i class="fas fa-trash-alt text-danger"></i></a>
+                                                        </div>
+                                                    </div>
+                                                <?php endif;
+                                            endif; ?>
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <img src="https://www.gravatar.com/avatar/<?php echo md5($event_comment['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
+                                                    <div class="d-flex">
+                                                        <h6 class="card-title"><?php echo $event_comment['first_name'] . " " . $event_comment['last_name'] ?></h6>
+                                                        <div class="d-flex justify-content-between ml-1" style="margin-top: -4px;">
+                                                            <?php $user_badges = getUserBadges($event_comment['author_id']);
+                                                            foreach ($user_badges as $user_badge): ?>
+                                                                <div class="my-2 text-center" style="font-size: 0.25rem;">
+                                                                    <span class="fa-stack fa-2x mx-auto" title="<?php echo $user_badge['name'] . " : " . $user_badge['description'] . "\n" . "Obtenu le : " . date('d/m/Y', strtotime($user_badge['date_added'])) ?>">
+                                                                        <i class="fas fa-certificate fa-stack-2x" style="color: <?php echo $user_badge['color'] ?>"></i>
+                                                                        <i class="fab <?php echo $user_badge['icon'] ?> fa-stack-1x fa-inverse"></i>
+                                                                    </span>
+                                                                </div>
+                                                            <?php endforeach; ?>
+                                                        </div>
+                                                    </div>
+                                                    <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($event_comment['date_added']); ?></h6>
+                                                </div>
+                                                <div class="mt-auto mb-4">
+                                                    <div class="d-flex">
+                                                        <i class="fas fa-heart mt-1 text-danger"></i>
+                                                        <div class="ml-2"><?php echo count(getEventCommentLikes($event_comment['id'])); ?></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p class="card-text text-muted"><?php echo $event_comment['content'] ?></p>
+                                            <hr class="bg-secondary">
+                                            <div class="d-flex justify-content-around mt-3">
+                                                <?php if (isset($_SESSION['auth_id'])):
+                                                    $event_comment_likes = getEventCommentLikes($event_comment['id']);
+                                                    if (empty($event_comment_likes)): ?>
+                                                        <div class="d-flex">
+                                                            <a href="assets/addeventcommentlike.php?id=<?php echo $event_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
+                                                        </div>
+                                                    <?php else:
+                                                        foreach ($event_comment_likes as $event_comment_like):
+                                                            if ($event_comment_like['user_id'] == $_SESSION['auth_id']): ?>
+                                                                <div class="d-flex">
+                                                                    <a href="assets/deleventcommentlike.php?id=<?php echo $event_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="fas fa-heart mt-1 text-danger"></i> Aimé</a>
+                                                                </div>
+                                                                <?php break;
+                                                            elseif (end($event_comment_likes) == $event_comment_like): ?>
+                                                                <div class="d-flex">
+                                                                    <a href="assets/addeventcommentlike.php?id=<?php echo $event_comment['id'] ?>" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
+                                                                </div>
+                                                            <?php endif;
+                                                        endforeach;
+                                                    endif;
+                                                else: ?>
+                                                    <div class="d-flex">
+                                                        <a href="login.php" class="card-link ml-2 text-muted"><i class="far fa-heart mt-1 text-muted"></i> Aimer</a>
+                                                    </div>
+                                                <?php endif; ?>
+                                                <div class="d-flex">
+                                                    <button class="btn btn-light bg-white py-0 text-muted border-0 showCommentForm"><i class="far fa-comment-alt mt-1 text-muted"></i> Commenter</button>
+                                                </div>
+                                                <div class="d-flex">
+                                                    <a href="#" class="card-link ml-2 text-muted"><i class="fas fa-share mt-1 text-muted"></i> Partager</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+
             </div>
         </div>
-        <div class="container col-5">
-            <div class="mapEvent" style="margin-top: 50%">
+      
+        <div class="container col-5" style="z-index: 99;">
+            <div class="mapEvent" style="margin-top: 15%">
                 <div class="gMaps">
                     <div class="gmap_canvas">
                         <iframe
@@ -187,7 +281,7 @@ if (isset($_SESSION['auth_id'])) {
                                 ?>&t=&z=13&ie=UTF8&iwloc=&output=embed"
                                 frameborder="0"
                                 scrolling="no"
-                                style="width: 40vw; height: 40vh;">
+                                style="width: 40vw; height: 63vh;">
                         </iframe>
                     </div>
                 </div>
@@ -195,5 +289,6 @@ if (isset($_SESSION['auth_id'])) {
         </div>
     </div>
 </section>
+
 
 <?php require_once 'includes/footer.php'; ?>

@@ -160,7 +160,7 @@ endif;
                     <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                 </div>
                 <div class="col-3 text-center">
-                    <button class="h5 nav-link text-white bg-transparent mt-5 border-0 mx-auto" id="SortMenuEvents">Événements</button>
+                    <button class="h5 nav-link text-white bg-transparent mt-5 border-0 mx-auto" id="SortMenuEvents">Events</button>
                     <div class="bg-white mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                 </div>
                 <div class="col-3 text-center">
