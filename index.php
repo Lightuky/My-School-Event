@@ -38,9 +38,10 @@ endif;
 
 <section>
     <div class="row m-0">
+        <div class="display-none-mobile">
         <div class="col-2 m-0 p-0 bg-dark d-flex flex-column justify-content-between position-fixed" style="height: calc(100vh - 60px); bottom: 0;">
             <div>
-                <a href="index.php" class="text-white nav-link border py-3 mt-2 border-left-0">Acceuil</a>
+                <a href="index.php" class="text-white nav-link border py-3  border-left-0">Acceuil</a>
                 <?php if (!isset($_SESSION['auth_id'])): ?>
                     <a href="login.php" class="text-white nav-link border py-3 mt-5 border-left-0">Se connecter</a>
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
@@ -62,15 +63,12 @@ endif;
                 </div>
             <?php endif; ?>
         </div>
-        <div class="col-10 mx-0 p-0 d-flex ml-auto" style="padding-top: 60px!important;">
-            <div class="col-2 mt-4 p-0 text-center">
-                <?php if (!isset($_SESSION['auth_id'])): ?>
-                    <a href="login.php" class="btn btn-secondary">Ajouter un event</a>
-                <?php else: ?>
-                    <a href="addevent.php" class="btn btn-secondary">Ajouter un event</a>
-                <?php endif; ?>
-            </div>
-            <div class="col-7 p-0">
+        </div>
+        <div class="col-10 mx-0 p-0 d-flex ml-auto max-w-none" style="padding-top: 60px!important;">
+
+            <div class="ml-4 mr-4 w-100 margin-none-mobile">
+
+
                 <div class="d-flex justify-content-around">
                     <div class="col-3 text-center">
                         <button class="h5 nav-link text-dark mt-3 border-0 mx-auto" id="SortMenuAll">Tout</button>
@@ -81,7 +79,7 @@ endif;
                         <div class="bg-dark mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                     </div>
                     <div class="col-3 text-center">
-                        <button class="h5 nav-link text-dark mt-5 border-0 mx-auto" id="SortMenuEvents">Événements</button>
+                        <button class="h5 nav-link text-dark mt-5 border-0 mx-auto" id="SortMenuEvents">Events</button>
                         <div class="bg-dark mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                     </div>
                     <div class="col-3 text-center">
@@ -89,6 +87,7 @@ endif;
                         <div class="bg-dark mt-2 mx-auto" style="width: 60%; height: 6px; border-radius: 10px;"></div>
                     </div>
                 </div>
+
                 <div id="allPosts">
                     <div class="card col-10 my-5 mx-auto" id="ContentPosts" style="border-radius: initial">
                         <div class="card-header text-center">
@@ -275,6 +274,18 @@ endif;
                 </div>
 
                 <div id="allEvents">
+                    <div class="card col-10 my-5 mx-auto" id="ContentPosts" style=" border-radius: initial">
+                        <div class="card-header text-center">
+                            Ajouter un événement
+                        </div>
+                        <div class="card-body mt-2 p-1">
+                            <?php if (!isset($_SESSION['auth_id'])): ?>
+                                <a href="login.php" class="btn btn-outline-info">Ajouter un event</a>
+                            <?php else: ?>
+                                <a href="addevent.php" class="btn btn-outline-info">Ajouter un event</a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                     <?php foreach ($events as $event):
                         $current_datetime = date('Y-m-d H:i:s');
                         $event_duration_hours = date('G', strtotime($event['duration']));
@@ -673,6 +684,8 @@ endif;
                     <?php endforeach; ?>
                 </div>
             </div>
+
+            <div class="display-none-mobile">
             <div class="col-3 mt-4 p-0 text-center">
                 <div class="btn btn-secondary" id="btnSort">Trier</div>
                 <?php if ($query_school OR $query_city): ?>
@@ -708,6 +721,7 @@ endif;
                         <?php endif; ?>
                     </form>
                 </div>
+            </div>
             </div>
         </div>
     </div>

@@ -11420,8 +11420,8 @@ a.text-dark:focus {
 
 #CommentProfilePics {
   top: 50px;
-  left: -65px;
-  width: 3.7vw;
+  left: -3%;
+  width: 6.5%;
 }
 
 #ContentPosts {
@@ -11452,6 +11452,27 @@ html::-webkit-scrollbar-thumb {
 #SortMenuHelps:focus,
 .dropdownButtonPosts:focus {
   outline: none;
+}
+
+@media (max-width: 760px) {
+  .display-none-mobile {
+    display: none;
+  }
+
+  .margin-auto-mobile {
+    margin: auto;
+  }
+
+  .margin-none-mobile {
+    margin-right: none;
+    margin-left: none;
+  }
+
+  .max-w-none {
+    max-width: none;
+    -webkit-box-flex: 0;
+            flex: none;
+  }
 }
 
 @media (max-width: 760px) {
@@ -11620,5 +11641,18 @@ td.calendar-day {
   padding: 0;
   border: 1px solid #999;
   position: relative;
+}
+
+@media (min-width: 760px) {
+  .desktop {
+    display: -webkit-box;
+    display: flex;
+  }
+}
+
+@media (max-width: 760px) {
+  .menu-event {
+    display: none;
+  }
 }
 

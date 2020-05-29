@@ -1,0 +1,15 @@
+@media (min-width: 760px) {
+
+  .desktop{
+    display: flex;
+  }
+
+}
+
+@media (max-width: 760px) {
+
+  .menu-event{
+    display: none;
+  }
+
+}

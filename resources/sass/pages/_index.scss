@@ -6,8 +6,8 @@
 
 #CommentProfilePics {
   top: 50px;
-  left: -65px;
-  width: 3.7vw;
+  left: -3%;
+  width: 6.5%;
 }
 
 #ContentPosts {
@@ -33,4 +33,24 @@ html::-webkit-scrollbar-thumb {
 
 #SortMenuAll:focus, #SortMenuPosts:focus, #SortMenuEvents:focus, #SortMenuHelps:focus, .dropdownButtonPosts:focus {
   outline: none;
+}
+
+
+@media (max-width: 760px) {
+
+  .display-none-mobile{
+    display: none;
+  }
+  .margin-auto-mobile{
+    margin:auto;
+  }
+  .margin-none-mobile{
+    margin-right: none;
+    margin-left: none;
+  }
+
+  .max-w-none{
+    max-width: none;
+    flex:none;
+  }
 }
