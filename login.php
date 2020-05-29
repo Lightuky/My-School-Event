@@ -32,7 +32,7 @@ endif;
                 <div>
                     <div style="display: flex">
                         <button type="submit" class="btn btn-success">Se Connecter</button>
-                        <a href="register.php" class="btn btn-info ml-5">Créer un compte</a>
+                        <a href="registerchoice.php" class="btn btn-info ml-5">Créer un compte</a>
                     </div>
                 </div>
             </form>
