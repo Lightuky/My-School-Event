@@ -93,11 +93,23 @@ $('#deleteCommentBlock div.position-relative').hover(function () {
 
 if ($("section").hasClass("404")) {
   $("#header form").hide();
+} else if ($("section").hasClass("chatPage")) {
+  var messageFeed = document.getElementById("messageFeed");
+  messageFeed.scrollTop = messageFeed.scrollHeight;
 }
 
 if (!$("#section-up").hasClass("profile")) {
   $("#header").removeClass("d-none").addClass("d-flex");
 }
+
+$('.postAttachmentsImgur').click(function () {
+  $(this).closest("#addPostForm").find('.inputLinkImgur').toggleClass("d-none");
+  $(this).closest("#addPostForm").find('.inputLinkYoutube').addClass("d-none");
+});
+$('.postAttachmentsYoutube').click(function () {
+  $(this).closest("#addPostForm").find('.inputLinkYoutube').toggleClass("d-none");
+  $(this).closest("#addPostForm").find('.inputLinkImgur').addClass("d-none");
+});
 
 /***/ }),
 
@@ -119,8 +131,8 @@ if (!$("#section-up").hasClass("profile")) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Applications/MAMP/htdocs/mse/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Applications/MAMP/htdocs/mse/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\wamp64\www\mse\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\wamp64\www\mse\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -71,10 +71,24 @@ $('#deleteCommentBlock div.position-relative').hover(function() {
 if ($("section").hasClass("404")) {
     $("#header form").hide();
 }
+else if ($("section").hasClass("chatPage")) {
+    let messageFeed = document.getElementById("messageFeed");
+    messageFeed.scrollTop = messageFeed.scrollHeight;
+}
+
 if (!$("#section-up").hasClass("profile")) {
     $("#header").removeClass("d-none").addClass("d-flex");
 }
 
+$('.postAttachmentsImgur').click(function() {
+    $(this).closest("#addPostForm").find('.inputLinkImgur').toggleClass("d-none");
+    $(this).closest("#addPostForm").find('.inputLinkYoutube').addClass("d-none");
+});
+
+$('.postAttachmentsYoutube').click(function() {
+    $(this).closest("#addPostForm").find('.inputLinkYoutube').toggleClass("d-none");
+    $(this).closest("#addPostForm").find('.inputLinkImgur').addClass("d-none");
+});
 
 
 

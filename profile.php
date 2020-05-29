@@ -38,7 +38,7 @@ endif;
                     <a href="login.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                 <?php else: ?>
                     <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
-                    <a href="calendar.php" class="text-white nav-link border-left-0 border py-3">Calendrier</a>
+                    <a href="calendar.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                     <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                     <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                     <a href="progress.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
@@ -46,7 +46,7 @@ endif;
             </div>
             <?php if (isset($_SESSION['auth_id'])): ?>
                 <div class="">
-                    <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
+                    <a href="assets/logout.php" class="text-white nav-link border py-3 mt-5 border-left-0" style="background-color: rgba(206, 130, 299, 0.3)">Supprimer mon compte</a>
                     <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
                 </div>
             <?php endif; ?>
@@ -72,7 +72,7 @@ endif;
                             <a href="login.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                         <?php else: ?>
                             <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
-                            <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0 ">Calendrier</a>
+                            <a href="calendar.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                             <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                             <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
                             <a href="progress.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
@@ -80,7 +80,7 @@ endif;
                     </div>
                     <?php if (isset($_SESSION['auth_id'])): ?>
                         <div class="">
-                            <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
+                            <a href="assets/logout.php" class="text-white nav-link border py-3 mt-5 border-left-0" style="background-color: rgba(206, 130, 299, 0.3)">Supprimer mon compte</a>
                             <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
                         </div>
                     <?php endif; ?>
@@ -174,27 +174,67 @@ endif;
                     <div class="card col-10 my-5 mx-auto" id="ContentPosts" style="border-radius: initial">
                         <div class="card-header text-center">Ajouter une publication</div>
                         <div class="card-body mt-2 p-1">
-                            <form method="post" action="assets/addpost.php">
+                            <form method="post" action="assets/addpost.php" id="addPostForm">
                                 <div class="form-group">
                                     <label for="content">Contenu du post</label>
                                     <textarea class="form-control mt-1" name="content" rows="2" required></textarea>
                                 </div>
-                                <?php if (isset($_SESSION['auth_id'])): ?>
-                                    <button class="btn btn-outline-info my-2">Poster</button>
-                                <?php else: ?>
-                                    <a href="login.php" class="btn btn-outline-info my-2">Poster</a>
-                                <?php endif; ?>
+                                <div class="d-flex justify-content-around">
+                                    <div class="btn btn-outline-success postAttachmentsImgur">Lier un album Imgur</div>
+                                    <div class="text-secondary mt-1 font-weight-bolder">ou</div>
+                                    <div class="btn btn-outline-danger postAttachmentsYoutube">Ajouter une vidéo Youtube</div>
+                                </div>
+                                <div class="form-group mt-4">
+                                    <div class="input-group mb-3 d-none inputLinkImgur">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text text-secondary" id="basic-addon3">imgur.com/a/</span>
+                                        </div>
+                                        <input type="text" class="form-control text-secondary" name="linkImgur" aria-describedby="basic-addon3" placeholder="AbCtrGe" maxlength="15">
+                                    </div>
+                                    <div class="input-group mb-3 d-none inputLinkYoutube">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text text-secondary" id="basic-addon3">youtube.com/watch?v=</span>
+                                        </div>
+                                        <input type="text" class="form-control text-secondary" name="linkYoutube" aria-describedby="basic-addon3" placeholder="R5Vf5p5pyj4" maxlength="15">
+                                    </div>
+                                </div>
+                                <div class="w-100 text-right">
+                                    <?php if (isset($_SESSION['auth_id'])): ?>
+                                        <button class="btn btn-outline-info my-2">Poster</button>
+                                    <?php else: ?>
+                                        <a href="login.php" class="btn btn-outline-info my-2">Poster</a>
+                                    <?php endif; ?>
+                                </div>
                             </form>
                         </div>
                     </div>
                 <?php endif; ?>
-                <?php foreach ($posts as $post){ ?>
+                <?php foreach ($posts as $post){
+                    $attachments = getPostAttachments($post['id']);
+                    ?>
                     <div class="card col-10 mx-auto mt-4" id="ContentPosts">
                         <div class="card-body">
                             <img src="https://www.gravatar.com/avatar/<?php echo md5($user['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                             <h5 class="card-title"><?php echo $user['first_name'] . " " . $user['last_name'] ?></h5>
                             <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($post['date_added']); ?></h6>
                             <p class="card-text text-muted"><?php echo $post['content'] ?></p>
+                            <?php if ($attachments):
+                                if ($attachments['type'] == "imgur"): ?>
+                                    <div class="ml-5">
+                                        <blockquote class="imgur-embed-pub" lang="en" data-id="<?php echo 'a/' . $attachments['hash'] ?>" data-context="false">
+                                            <a href="<?php echo '//imgur.com/a/' . $attachments['hash'] ?>"></a>
+                                        </blockquote>
+                                        <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+                                    </div>
+                                <?php elseif ($attachments['type'] == "youtube"): ?>
+                                    <div style="margin-left: 15%">
+                                        <iframe
+                                                width="476" height="268" src="<?php echo 'https://www.youtube.com/embed/' . $attachments['hash'] ?>" frameborder="0"
+                                                allow="accelerometer;autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 10px;">
+                                        </iframe>
+                                    </div>
+                                <?php endif;
+                            endif; ?>
                             <div class="d-flex">
                                 <i class="fas fa-star mt-1" style="color: gold"></i>
                                 <div class="ml-2"><?php echo count(getPostLikes($post['id'])); ?></div>
@@ -346,8 +386,8 @@ endif;
                             <img src="https://www.gravatar.com/avatar/<?php echo md5($user['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                             <h5 class="card-title"><?php echo $user['first_name'] . " " . $user['last_name'] ?></h5>
                             <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($event['date_added']); ?></h6>
-                            <p class="card-text text-muted"><?php echo $event['description'] ?></p>
                             <p class="h5 font-weight-bold"><?php echo $event['name'] ?></p>
+                            <p class="card-text text-muted"><?php echo $event['description'] ?></p>
                             <p class="card-text mb-1"><?php echo "Le " . strftime("%A %e %B", strtotime($event['date'])) . " à " . strftime("%Hh%M", strtotime($event['time'])) ?></p>
                             <div class="d-flex">
                                 <i class="fas fa-map-marker-alt mt-1" style="color: red"></i>

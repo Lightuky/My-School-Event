@@ -11442,7 +11442,9 @@ html::-webkit-scrollbar-thumb {
 }
 
 #ShowComments:focus,
-#showCommentForm:focus {
+#showCommentForm:focus,
+.navIconsLinks:focus,
+.searchBarButton:focus {
   box-shadow: none;
 }
 
@@ -11612,6 +11614,23 @@ html::-webkit-scrollbar-thumb {
   .feed-friends {
     margin-left: auto;
   }
+}
+
+#chatFriendsList::-webkit-scrollbar,
+#messageFeed::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+}
+
+#chatFriendsList::-webkit-scrollbar-thumb,
+#messageFeed::-webkit-scrollbar-thumb {
+  background: slategray;
+  border-radius: 10px;
+}
+
+#ChatUniqueFriendList:hover {
+  background-color: lightgray;
 }
 
 /* calendar */

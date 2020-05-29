@@ -20,7 +20,7 @@ if (isset($_SESSION['auth_id'])) {
 
 ?>
 
-<section>
+<section style="margin-top: 90px;">
     <div class="container">
         <div class="text-center mt-5">
             <h2><?php echo $event_infos['name'] ?></h2>

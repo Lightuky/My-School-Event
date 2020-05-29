@@ -11,21 +11,21 @@ $pending_request = checkFriend($_SESSION['auth_id'], $user_id);
 if ($pending === '0') {
     if ($pending_request == false) {
         addFriend(1, $_SESSION['auth_id'], $user_id);
-        $pathSuccess =  "/mse/profile.php?id=$user_id";
-        header('Location: '. $pathSuccess);
+        $pathSuccess = $_SERVER['HTTP_REFERER'];
+        header("Location: $pathSuccess");
     }
     else {
-        $pathError =  "/mse/profile.php?id=$user_id";
-        header('Location: '. $pathError);
+        $pathError = $_SERVER['HTTP_REFERER'];
+        header("Location: $pathError");
     }
 }
 elseif ($pending === '1') {
     acceptFriendRequest(2, $_SESSION['auth_id'], $user_id);
-    $pathSuccess =  "/mse/profile.php?id=$user_id";
-    header('Location: '. $pathSuccess);
+    $pathSuccess = $_SERVER['HTTP_REFERER'];
+    header("Location: $pathSuccess");
 }
 elseif ($pending === '2') {
     deleteFriend(2, $_SESSION['auth_id'], $user_id);
-    $pathSuccess =  "/mse/profile.php?id=$user_id";
-    header('Location: '. $pathSuccess);
+    $pathSuccess = $_SERVER['HTTP_REFERER'];
+    header("Location: $pathSuccess");
 }

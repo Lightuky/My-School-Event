@@ -55,16 +55,13 @@ if (isset($_SESSION['auth_id'])) {
                 </div>
                 <?php if (isset($_SESSION['auth_id'])): ?>
                     <div class="">
-                        <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
+                        <a href="assets/logout.php" class="text-white nav-link border py-3 mt-5 border-left-0" style="background-color: rgba(206, 130, 299, 0.3)">Supprimer mon compte</a>
                         <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
                     </div>
                 <?php endif; ?>
             </div>
-            </section>
             <div class="card container col-4" style="padding-top: 5px!important;max-width: 70%; margin-left: 30%;  margin-top: 10%; z-index: 99;">
-
                 <div class="d-flex justify-content-between">
-
                     <div class="d-flex">
                         <div class="text-muted mr-2">Évenement crée par</div>
                         <div class="h5"><?php echo $event_admin['first_name'] . " " . $event_admin['last_name']; ?></div>
@@ -91,10 +88,8 @@ if (isset($_SESSION['auth_id'])) {
                                 } else { ?>
                                     <a href="login.php">se connecter</a>
                             <?php } ?>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <h2 class="mt-1"><?php echo $event_infos['name'] ?></h2>
@@ -109,7 +104,6 @@ if (isset($_SESSION['auth_id'])) {
                         <span class="d d-block">Le <?php echo strftime("%A %e %B", strtotime($event_infos['date'])) . " à " . strftime("%Hh%M", strtotime($event_infos['time'])) ?></span>
                     <?php endif;
                 endif; ?>
-
                 <div class="d-flex">
                     <i class="fas fa-map-marker-alt mt-1" style="color: red; margin-right: 5px"></i>
                     <span class="text-muted d-block"><?php echo $event_address['street_number'] . " " . $event_address['address_line1'] . ", "        . $event_address['address_line2'] . " "  . $event_address['zip_code'] . " " . $event_address['city'] ?></span>
@@ -118,9 +112,7 @@ if (isset($_SESSION['auth_id'])) {
                     <i class="far fa-clock mt-1" style=" margin-right: 5px"></i>
                     <span class="text-muted d-block">Durée : <?php echo strftime("%Hh%M", strtotime($event_infos['duration']));?></span>
                 </div>
-
                 <span class="d-block mt-4">Description : <?php echo $event_infos['description'] ?></span>
-
                 <div class="d-flex mt-4">
                     <a href="eventmembers.php?id=<?php echo $id ?>" style="color: black"><i class="fas fa-users  mt-1" title="membres de l'événenment" style=" margin-right: 5px"></i></a>
                     <?php if ($event_infos['member_limit'] != '0') { ?>
@@ -129,7 +121,6 @@ if (isset($_SESSION['auth_id'])) {
                         <span class="text-muted d-block"><?php echo  count($event_members) . " personnes"?><?php if ($event_infos['is_private'] == 1){ echo " (Événement privée) "; } ?></span>
                     <?php } ?>
                 </div>
-
                 <hr class="bg-secondary">
                                 <div class="d-flex justify-content-around mt-3">
                                     <?php if ($event_end_date < $current_datetime): ?>
@@ -296,6 +287,7 @@ if (isset($_SESSION['auth_id'])) {
                 </div>
             </div>
         </div>
+    </div>
 </section>
 
 
