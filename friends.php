@@ -24,17 +24,19 @@ endif;
                         <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                         <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                         <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                        <a href="login.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                     <?php }
                     else { ?>
                         <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
-                        <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
+                        <a href="calendar.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                         <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
                         <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                        <a href="progress.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                     <?php } ?>
                 </div>
                 <?php if (isset($_SESSION['auth_id'])) { ?>
                     <div class="">
-                        <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
+                        <a href="assets/logout.php" class="text-white nav-link border py-3 mt-5 border-left-0" style="background-color: rgba(206, 130, 299, 0.3)">Supprimer mon compte</a>
                         <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
                     </div>
                 <?php } ?>
@@ -57,16 +59,20 @@ endif;
                             <a href="login.php" class="text-white nav-link border py-3 mt-5 border-left-0">Se connecter</a>
                             <a href="login.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                             <a href="login.php" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                            <a href="login.php" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                            <a href="login.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                         <?php }
                         else { ?>
                             <a href="profile.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 mt-5 border-left-0">Mon profil</a>
-                            <a href="calendar.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border-left-0">Calendrier</a>
+                            <a href="calendar.php" class="text-white nav-link border py-3 border-left-0">Calendrier</a>
                             <a href="bugreport.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Signaler un problème</a>
+                            <a href="friends.php?id=<?php echo $_SESSION['auth_id'] ?>" class="text-white nav-link border py-3 border-left-0">Mes amis</a>
+                            <a href="progress.php" class="text-white nav-link border py-3 border-left-0">Progression</a>
                         <?php } ?>
                     </div>
                     <?php if (isset($_SESSION['auth_id'])) { ?>
                         <div class="">
-                            <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
+                            <a href="assets/logout.php" class="text-white nav-link border py-3 mt-5 border-left-0" style="background-color: rgba(206, 130, 299, 0.3)">Supprimer mon compte</a>
                             <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
                         </div>
                     <?php } ?>
@@ -80,7 +86,7 @@ endif;
             <form class="d-flex" method="post" action="assets/searchfriends.php?id=<?php echo $id ?>">
                 <div class="form-group d-flex">
                     <input class="form-control mr-2" type="search" name="search" id="search" aria-label="Search" style="width: 68%;">
-                    <button class="btn btn-outline-success search-button" type="submit" style="width: 30%;">Rechercher</button>
+                    <button class="btn btn-outline-success search-button p-0" type="submit" style="width: 30%;">Rechercher</button>
                 </div>
             </form>
             <?php
@@ -137,15 +143,17 @@ endif;
                                 </div>
                             </div>
                             <div class="col-md-3 d-flex align-items-center">
-                                <?php if ($friends_credential['pending'] === '2'): ?>
-                                    <div class="btn bg-secondary text-white">Vous êtes Amis</div>
-                                <?php elseif ($friends_credential['pending'] === '1'): ?>
-                                    <?php if ( $friends_credential['user2_id'] == $id): ?>
-                                        <a href="assets/friends.php?s=1&id=<?php echo $id ?>" class="btn btn-success">Accepter la demande</a>
-                                    <?php else: ?>
-                                        <div class="btn bg-info text-white">Demande Envoyée</div>
-                                    <?php endif; ?>
-                                <?php endif; ?>
+                                <?php if (isset($_SESSION['auth_id']) && $id == $_SESSION['auth_id']):
+                                    if ($friends_credential['pending'] === '2'): ?>
+                                        <div class="btn bg-secondary text-white">Vous êtes Amis</div>
+                                    <?php elseif ($friends_credential['pending'] === '1'):
+                                        if ( $friends_credential['user2_id'] == $_SESSION['auth_id']): ?>
+                                            <a href="assets/friends.php?s=1&id=<?php echo $friends_credential['user1_id'] ?>" class="btn btn-success">Accepter la demande</a>
+                                        <?php else: ?>
+                                            <div class="btn bg-info text-white">Demande Envoyée</div>
+                                        <?php endif;
+                                    endif;
+                                endif; ?>
                             </div>
                         </div>
                     </div>

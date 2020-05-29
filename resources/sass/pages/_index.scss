@@ -27,7 +27,7 @@ html::-webkit-scrollbar-thumb {
   border-radius: 10px;
 }
 
-#ShowComments:focus, #showCommentForm:focus {
+#ShowComments:focus, #showCommentForm:focus, .navIconsLinks:focus, .searchBarButton:focus {
   box-shadow: none;
 }
 

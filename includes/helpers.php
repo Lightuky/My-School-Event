@@ -60,6 +60,17 @@ function setNewUser($data) {
     return $dbh->lastInsertId();
 }
 
+function setNewBrandInfos($user_id, $data) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO brand_infos (user_id, brand_name, contact_email, website_url) 
+                                    VALUES (:user_id, :brand_name, :contact_email, :website_url)");
+    $stmt->bindValue(':user_id', $user_id);
+    $stmt->bindValue(':brand_name', $data['brand_name']);
+    $stmt->bindValue(':contact_email', $data['contact_email']);
+    $stmt->bindValue(':website_url', $data['website_url']);
+    $stmt->execute();
+}
+
 function authUser($data) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT * FROM users WHERE email = :email AND password = :password LIMIT 1");
@@ -124,6 +135,16 @@ function getFriends($user_id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT * FROM friends WHERE user1_id = :user1_id  OR user2_id = :user1_id");
     $stmt->bindValue(':user1_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getReceivedFriendRequests($auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT friends.*, users.first_name, users.last_name, users.email FROM friends LEFT JOIN users 
+                                    ON friends.user1_id = users.id WHERE friends.user2_id = :auth_id AND friends.pending = :pending");
+    $stmt->bindValue(':auth_id', $auth_id);
+    $stmt->bindValue(':pending', 1);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -292,6 +313,23 @@ function getPostsSorted() {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getPostAttachments($post_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM post_attachments WHERE post_id = :post_id");
+    $stmt->bindValue(':post_id', $post_id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function setPostAttachments($post_id, $type, $hash) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO post_attachments (post_id, type, hash) VALUES (:post_id, :type, :hash)");
+    $stmt->bindValue(':post_id', $post_id);
+    $stmt->bindValue(':type', $type);
+    $stmt->bindValue(':hash', $hash);
+    $stmt->execute();
+}
+
 function getPostsQueryOneParam($query_value, $column, $table_join) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT posts.*, users.first_name, users.last_name, users.email, $table_join.name AS :tablejoin_name, $table_join.id AS :tablejoin_id 
@@ -452,6 +490,7 @@ function setNewPost($data, $id) {
     $stmt->bindValue(':content', $data['content']);
     $stmt->bindValue(':privacy_level', 0);
     $stmt->execute();
+    return $dbh->lastInsertId();
 }
 
 function setNewHelp($data, $id) {
@@ -879,4 +918,22 @@ function getLastMessageByPerson($other_user_id, $auth_id) {
     $stmt->bindValue(':auth_id', $auth_id);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function addChatMessage($auth_id, $receiver_id, $message) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO chat_messages (user1_id, user2_id, message) VALUES (:auth_id, :receiver_id, :message)");
+    $stmt->bindValue(':auth_id', $auth_id);
+    $stmt->bindValue(':receiver_id', $receiver_id);
+    $stmt->bindValue(':message', $message);
+    $stmt->execute();
+}
+
+function getQueryUserMessages($query_user_id, $auth_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM chat_messages WHERE (user1_id = :other_user_id AND user2_id = :auth_id) OR (user1_id = :auth_id AND user2_id = :other_user_id) ORDER BY date_added");
+    $stmt->bindValue(':other_user_id', $query_user_id);
+    $stmt->bindValue(':auth_id', $auth_id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }

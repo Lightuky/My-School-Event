@@ -53,7 +53,7 @@ if (isset($_SESSION['auth_id'])) {
                 </div>
                 <?php if (isset($_SESSION['auth_id'])): ?>
                     <div class="">
-                        <a href="assets/logout.php" class="text-danger nav-link border py-3 mt-5 border-left-0">Supprimer mon compte</a>
+                        <a href="assets/logout.php" class="text-white nav-link border py-3 mt-5 border-left-0" style="background-color: rgba(206, 130, 299, 0.3)">Supprimer mon compte</a>
                         <a href="assets/logout.php" class="bg-white text-dark font-weight-bold nav-link border py-3 border-left-0">Déconnexion</a>
                     </div>
                 <?php endif; ?>
