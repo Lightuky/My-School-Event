@@ -15,13 +15,13 @@ foreach ($_POST as $name => $value) {
 if ($errored) {
     session_start();
     $_SESSION['fields'] = $fields;
-    $pathError =  '/index.php?errored=true';
-    header('Location: '. $pathError);
+
+    $pathError = $_SERVER['HTTP_REFERER'];
+    header("Location: $pathError");
 }
 else {
     setNewHelp($data, $_SESSION['auth_id']);
 
-    $pathSuccess =  "/mse/index.php";
-    header('Location: '. $pathSuccess);
-
+    $pathSuccess = $_SERVER['HTTP_REFERER'];
+    header("Location: $pathSuccess");
 }
