@@ -21,49 +21,40 @@ $('#btnSort').click(function () {
 $('#SortMenuPosts').click(function () {
   $('#SortMenuPosts').addClass("mt-3").removeClass("mt-5");
   $('#SortMenuHelps, #SortMenuEvents, #SortMenuAll').addClass("mt-5").removeClass("mt-3");
-  $('#allHelps #ContentPosts').css({
+  $('.allContentEventForm, .allContentHelpForm, .allContentEvent, .allContentHelp').css({
     "display": "none"
   });
-  $('#allPosts').css({
+  $('.allContentPost, .allContentPostForm').css({
     "display": "block"
-  });
-  $('#allEvents, #allHelps').css({
-    "display": "none"
   });
 });
 $('#SortMenuEvents').click(function () {
   $('#SortMenuEvents').addClass("mt-3").removeClass("mt-5");
   $('#SortMenuAll, #SortMenuHelps, #SortMenuPosts').addClass("mt-5").removeClass("mt-3");
-  $('#allHelps #ContentPosts').css({
+  $('.allContentPostForm, .allContentHelpForm, .allContentPost, .allContentHelp').css({
     "display": "none"
   });
-  $('#allEvents').css({
+  $('.allContentEvent, .allContentEventForm').css({
     "display": "block"
-  });
-  $('#allPosts, #allHelps').css({
-    "display": "none"
   });
 });
 $('#SortMenuHelps').click(function () {
   $('#SortMenuHelps').addClass("mt-3").removeClass("mt-5");
   $('#SortMenuAll, #SortMenuEvents, #SortMenuPosts').addClass("mt-5").removeClass("mt-3");
-  $('#allHelps #ContentPosts').css({
-    "display": "block"
-  });
-  $('#allHelps').css({
-    "display": "block"
-  });
-  $('#allEvents, #allPosts').css({
+  $('.allContentPostForm, .allContentEventForm, .allContentPost, .allContentEvent').css({
     "display": "none"
+  });
+  $('.allContentHelpForm, .allContentHelp').css({
+    "display": "block"
   });
 });
 $('#SortMenuAll').click(function () {
   $('#SortMenuAll').addClass("mt-3").removeClass("mt-5");
   $('#SortMenuHelps, #SortMenuEvents, #SortMenuPosts').addClass("mt-5").removeClass("mt-3");
-  $('#allHelps #ContentPosts').css({
+  $('.allContentEventForm, .allContentHelpForm').css({
     "display": "none"
   });
-  $('#allHelps, #allPosts, #allEvents').css({
+  $('.allContentEvent, .allContentHelp, .allContentPost, .allContentPostForm').css({
     "display": "block"
   });
 });
@@ -93,13 +84,15 @@ $('#deleteCommentBlock div.position-relative').hover(function () {
 
 if ($("section").hasClass("404")) {
   $("#header form").hide();
-} else if ($("section").hasClass("chatPage")) {
-  var messageFeed = document.getElementById("messageFeed");
-  messageFeed.scrollTop = messageFeed.scrollHeight;
 }
 
-if (!$("#section-up").hasClass("profile")) {
+if (!$("section").hasClass("profile")) {
   $("#header").removeClass("d-none").addClass("d-flex");
+}
+
+if ($("section").hasClass("chatPage")) {
+  var messageFeed = document.getElementById("messageFeed");
+  messageFeed.scrollTop = messageFeed.scrollHeight;
 }
 
 $('.postAttachmentsImgur').click(function () {
