@@ -168,8 +168,9 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                     </div>
                     <?php foreach ($all_contents as $all_content):
                         if ($all_content['type'] == "post"):
-                            $attachments = getPostAttachments($all_content['id']); ?>
-                            <div class="card col-10 mx-auto mt-5 allContentPost" id="ContentPosts">
+                            $attachments = getPostAttachments($all_content['id']);
+                            $is_sponsored = getSponsoredPost($all_content['id']); ?>
+                            <div class="card col-10 mx-auto mt-5 allContentPost" id="ContentPosts" style="<?php echo ($is_sponsored ? 'box-shadow: 0 6px 10px -4px rgba(61, 194, 66, 0.57)!important; border-color: rgba(61, 194, 66, 0.57); border-width: 0.1em' : NULL) ?>">
                                 <div class="card-body">
                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($all_content['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                                     <div class="d-flex">
@@ -213,7 +214,7 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                                         <i class="fas fa-star mt-1" style="color: gold"></i>
                                         <div class="ml-2"><?php echo count(getPostLikes($all_content['id'])); ?></div>
                                     </div>
-                                    <hr class="bg-secondary">
+                                    <hr class="bg-secondary" style="<?php echo ($is_sponsored ? 'background-color: rgba(61, 194, 66, 0.30)!important; border-width: 2px' : NULL) ?>">
                                     <div class="d-flex justify-content-around mt-3">
                                         <?php if (isset($_SESSION['auth_id'])):
                                             $post_likes = getPostLikes($all_content['id']);
