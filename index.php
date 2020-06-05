@@ -204,7 +204,7 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                                         <?php elseif ($attachments['type'] == "youtube"): ?>
                                             <div style="margin-left: 25%">
                                                 <iframe
-                                                        width="426" height="248" src="<?php echo 'https://www.youtube.com/embed/' . $attachments['hash'] ?>" frameborder="0"
+                                                        width="100%" height="248" src="<?php echo 'https://www.youtube.com/embed/' . $attachments['hash'] ?>" frameborder="0"
                                                         allow="accelerometer;autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 10px;">
                                                 </iframe>
                                             </div>

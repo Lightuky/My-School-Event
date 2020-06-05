@@ -141,7 +141,6 @@ if ($query) {
                                     <?php endif;
                                 endforeach;
                             else:
-
                                 $query_user_messages = getQueryUserMessages($query_user_credentials['id'], $_SESSION['auth_id']);
                                 $receiver_id = $query;
 
