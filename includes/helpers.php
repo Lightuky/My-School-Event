@@ -945,3 +945,18 @@ function isBrand($user_id) {
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+function setSponsoredPost($post_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO post_sponsored (post_id) VALUES (:post_id)");
+    $stmt->bindValue(':post_id', $post_id);
+    $stmt->execute();
+}
+
+function getSponsoredPost($post_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM post_sponsored WHERE post_id = :post_id");
+    $stmt->bindValue(':post_id', $post_id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
