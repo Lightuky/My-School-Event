@@ -7,6 +7,7 @@ $fields = [];
 $errored = false;
 
 session_start();
+$is_brand = isBrand($_SESSION['auth_id']);
 
 foreach ($_POST as $name => $value):
     $data[$name] = $value;
@@ -33,6 +34,10 @@ else:
         setPostAttachments($post_id, "imgur", $data['linkImgur']);
     elseif($data['linkYoutube']):
         setPostAttachments($post_id, "youtube", $data['linkYoutube']);
+    endif;
+
+    if ($is_brand):
+        setSponsoredPost($post_id);
     endif;
 
     $pathSuccess = $_SERVER['HTTP_REFERER'];

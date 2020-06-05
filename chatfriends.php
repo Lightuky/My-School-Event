@@ -56,10 +56,12 @@ $friends = getFriends($_SESSION['auth_id']);
                                 $last_sender_name = getUser($last_message['user1_id']);
                                 ?>
                                 <a href="chat.php?u=<?php echo $friends_credential["id"] ?>" class="list-group-item-flush list-group-item-action py-2 d-flex" id="ChatUniqueFriendList">
-                                    <img src="https://www.gravatar.com/avatar/<?php echo md5($friends_credential['email']); ?>?s=700" class="mr-4 bd-highlight rounded-circle" style="width: 15%">
+                                    <img src="https://www.gravatar.com/avatar/<?php echo md5($friends_credential['email']); ?>?s=700" class="mr-4 bd-highlight rounded-circle" style="width: 15%" alt="">
                                     <div class="align-self-center">
                                         <div><?php echo $friends_credential["first_name"] . " " . $friends_credential["last_name"] ?></div>
-                                        <div class="small text-muted"><?php echo ($last_sender_name["id"] == $_SESSION['auth_id'] ? "Vous" : ucfirst($last_sender_name["first_name"])) . ' : "' . $last_message['message'] . '"' ?></div>
+                                        <div class="small text-muted">
+                                            <?php echo empty($last_message) ? "" : (($last_sender_name["id"] == $_SESSION['auth_id'] ? "Vous" : ucfirst($last_sender_name["first_name"])) . ' : "' . $last_message['message'] . '"') ?>
+                                        </div>
                                     </div>
                                 </a>
                             <?php endforeach;

@@ -894,7 +894,7 @@ function getUserAcceptedEvents($user_id) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getFriendsSorted($auth_id) {
+function getFriendsConvSorted($auth_id) {
     $dbh = connectDB();
     $stmt = $dbh->prepare("SELECT user1_id, user2_id FROM chat_messages WHERE (user1_id = :user_id OR user2_id = :user_id) ORDER BY date_added DESC");
     $stmt->bindValue(':user_id', $auth_id);
@@ -936,4 +936,27 @@ function getQueryUserMessages($query_user_id, $auth_id) {
     $stmt->bindValue(':auth_id', $auth_id);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function isBrand($user_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM brand_infos WHERE user_id = :user_id");
+    $stmt->bindValue(':user_id', $user_id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function setSponsoredPost($post_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare( "INSERT INTO post_sponsored (post_id) VALUES (:post_id)");
+    $stmt->bindValue(':post_id', $post_id);
+    $stmt->execute();
+}
+
+function getSponsoredPost($post_id) {
+    $dbh = connectDB();
+    $stmt = $dbh->prepare("SELECT * FROM post_sponsored WHERE post_id = :post_id");
+    $stmt->bindValue(':post_id', $post_id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }

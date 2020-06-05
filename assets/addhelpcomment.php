@@ -16,13 +16,13 @@ foreach ($_POST as $name => $value) {
 if ($errored) {
     session_start();
     $_SESSION['fields'] = $fields;
-    $pathError =  '/index.php?errored=true';
-    header('Location: '. $pathError);
+
+    $pathError = $_SERVER['HTTP_REFERER'];
+    header("Location: $pathError");
 }
 else {
     addHelpAnswer($_SESSION['auth_id'], $help_id, $data);
 
-    $pathSuccess =  "/mse/help.php?id=" . $help_id;
-    header('Location: '. $pathSuccess);
-
+    $pathSuccess = $_SERVER['HTTP_REFERER'];
+    header("Location: $pathSuccess");
 }
