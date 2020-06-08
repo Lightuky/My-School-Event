@@ -275,7 +275,7 @@ endif;
                             <img src="https://www.gravatar.com/avatar/<?php echo md5($user['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                             <h5 class="card-title">
                                 <a href="profile.php?id=<?php echo $id ?>" style="text-decoration: none; color: black">
-                                    <?php echo $user['first_name'] . " " . $user['last_name'] ?>
+                                    <?php echo !$is_brand ? $user['first_name'] . " " . $user['last_name'] : $is_brand['brand_name'] ?>
                                 </a>
                             </h5>
                             <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($all_content['date_added']); ?></h6>
@@ -297,9 +297,19 @@ endif;
                                     </div>
                                 <?php endif;
                             endif; ?>
-                            <div class="d-flex">
-                                <i class="fas fa-star mt-1" style="color: gold"></i>
-                                <div class="ml-2"><?php echo count(getPostLikes($all_content['id'])); ?></div>
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-self-center">
+                                    <i class="fas fa-star mt-1" style="color: gold"></i>
+                                    <div class="ml-2"><?php echo count(getPostLikes($all_content['id'])); ?></div>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <?php if (empty(getPostComments($all_content['id']))): ?>
+                                        <div class="btn btn-light bg-white text-secondary border-0 m-0 pr-1">Aucun commentaire</div>
+                                    <?php else: ?>
+                                        <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowComments"><?php echo count(getPostComments($all_content['id'])) ?> commentaire(s)</button>
+                                        <div class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 d-none HideComments">Masquer les commentaires</div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                             <hr class="bg-secondary">
                             <div class="d-flex justify-content-around mt-3">
@@ -357,10 +367,6 @@ endif;
                                         <?php } ?>
                                     </form>
                                 </div>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowComments">Montrer les commentaires</button>
-                                <div class="nav-link text-muted px-0">(<?php echo count(getPostComments($all_content['id'])) ?>)</div>
                             </div>
                             <div class="d-none ContentsComments">
                                 <?php $post_comments = getPostComments($all_content['id']);
@@ -462,9 +468,19 @@ endif;
                                 <p class="card-text text-muted ml-2"><?php echo $event_address['street_number'] . " " . $event_address['address_line1'] . ", "
                                         . $event_address['address_line2'] . " "  . $event_address['zip_code'] . " " . $event_address['city'] ?></p>
                             </div>
-                            <div class="d-flex mt-3">
-                                <i class="fas fa-check-circle mt-1" style="color: forestgreen"></i>
-                                <div class="ml-2"><?php echo count(getEventMembers($all_content['id'])); ?></div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <div class="d-flex align-self-center">
+                                    <i class="fas fa-check-circle mt-1" style="color: forestgreen"></i>
+                                    <div class="ml-2"><?php echo count(getEventMembers($all_content['id'])); ?></div>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <?php if (empty(getEventComments($all_content['id']))): ?>
+                                        <div class="btn btn-light bg-white text-secondary border-0 m-0 pr-1">Aucun commentaire</div>
+                                    <?php else: ?>
+                                        <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowComments"><?php echo count(getEventComments($all_content['id'])) ?> commentaire(s)</button>
+                                        <div class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 d-none HideComments">Masquer les commentaires</div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                             <hr class="bg-secondary">
                             <div class="d-flex justify-content-around mt-3">
@@ -528,10 +544,6 @@ endif;
                                         <?php } ?>
                                     </form>
                                 </div>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowComments">Montrer les commentaires</button>
-                                <div class="nav-link text-muted px-0">(<?php echo count(getEventComments($all_content['id'])) ?>)</div>
                             </div>
                             <div class="d-none ContentsComments">
                                 <?php $event_comments = getEventComments($all_content['id']);

@@ -169,15 +169,18 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                     <?php foreach ($all_contents as $all_content):
                         if ($all_content['type'] == "post"):
                             $attachments = getPostAttachments($all_content['id']);
-                            $is_sponsored = getSponsoredPost($all_content['id']); ?>
+                            $is_sponsored = getSponsoredPost($all_content['id']);
+                            $is_brand = isBrand($all_content['author_id']);
+                            ?>
                             <div class="card col-10 mx-auto mt-5 allContentPost" id="ContentPosts" style="<?php echo ($is_sponsored ? 'box-shadow: 0 6px 10px -4px rgba(61, 194, 66, 0.57)!important; border-color: rgba(61, 194, 66, 0.57); border-width: 0.1em' : NULL) ?>">
                                 <div class="card-body">
                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($all_content['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                                     <div class="d-flex">
-                                        <h5 class="card-title">
+                                        <h5 class="card-title d-flex">
                                             <a href="profile.php?id=<?php echo $all_content['author_id'] ?>" style="text-decoration: none; color: black">
-                                                <?php echo $all_content['first_name'] . " " . $all_content['last_name'] ?>
+                                                <?php echo !$is_brand ? ($all_content['first_name'] . " " . $all_content['last_name']) : $is_brand['brand_name'] ?>
                                             </a>
+                                            <?php echo $is_brand ? "<h6 class='badge badge-success font-weight-normal ml-2 mb-3 mt-1' title='Publication sponsorisée par " . $is_brand['brand_name'] ."'>Sponsorisé</h6>" : NULL ?>
                                         </h5>
                                         <div class="d-flex justify-content-between" style="margin-top: -4px;">
                                             <?php $user_badges = getUserBadges($all_content['author_id']);
@@ -202,7 +205,7 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                                                 <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
                                             </div>
                                         <?php elseif ($attachments['type'] == "youtube"): ?>
-                                            <div style="margin-left: 25%">
+                                            <div style="margin-left: 11%">
                                                 <iframe
                                                         width="100%" height="248" src="<?php echo 'https://www.youtube.com/embed/' . $attachments['hash'] ?>" frameborder="0"
                                                         allow="accelerometer;autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 10px;">
@@ -210,11 +213,21 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                                             </div>
                                         <?php endif;
                                     endif; ?>
-                                    <div class="d-flex">
-                                        <i class="fas fa-star mt-1" style="color: gold"></i>
-                                        <div class="ml-2"><?php echo count(getPostLikes($all_content['id'])); ?></div>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-self-center">
+                                            <i class="fas fa-star mt-1" style="color: gold"></i>
+                                            <div class="ml-2"><?php echo count(getPostLikes($all_content['id'])); ?></div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <?php if (empty(getPostComments($all_content['id']))): ?>
+                                                <div class="btn btn-light bg-white text-secondary border-0 m-0 pr-1">Aucun commentaire</div>
+                                            <?php else: ?>
+                                                <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowComments"><?php echo count(getPostComments($all_content['id'])) ?> commentaire(s)</button>
+                                                <div class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 d-none HideComments">Masquer les commentaires</div>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
-                                    <hr class="bg-secondary" style="<?php echo ($is_sponsored ? 'background-color: rgba(61, 194, 66, 0.30)!important; border-width: 2px' : NULL) ?>">
+                                    <hr class="bg-secondary mt-3" style="<?php echo ($is_sponsored ? 'background-color: rgba(61, 194, 66, 0.30)!important; border-width: 2px' : NULL) ?>">
                                     <div class="d-flex justify-content-around mt-3">
                                         <?php if (isset($_SESSION['auth_id'])):
                                             $post_likes = getPostLikes($all_content['id']);
@@ -267,10 +280,6 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                                                 <?php endif; ?>
                                             </form>
                                         </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center">
-                                        <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowComments">Montrer les commentaires</button>
-                                        <div class="nav-link text-muted px-0">(<?php echo count(getPostComments($all_content['id'])) ?>)</div>
                                     </div>
                                     <div class="d-none ContentsComments">
                                         <?php
@@ -395,9 +404,19 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                                         <?php $event_address = getEventAddress($all_content['id']) ?>
                                         <p class="card-text text-muted ml-2"><?php echo $event_address['street_number'] . " " . $event_address['address_line1'] . ", " . $event_address['address_line2'] . " "  . $event_address['zip_code'] . " " . $event_address['city'] ?></p>
                                     </div>
-                                    <div class="d-flex mt-3">
-                                        <i class="fas fa-check-circle mt-1" style="color: forestgreen"></i>
-                                        <div class="ml-2"><?php echo count(getEventMembers($all_content['id'])); ?></div>
+                                    <div class="d-flex justify-content-between mt-1">
+                                        <div class="d-flex align-self-center">
+                                            <i class="fas fa-check-circle mt-1" style="color: forestgreen"></i>
+                                            <div class="ml-2"><?php echo count(getEventMembers($all_content['id'])); ?></div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <?php if (empty(getEventComments($all_content['id']))): ?>
+                                                <div class="btn btn-light bg-white text-secondary border-0 m-0 pr-1">Aucun commentaire</div>
+                                            <?php else: ?>
+                                                <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowComments"><?php echo count(getEventComments($all_content['id'])) ?> commentaire(s)</button>
+                                                <div class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 d-none HideComments">Masquer les commentaires</div>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                     <hr class="bg-secondary">
                                     <div class="d-flex justify-content-around mt-3">
@@ -461,10 +480,6 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                                                 <?php endif; ?>
                                             </form>
                                         </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center">
-                                        <button class="btn btn-light bg-white text-secondary border-0 m-0 pr-1 ShowComments">Montrer les commentaires</button>
-                                        <div class="nav-link text-muted px-0">(<?php echo count(getEventComments($all_content['id'])) ?>)</div>
                                     </div>
                                     <div class="d-none ContentsComments">
                                         <?php $event_comments = getEventComments($all_content['id']);
@@ -551,7 +566,7 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                                 </div>
                             </div>
                         <?php elseif ($all_content['type'] == "help"): ?>
-                            <div class="card col-10 mx-auto mt-5 allContentHelp">
+                            <div class="card col-10 mx-auto mt-5 allContentHelp" id="ContentPosts">
                                 <div class="card-body">
                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($all_content['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                                     <div class="d-flex">
