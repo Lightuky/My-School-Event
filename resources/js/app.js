@@ -39,8 +39,15 @@ $('#SortMenuAll').click(function() {
 });
 
 $('.ShowComments').click(function() {
-    $(this).text(($(this).text() === 'Montrer les commentaires') ? 'Masquer les commentaires' : 'Montrer les commentaires');
-    $(this).closest("div.d-flex").next(".ContentsComments").toggleClass("d-none");
+    $(this).addClass('d-none');
+    $(this).next().removeClass('d-none');
+    $(this).closest(".card-body").next(".card-body").find('.ContentsComments').removeClass("d-none");
+});
+
+$('.HideComments').click(function() {
+    $(this).addClass('d-none');
+    $(this).prev().removeClass('d-none');
+    $(this).closest(".card-body").next(".card-body").find('.ContentsComments').addClass("d-none");
 });
 
 $('.ShowAnswer').click(function() {
