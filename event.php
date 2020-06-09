@@ -60,7 +60,8 @@ if (isset($_SESSION['auth_id'])) {
                     </div>
                 <?php endif; ?>
             </div>
-            <div class="card container col-4" style="padding-top: 5px!important;max-width: 70%; margin-left: 30%;  margin-top: 10%; z-index: 99;">
+            </section>
+            <div class="event-card card container col-4">
                 <div class="d-flex justify-content-between">
                     <div class="d-flex">
                         <div class="text-muted mr-2">Évenement crée par</div>
@@ -271,7 +272,7 @@ if (isset($_SESSION['auth_id'])) {
             </div>
         </div>
       
-        <div class="container col-5" style="z-index: 99;">
+        <div class="container col-5" style="z-index: 97;">
             <div class="mapEvent" style="margin-top: 15%">
                 <div class="gMaps">
                     <div class="gmap_canvas">

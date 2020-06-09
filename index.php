@@ -198,19 +198,18 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                                     <p class="card-text text-muted"><?php echo $all_content['content'] ?></p>
                                     <?php if ($attachments):
                                         if ($attachments['type'] == "imgur"): ?>
-                                            <div class="ml-5">
-                                                <blockquote class="imgur-embed-pub" lang="en" data-id="<?php echo 'a/' . $attachments['hash'] ?>" data-context="false">
+
+                                                <blockquote class="imgur-embed-pub" lang="en" data-id="<?php echo 'a/' . $attachments['hash'] ?>" data-context="false" style="width: 100%;!important;">
                                                     <a href="<?php echo '//imgur.com/a/' . $attachments['hash'] ?>"></a>
                                                 </blockquote>
                                                 <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
-                                            </div>
+
                                         <?php elseif ($attachments['type'] == "youtube"): ?>
-                                            <div style="margin-left: 11%">
                                                 <iframe
                                                         width="100%" height="248" src="<?php echo 'https://www.youtube.com/embed/' . $attachments['hash'] ?>" frameborder="0"
                                                         allow="accelerometer;autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 10px;">
                                                 </iframe>
-                                            </div>
+
                                         <?php endif;
                                     endif; ?>
                                     <div class="d-flex justify-content-between">

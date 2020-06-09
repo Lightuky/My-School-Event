@@ -11667,11 +11667,24 @@ td.calendar-day {
     display: -webkit-box;
     display: flex;
   }
+
+  .event-card {
+    padding-top: 5px !important;
+    max-width: 70%;
+    margin-left: 30%;
+    margin-top: 10%;
+    z-index: 99;
+  }
 }
 
 @media (max-width: 760px) {
   .menu-event {
     display: none;
+  }
+
+  .event-card {
+    max-width: 90%;
+    margin-top: 80px;
   }
 }
 
