@@ -25,7 +25,7 @@ elseif ($pending === '1') {
     header("Location: $pathSuccess");
 }
 elseif ($pending === '2') {
-    deleteFriend(2, $_SESSION['auth_id'], $user_id);
+    deleteFriend($_SESSION['auth_id'], $user_id);
     $pathSuccess = $_SERVER['HTTP_REFERER'];
     header("Location: $pathSuccess");
 }

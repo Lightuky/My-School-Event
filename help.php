@@ -48,7 +48,11 @@ if ($help_infos['title'] == NULL) {
                         <div class="card-body">
                             <img src="https://www.gravatar.com/avatar/<?php echo md5($help_infos['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                             <div class="d-flex">
-                                <h5 class="card-title"><?php echo $help_infos['first_name'] . " " . $help_infos['last_name'] ?></h5>
+                                <h5 class="card-title">
+                                    <a href="profile.php?id=<?php echo $help_infos['author_id'] ?>" style="text-decoration: none; color: black">
+                                        <?php echo $help_infos['first_name'] . " " . $help_infos['last_name'] ?>
+                                    </a>
+                                </h5>
                                 <div class="d-flex justify-content-between ml-1" style="margin-top: -4px;">
                                     <?php $user_badges = getUserBadges($help_infos['author_id']);
                                     foreach ($user_badges as $user_badge): ?>
@@ -159,7 +163,11 @@ if ($help_infos['title'] == NULL) {
                                                 <div>
                                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($new_answer['email']); ?>?s=600" alt="" class="d-block rounded-circle position-relative" id="CommentProfilePics">
                                                     <div class="d-flex">
-                                                        <h6 class="card-title"><?php echo $new_answer['first_name'] . " " . $new_answer['last_name'] ?></h6>
+                                                        <h6 class="card-title text-left ml-5">
+                                                            <a href="profile.php?id=<?php echo $new_answer['author_id'] ?>" style="text-decoration: none; color: black">
+                                                                <?php echo $new_answer['first_name'] . " " . $new_answer['last_name'] ?>
+                                                            </a>
+                                                        </h6>
                                                         <div class="d-flex justify-content-between ml-1" style="margin-top: -4px;">
                                                             <?php $user_badges = getUserBadges($new_answer['author_id']);
                                                             foreach ($user_badges as $user_badge): ?>
@@ -172,7 +180,7 @@ if ($help_infos['title'] == NULL) {
                                                             <?php endforeach; ?>
                                                         </div>
                                                     </div>
-                                                    <h6 class="card-subtitle mb-2 text-muted"><?php echo "Il y à " . getDateForHumans($new_answer['date_added']); ?></h6>
+                                                    <h6 class="card-subtitle mb-2 text-muted text-left ml-5"><?php echo "Il y à " . getDateForHumans($new_answer['date_added']); ?></h6>
                                                 </div>
                                                 <div class="mt-auto mb-4">
                                                     <div class="d-flex">

@@ -167,10 +167,9 @@ function acceptFriendRequest($pending, $auth_id, $user2_id) {
     $stmt->execute();
 }
 
-function deleteFriend($pending, $auth_id, $user2_id) {
+function deleteFriend($auth_id, $user2_id) {
     $dbh = connectDB();
-    $stmt = $dbh->prepare("DELETE FROM friends WHERE (user1_id = :user1_id AND user2_id = :user2_id AND pending = :pending) OR (user1_id = :user2_id AND user2_id = :user1_id AND pending = :pending)");
-    $stmt->bindValue(':pending', $pending);
+    $stmt = $dbh->prepare("DELETE FROM friends WHERE (user1_id = :user1_id AND user2_id = :user2_id) OR (user1_id = :user2_id AND user2_id = :user1_id)");
     $stmt->bindValue(':user1_id', $auth_id);
     $stmt->bindValue(':user2_id', $user2_id);
     $stmt->execute();
