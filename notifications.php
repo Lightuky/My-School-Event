@@ -23,7 +23,7 @@ $found_requests = 0;
             <div class="text-muted mb-5 mt-3"><?php echo (empty($friend_requests) ? "Aucune demande d'ami en attente" : count($friend_requests) . " demande(s) en attente") ?></div>
             <ul class="list-group align-items-center">
                 <?php foreach ($friend_requests as $friend_request): ?>
-                    <div class="card mb-3" style="max-width: 500px;">
+                    <div class="card mb-3" style="width: 550px;">
                         <div class="row no-gutters d-flex">
                             <div class="align-self-center"><img src="https://www.gravatar.com/avatar/<?php echo md5($friend_request['email']); ?>?s=700" alt="" class="d-block rounded-circle " style="" id="ContentProfilePics"></div>
                             <div class="card-body mx-3 py-1">
@@ -33,7 +33,8 @@ $found_requests = 0;
                                 <p class="card-text"><small class="text-muted"><?php echo "Recue il y à " . getDateForHumans($friend_request['date_added']); ?></small></p>
                             </div>
                             <div class="align-self-center pr-2">
-                                <a href="assets/friends.php?s=1&id=<?php echo $friend_request['user1_id'] ?>" class="btn btn-success">Accepter la demande</a>
+                                <a href="assets/friends.php?s=1&id=<?php echo $friend_request['user1_id'] ?>" class="btn btn-success">Accepter</a>
+                                <a href="assets/friends.php?s=2&id=<?php echo $friend_request['user1_id'] ?>" class="btn btn-danger ml-2">Refuser</a>
                             </div>
                         </div>
                     </div>
