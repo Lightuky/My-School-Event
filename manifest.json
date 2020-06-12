@@ -1,0 +1,21 @@
+{
+  "name": "My School Event",
+  "short_name": "My School Event",
+  "icons": [{
+    "src": "/mse/img/icons/icon-192x192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }, {
+    "src": "/mse/img/icons/icon-256x256.png",
+    "sizes": "256x256",
+    "type": "image/png"
+  }, {
+    "src": "/mse/img/icons/icon-512x512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }],
+  "start_url": "/mse/index.php",
+  "display": "standalone",
+  "background_color": "#3E4EB8",
+  "theme_color": "#2F3BA2"
+}
