@@ -36,6 +36,20 @@ html::-webkit-scrollbar-thumb {
 }
 
 
+@media (min-width: 760px) {
+  .margin-desktop{
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+
+  .margin-auto-desktop{
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+
+
 @media (max-width: 760px) {
 
   .display-none-mobile{
@@ -44,13 +58,13 @@ html::-webkit-scrollbar-thumb {
   .margin-auto-mobile{
     margin:auto;
   }
-  .margin-none-mobile{
-    margin-right: none;
-    margin-left: none;
-  }
 
   .max-w-none{
     max-width: none;
     flex:none;
+  }
+  .margin-auto-desktop{
+    max-width: none;
+    border-radius: 0 !important;
   }
 }

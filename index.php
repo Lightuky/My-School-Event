@@ -75,7 +75,7 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
         </div>
         </div>
         <div class="col-10 mx-0 p-0 d-flex ml-auto max-w-none" style="padding-top: 60px!important;">
-            <div class="ml-4 mr-4 w-100 margin-none-mobile">
+            <div class="margin-desktop w-100 margin-none-mobile">
                 <div class="d-flex justify-content-around">
                     <div class="col-3 text-center">
                         <button class="h5 nav-link text-dark mt-3 border-0 mx-auto" id="SortMenuAll">Tout</button>
@@ -95,7 +95,7 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                     </div>
                 </div>
                 <div id="allContents">
-                    <div class="card col-10 my-5 mx-auto allContentPostForm" id="ContentPosts" style="border-radius: initial">
+                    <div class="card col-10 my-5 margin-auto-desktop allContentPostForm" id="ContentPosts" style="border-radius: initial">
                         <div class="card-header text-center">Ajouter une publication</div>
                         <div class="card-body mt-2 p-1">
                             <form method="post" action="assets/addpost.php" id="addPostForm">
@@ -132,7 +132,7 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                             </form>
                         </div>
                     </div>
-                    <div class="card col-10 my-5 mx-auto allContentEventForm" id="ContentPosts" style=" border-radius: initial; display: none">
+                    <div class="card col-10 my-5 margin-auto-desktop allContentEventForm" id="ContentPosts" style=" border-radius: initial; display: none">
                         <div class="card-header text-center">
                             Ajouter un événement
                         </div>
@@ -144,7 +144,7 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                             <?php endif; ?>
                         </div>
                     </div>
-                    <div class="card col-10 my-5 mx-auto allContentHelpForm" id="ContentPosts" style="display: none; border-radius: initial">
+                    <div class="card col-10 my-5 margin-auto-desktop allContentHelpForm" id="ContentPosts" style="display: none; border-radius: initial">
                         <div class="card-header text-center">
                             Poser une question
                         </div>
@@ -172,7 +172,7 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                             $is_sponsored = getSponsoredPost($all_content['id']);
                             $is_brand = isBrand($all_content['author_id']);
                             ?>
-                            <div class="card col-10 mx-auto mt-5 allContentPost" id="ContentPosts" style="<?php echo ($is_sponsored ? 'box-shadow: 0 6px 10px -4px rgba(61, 194, 66, 0.57)!important; border-color: rgba(61, 194, 66, 0.57); border-width: 0.1em' : NULL) ?>">
+                            <div class="card col-10 margin-auto-desktop mt-5 allContentPost" id="ContentPosts" style="<?php echo ($is_sponsored ? 'box-shadow: 0 6px 10px -4px rgba(61, 194, 66, 0.57)!important; border-color: rgba(61, 194, 66, 0.57); border-width: 0.1em' : NULL) ?>">
                                 <div class="card-body">
                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($all_content['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                                     <div class="d-flex">
@@ -198,12 +198,12 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                                     <p class="card-text text-muted"><?php echo $all_content['content'] ?></p>
                                     <?php if ($attachments):
                                         if ($attachments['type'] == "imgur"): ?>
-
-                                                <blockquote class="imgur-embed-pub" lang="en" data-id="<?php echo 'a/' . $attachments['hash'] ?>" data-context="false" style="width: 100%;!important;">
+                                                <div style="max-width: 100%; width: 100%;">
+                                                <blockquote class="imgur-embed-pub" lang="en" data-id="<?php echo 'a/' . $attachments['hash'] ?>" data-context="false" style="max-width: 100%;!important;">
                                                     <a href="<?php echo '//imgur.com/a/' . $attachments['hash'] ?>"></a>
                                                 </blockquote>
                                                 <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
-
+                                                </div>
                                         <?php elseif ($attachments['type'] == "youtube"): ?>
                                                 <iframe
                                                         width="100%" height="248" src="<?php echo 'https://www.youtube.com/embed/' . $attachments['hash'] ?>" frameborder="0"
@@ -373,7 +373,7 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                             $event_start_date = date('Y-m-d H:i:s', strtotime($all_content['date'] . $all_content['time']));
                             $event_end_date = date('Y-m-d H:i:s',strtotime("+" . $event_duration_hours . " hour +" . $event_duration_minutes . " minutes +" . $event_duration_seconds . " seconds",strtotime($event_start_date)));
                             ?>
-                            <div class="card col-10 mx-auto mt-5 allContentEvent" id="ContentPosts">
+                            <div class="card col-10 margin-auto-desktop mt-5 allContentEvent" id="ContentPosts">
                                 <div class="card-body">
                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($all_content['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                                     <div class="d-flex">
@@ -565,7 +565,7 @@ array_multisort($all_contents_date, SORT_DESC, $all_contents);
                                 </div>
                             </div>
                         <?php elseif ($all_content['type'] == "help"): ?>
-                            <div class="card col-10 mx-auto mt-5 allContentHelp" id="ContentPosts">
+                            <div class="card col-10 margin-auto-desktop mt-5 allContentHelp" id="ContentPosts">
                                 <div class="card-body">
                                     <img src="https://www.gravatar.com/avatar/<?php echo md5($all_content['email']); ?>?s=600" alt="" class="d-block rounded-circle position-absolute" id="ContentProfilePics">
                                     <div class="d-flex">
